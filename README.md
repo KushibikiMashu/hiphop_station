@@ -13,10 +13,12 @@ $ chmod -R 777 laravel/bootstrap
 
 Install predis to Laravel
 ```
+$ cd laravel
 $ composer require predis/predis
 ```
 
 ```
+$ cd ..
 $ docker-compose up -d
 ```
 
