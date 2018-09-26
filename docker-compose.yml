@@ -1,0 +1,27 @@
+version: '2'
+services:
+  nginx:
+    image: nginx:stable-alpine
+    volumes:
+      - ./etc/nginx/conf.d:/etc/nginx/conf.d
+      - ./log/nginx:/var/log/nginx
+      - ./laravel:/var/www/laravel
+    ports:
+      - 3000:80
+    links:
+      - phpfpm:phpfpm
+      - redis:redis
+
+  phpfpm:
+    image: php:7.1-fpm-alpine
+    volumes:
+      - ./etc/php-fpm/php-fpm.conf:/usr/local/etc/php-fpm.conf # 全体の設定ファイル
+      - ./etc/php-fpm/php-fpm.d:/usr/local/etc/php-fpm.d # プール向け設定ファイル
+      - ./log/php-fpm:/usr/local/var/log
+      - ./laravel:/var/www/laravel
+
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379
+      
