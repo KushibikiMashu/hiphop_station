@@ -17,9 +17,10 @@
                 border-collapse: collapse;
             }
             td, th {
+                text-align: center;
                 padding: 3px;
-                width: 30px;
-                height: 25px;
+                width: 200px;
+                height: 50px;
             }
             th {
                 background: #f0e6cc;
@@ -36,20 +37,20 @@
         <table>
             <tbody>
                 <tr>
-                    <td rowspan="4"></td>
-                    <td rowspan="4"></td>
-                    <td rowspan="2"></td>
-                    <td></td>
+                    <td rowspan="4">{{ $artist }}</td>
+                    <td rowspan="4">{{ $title }}</td>
+                    <td rowspan="2">{{ $songs[0][0] }}</td>
+                    <td><iframe width="480" height="245" src={{ $info[0]['adress'] }} frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <td>{{ $info[0]['datetime'] }}</td>
                 </tr>
                 <tr>
-                    <td rowspan="2"></td>
-                    <td></td>
+                    <td rowspan="2">{{ $songs[0][1] }}</td>
+                    <td><iframe width="480" height="245" src={{ $info[1]['adress'] }} frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <td>{{ $info[1]['datetime'] }}</td>
                 </tr>
             </tbody>
         </table>
