@@ -26,6 +26,20 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+
+        // cronにこれを追加する
+        // * * * * * php /path-to-your-project/artisan schedule:run >> /dev/null 2>&1
+
+        // $schedule->call(function(){
+        //    Redisでメモリからディスクに値を書き込み
+        // })->hourly();
+
+        // $schedule->call(function(){
+        //    APIを叩くチャンネルを取得する
+        //    YoutubeのAPIを叩く
+        //    値をRedisでメモリに保存する
+        // })->->everyFiveMinutes();
+
     }
 
     /**

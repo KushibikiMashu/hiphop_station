@@ -9,18 +9,10 @@ class CreepyNutsController extends Controller
 {
     public function display()
     {
-        // $redis = new Predis\Client([
-        //     'scheme' => 'tcp',
-        //     'host'   => 'redis',
-        //     'port'   => 6379,
-        // ]);
-
-        $results = [];
         
         $artist = "Creepy Nuts";
 
         // チャンネルは手で集める
-        
         // チャンネル→URLはJSONで持つ
 
         // （String型）チャンネル　→ 歌手
