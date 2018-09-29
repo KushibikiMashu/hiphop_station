@@ -35,3 +35,34 @@ Well done!
 see URL below
 
 https://github.com/alaouy/Youtube
+
+Configuration
+In /config/app.php add YoutubeServiceProvider:
+
+```
+Alaouy\Youtube\YoutubeServiceProvider::class,
+```
+
+Do not forget to add also Youtube facade there:
+
+```
+'Youtube' => Alaouy\Youtube\Facades\Youtube::class,
+```
+
+Publish config settings:
+
+```
+$ php artisan vendor:publish --provider="Alaouy\Youtube\YoutubeServiceProvider"
+```
+
+Set your Youtube API key in the .env file
+
+```
+YOUTUBE_API_KEY = KEY
+```
+
+Don't forget add this code in the file using alaouy/Youtube API
+
+```
+use Alaouy\Youtube\Facades\Youtube;
+```

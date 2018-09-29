@@ -16,7 +16,10 @@ services:
 
   phpfpm:
     image: php:7.1-fpm-alpine
+    build: 
+      context: ./php-fpm
     volumes:
+      - ./php-fpm/php.ini:/usr/local/etc/php/php.ini
       - ./php-fpm/php-fpm.conf:/usr/local/etc/php-fpm.conf # 全体の設定ファイル
       - ./php-fpm/php-fpm.d:/usr/local/etc/php-fpm.d # プール向け設定ファイル
       - ./php-fpm/log:/usr/local/var/log
