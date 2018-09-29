@@ -1,4 +1,5 @@
 Framework: Laravel(5.7)
+
 Docker Images: Nginx, php-fpm, Redis
 
 # How to set up
@@ -14,6 +15,13 @@ Install predis to Laravel
 ```
 $ cd laravel
 $ composer require predis/predis
+```
+
+Don't forget to use customized .env file.
+
+```
+$ cp .env.local .env
+
 ```
 
 ```
