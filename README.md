@@ -21,7 +21,6 @@ Don't forget to use customized .env file.
 
 ```
 $ cp .env.local .env
-
 ```
 
 ```

@@ -3,25 +3,41 @@ services:
   nginx:
     image: nginx:stable-alpine
     volumes:
-      - ./etc/nginx/conf.d:/etc/nginx/conf.d
-      - ./log/nginx:/var/log/nginx
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/log:/var/log/nginx
       - ./laravel:/var/www/laravel
     ports:
       - 3000:80
     links:
       - phpfpm:phpfpm
       - redis:redis
+      - mysql:mysql
+    restart: always
 
   phpfpm:
     image: php:7.1-fpm-alpine
     volumes:
-      - ./etc/php-fpm/php-fpm.conf:/usr/local/etc/php-fpm.conf # 全体の設定ファイル
-      - ./etc/php-fpm/php-fpm.d:/usr/local/etc/php-fpm.d # プール向け設定ファイル
-      - ./log/php-fpm:/usr/local/var/log
+      - ./php-fpm/php-fpm.conf:/usr/local/etc/php-fpm.conf # 全体の設定ファイル
+      - ./php-fpm/php-fpm.d:/usr/local/etc/php-fpm.d # プール向け設定ファイル
+      - ./php-fpm/log:/usr/local/var/log
       - ./laravel:/var/www/laravel
+    restart: always
+
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - ./mysql:/etc/mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER:     user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: hiphop_station
+    restart: always
 
   redis:
     image: redis:alpine
     ports:
       - 6379:6379
-      
+    restart: always
