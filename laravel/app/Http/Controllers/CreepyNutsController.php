@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
+use Alaouy\Youtube\Facades\Youtube;
 
 class CreepyNutsController extends Controller
 {
@@ -41,6 +42,10 @@ class CreepyNutsController extends Controller
 
         Redis::del("合法的トビ方ノススメ");
         Redis::del("助演男優賞");
+
+
+        $videoList = Youtube::listChannelVideos('UCEc1YzMOSKKtJD7H-q71HgQ', 40);
+        var_dump($videoList);
 
         return view('redis', compact('artist', 'title', 'songs', 'info'));
     }

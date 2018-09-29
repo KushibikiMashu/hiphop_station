@@ -29,3 +29,9 @@ $ docker-compose up -d
 ```
 
 Well done!
+
+# install alaouy/Youtube
+
+see URL below
+
+https://github.com/alaouy/Youtube
