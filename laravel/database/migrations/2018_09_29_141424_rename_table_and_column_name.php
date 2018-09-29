@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class DropSomeColumnsFromCreepyNutsTable extends Migration
+class RenameTableAndColumnName extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class DropSomeColumnsFromCreepyNutsTable extends Migration
      */
     public function up()
     {
-        Schema::table('creepy_nuts', function (Blueprint $table) {
-            $table->dropColumn(['channelTitle','channelId', 'videoId']);
+        Schema::table('creepy_nuts_video', function (Blueprint $table) {
+            $table->dropColumn('cannelId');
         });
     }
 
@@ -25,8 +25,6 @@ class DropSomeColumnsFromCreepyNutsTable extends Migration
      */
     public function down()
     {
-        Schema::table('creepy_nuts', function (Blueprint $table) {
-            //
-        });
+        //
     }
 }

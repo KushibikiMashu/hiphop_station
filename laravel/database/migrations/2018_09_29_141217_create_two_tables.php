@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTablesAdnDropComeColumns extends Migration
+class CreateTwoTables extends Migration
 {
     /**
      * Run the migrations.
@@ -29,14 +29,6 @@ class AddTablesAdnDropComeColumns extends Migration
             $table->string('medium');
             $table->string('high');
             $table->timestamps();
-        });
-
-        Schema::table('creepy_nuts', function (Blueprint $table) {
-            $table->dropColumn(['thumnail_default','thumnail_medium', 'thumnail_high']);
-        });
-
-        Schema::table('creepy_nuts_video', function (Blueprint $table) {
-            $table->dropColumn(['thumnail_default','thumnail_medium', 'thumnail_high']);
         });
     }
 
