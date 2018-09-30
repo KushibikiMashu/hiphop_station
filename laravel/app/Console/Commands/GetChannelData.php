@@ -44,13 +44,14 @@ class GetChannelData extends Command
         $start = strtotime(Carbon::now());
         date_default_timezone_set("Asia/Tokyo");
 
-        // チャンネルIDを集めた配列（jsonファイルを読み込む）
-        // $hashes = json_decode(外部ファイル)
+        // チャンネルIDを集めたjsonファイルから取り出したハッシュでAPIを叩く
+        $json = file_get_contents(dirname(__FILE__) . '/youtube_channel.json');
+        $arr = json_decode($json);
 
-        $hash = 'UCEc1YzMOSKKtJD7H-q71HgQ';
-        // foreach($hashes as $hash){
+        foreach($arr as $data){
+            $hash = $data->hash;
             // チャンネルの情報を取得する
-            $channel = Youtube::getChannelById('UCEc1YzMOSKKtJD7H-q71HgQ');
+            $channel = Youtube::getChannelById($hash);
 
             // channelテーブルに挿入するデータ
             $title = $channel->snippet->title;
@@ -74,6 +75,6 @@ class GetChannelData extends Command
                 values (?, ?, ?, ?, ?)',
                 [$channel_id, $medium, $high, $now, $now]
             );
-        // }
+        }
     }
 }
