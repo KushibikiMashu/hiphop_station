@@ -3,10 +3,10 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-
 use Alaouy\Youtube\Facades\Youtube;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
+use DateTime;
 
 class GetChannelData extends Command
 {
@@ -56,12 +56,12 @@ class GetChannelData extends Command
             $title = $channel->snippet->title;
             $published_at = $channel->snippet->publishedAt;
             $video_count = $channel->statistics->videoCount;
-            $time = Carbon::now();
+            $now = Carbon::now();
 
             DB::insert(
                 'insert into channel (title, channel_hash, published_at, video_count, created_at, updated_at) 
                 values (?, ?, ?, ?, ?, ?)',
-                [$title, $hash, $published_at, (int)$video_count, $time, $time]
+                [$title, $hash, $published_at, (int)$video_count, $now, $now]
             );
 
             // channel_thumbnailsテーブルに挿入するデータ
@@ -72,7 +72,7 @@ class GetChannelData extends Command
             DB::insert(
                 'insert into channel_thumbnails (channel_id, medium, high, created_at, updated_at) 
                 values (?, ?, ?, ?, ?)',
-                [$channel_id, $medium, $high, $time, $time]
+                [$channel_id, $medium, $high, $now, $now]
             );
         // }
     }
