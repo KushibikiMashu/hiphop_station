@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Redis;
-use Alaouy\Youtube\Facades\Youtube;
 
 class CreepyNutsController extends Controller
 {
@@ -13,8 +13,8 @@ class CreepyNutsController extends Controller
         
         $artist = "Creepy Nuts";
 
-        // チャンネルは手で集める
-        // チャンネル→URLはJSONで持つ
+        // // チャンネルは手で集める
+        // // チャンネル→URLはJSONで持つ
 
         // （String型）チャンネル　→ 歌手
         Redis::set("Creepy Nuts", "R-指定 & DJ 松永");
@@ -42,10 +42,6 @@ class CreepyNutsController extends Controller
 
         Redis::del("合法的トビ方ノススメ");
         Redis::del("助演男優賞");
-
-
-        $videoList = Youtube::listChannelVideos('UCEc1YzMOSKKtJD7H-q71HgQ', 40);
-        var_dump($videoList);
 
         return view('redis', compact('artist', 'title', 'songs', 'info'));
     }
