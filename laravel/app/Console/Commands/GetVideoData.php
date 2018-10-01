@@ -15,7 +15,7 @@ class GetVideoData extends Command
      *
      * @var string
      */
-    protected $signature = 'getvd';
+    protected $signature = 'getvd {id}';
 
     /**
      * The console command description.
@@ -36,6 +36,7 @@ class GetVideoData extends Command
 
     /**
      * YouTube APIからchannelテーブルのハッシュを用いて動画を取得する
+     * コマンド"php artisan getcd {channel_id}"で１つずつ取得
      *
      * @return mixed
      */
@@ -43,12 +44,10 @@ class GetVideoData extends Command
     {
         $start = strtotime(Carbon::now());
         date_default_timezone_set("Asia/Tokyo");
-        $channel_query = DB::table('channel')->select('*')->get();
-
-        if(count($channel_query) === 1){
-            echo "There is only one record in the channel table.\n";
-            exit;
-        }
+        $number = $this->argument("id");
+        $channel_query = DB::table('channel')->where([
+            ['id', '=', $number]
+            ])->get();
 
         $now = Carbon::now();
         $now_timestamp = strtotime($now);
