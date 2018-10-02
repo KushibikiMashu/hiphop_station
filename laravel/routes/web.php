@@ -16,3 +16,5 @@ Route::get('/', function () {
 });
 
 Route::get('/redis', 'CreepyNutsController@display');
+
+Route::get('sample/react', 'SampleController@react');

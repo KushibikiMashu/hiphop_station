@@ -17,6 +17,7 @@ $ cd laravel
 $ composer require predis/predis
 $ php artisan preset react
 $ npm install
+$ npm i -g npm to update
 ```
 
 Don't forget to use customized .env file.
