@@ -11,10 +11,12 @@ $ cd hiphop_station
 $ sudo chmod -R 777 laravel/storage && sudo chmod -R 777 laravel/bootstrap
 ```
 
-Install predis to Laravel
+Install predis and React to Laravel
 ```
 $ cd laravel
 $ composer require predis/predis
+$ php artisan preset react
+$ npm install
 ```
 
 Don't forget to use customized .env file.

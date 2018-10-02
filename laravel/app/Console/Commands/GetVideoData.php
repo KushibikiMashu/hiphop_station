@@ -94,8 +94,8 @@ class GetVideoData extends Command
         }
 
         $end = strtotime(Carbon::now());
-        echo $end - $start;
-        echo "second\nend\n";
+        $this->info($end - $start);
+        $this->info("second");
 
     }
 
