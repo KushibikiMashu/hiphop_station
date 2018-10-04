@@ -69,3 +69,11 @@ Don't forget add this code in the file using alaouy/Youtube API
 ```
 use Alaouy\Youtube\Facades\Youtube;
 ```
+
+install Material UI
+
+```
+$ npm install @material-ui/core
+$ npm install @material-ui/icons
+$ npm install --save-dev @babel/preset-es2016
+```
