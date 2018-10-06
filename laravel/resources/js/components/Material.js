@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import PersistentDrawer from './PersistentDrawer';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import SearchAppBar from './SearchAppBar';
+import RecipeReviewCard from './RecipeReviewCard'
 
 export default class Material extends Component {
     render() {
         return (
             <div className="test_container">
-                <PersistentDrawer />
+                <CssBaseline />
+                <SearchAppBar />
+                <RecipeReviewCard />
             </div>
         );
     }
