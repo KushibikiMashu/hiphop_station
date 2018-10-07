@@ -20,7 +20,7 @@ const styles = theme => ({
     marginBottom: 20,
   },
   card: {
-    maxWidth: 246,
+    maxWidth: 210,
   },
   media: {
     height: 0,

@@ -1,22 +1,46 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import { mailFolderListItems, otherMailFolderListItems } from './tileData';
+
+import SearchIcon from '@material-ui/icons/Search';
 import Input from '@material-ui/core/Input';
 import { fade } from '@material-ui/core/styles/colorManipulator';
-import { withStyles } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
 
-import ClippedDrawer from './ClippedDrawer'
+import NewSongs from './NewSongs'
+import NewMCBattle from './NewMCBattle'
+
+const drawerWidth = 240;
 
 const styles = theme => ({
   root: {
-    width: '100%',
-    marginBottom: 10
+    flexGrow: 1,
+    height: 800,
+    zIndex: 1,
+    overflow: 'hidden',
+    position: 'relative',
+    display: 'flex',
   },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+  },
+  drawerPaper: {
+    position: 'relative',
+    width: drawerWidth,
+  },
+  content: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing.unit * 3,
+    minWidth: 0, // So the Typography noWrap works
+  },
+  toolbar: theme.mixins.toolbar,
   grow: {
     flexGrow: 1,
   },
@@ -73,15 +97,15 @@ const styles = theme => ({
   },
 });
 
-function SearchAppBar(props) {
+function ClippedDrawer(props) {
   const { classes } = props;
+
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="absolute" className={classes.appBar}>
         <Toolbar>
-          <ClippedDrawer />
-          <Typography className={classes.title} variant="title" color="inherit" noWrap>
-            HIPHOP-STATION
+          <Typography variant="title" color="inherit" noWrap>
+            Clipped drawer
           </Typography>
           <div className={classes.grow} />
           <div className={classes.search}>
@@ -99,12 +123,29 @@ function SearchAppBar(props) {
           </div>
         </Toolbar>
       </AppBar>
+
+      <Drawer
+        variant="permanent"
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <div className={classes.toolbar} />
+        <List>{mailFolderListItems}</List>
+        <Divider />
+        <List>{otherMailFolderListItems}</List>
+      </Drawer>
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        <NewSongs />
+        <NewMCBattle />
+      </main>
     </div>
   );
 }
 
-SearchAppBar.propTypes = {
+ClippedDrawer.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SearchAppBar);
+export default withStyles(styles)(ClippedDrawer);
