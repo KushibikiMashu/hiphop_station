@@ -20,7 +20,7 @@ const styles = theme => ({
     marginBottom: 20,
   },
   card: {
-    maxWidth: 210,
+    maxWidth: 246,
   },
   media: {
     height: 0,
@@ -42,8 +42,11 @@ const styles = theme => ({
   expandOpen: {
     transform: 'rotate(180deg)',
   },
-  avatar: {
-    backgroundColor: red[500],
+  cardContent: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    paddingLeft: 12,
+    paddingRight: 12,
   },
   root: {
     justifyContent: 'center'
@@ -52,7 +55,7 @@ const styles = theme => ({
 
 const videoData = 
   {
-    img: "https://i.ytimg.com/vi/AlZ3H-A2BeQ/default.jpg",
+    img: "https://i.ytimg.com/vi/AlZ3H-A2BeQ/mqdefault.jpg",
     title: "R-指定 UMB 3連覇達成＆Creepy Nuts本格始動 コメント",
     date: "2018-10-5"
   };
@@ -67,7 +70,7 @@ class NewSongs extends React.Component {
       <Typography variant="headline">
         最新曲
       </Typography>
-      <Grid container justify='flex-start' direction="row" spacing="16">
+      <Grid container justify='center' direction="row" spacing="16">
         {/* {[0,1,2,3,4].map(value=> ( */}
           <Grid  item>
             <Card className={classes.card}>
@@ -75,7 +78,7 @@ class NewSongs extends React.Component {
                 className={classes.media}
                 image={videoData.img}
               />
-              <CardContent>
+              <CardContent className={classes.cardContent}>
                 <Typography gutterBottom variant="subheading">
                  {videoData.title}
                 </Typography>
@@ -94,7 +97,7 @@ class NewSongs extends React.Component {
                 className={classes.media}
                 image={videoData.img}
               />
-              <CardContent>
+              <CardContent className={classes.cardContent}>
                 <Typography gutterBottom variant="subheading">
                  {videoData.title}
                 </Typography>
@@ -113,7 +116,7 @@ class NewSongs extends React.Component {
                 className={classes.media}
                 image={videoData.img}
               />
-              <CardContent>
+              <CardContent className={classes.cardContent}>
                 <Typography gutterBottom variant="subheading">
                  {videoData.title}
                 </Typography>
@@ -126,14 +129,14 @@ class NewSongs extends React.Component {
               
             </Card>
           </Grid>
-          <Hidden only={['sm']}>
+          <Hidden>
           <Grid  item>
             <Card className={classes.card}>
               <CardMedia
                 className={classes.media}
                 image={videoData.img}
               />
-              <CardContent>
+              <CardContent className={classes.cardContent}>
                 <Typography gutterBottom variant="subheading">
                 {videoData.title}
                 </Typography>
@@ -154,7 +157,7 @@ class NewSongs extends React.Component {
                   className={classes.media}
                   image={videoData.img}
                 />
-                <CardContent>
+                <CardContent className={classes.cardContent}>
                   <Typography gutterBottom variant="subheading">
                   {videoData.title}
                   </Typography>
