@@ -3,27 +3,18 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-
-import NavigationIcon from '@material-ui/icons/Navigation';
 
 const styles = theme => ({
   flex: {
     flexGrow: 1,
+    marginLeft: 20,
+    marginBottom: 20,
   },
   card: {
     maxWidth: 210,
@@ -42,7 +33,7 @@ const styles = theme => ({
     }),
     marginLeft: 'auto',
     [theme.breakpoints.up('sm')]: {
-      marginRight: -8,
+    //   marginRight: -8,
     },
   },
   expandOpen: {
@@ -58,19 +49,23 @@ const styles = theme => ({
 
 const videoData = 
   {
-    img: "https://i.ytimg.com/vi/AlZ3H-A2BeQ/default.jpg",
-    title: "R-指定 UMB 3連覇達成＆Creepy Nuts本格始動 コメント",
-    date: "2018-10-5"
+    img: "https://i.ytimg.com/vi/5Q_anTqs-_8/default.jpg",
+    title: "裂固 vs GADORO/戦極MCBATTLE第15章(2016.11.06)@BEST BOUT2",
+    date: "2017-02-17 12:18:43"
   };
 
-class RecipeReviewCard extends React.Component {
+class NewMCBattle extends React.Component {
 
   render() {
     const { classes } = this.props;
 
     return (
-      <Grid container className={classes.flex} justify='flex-start' direction="row" spacing="16">
-        {[0,1,2,3,4,5,6,7,8,9].map(value=> (
+      <div className={classes.flex}>
+      <Typography variant="headline">
+        MCバトル
+      </Typography>
+      <Grid container justify='flex-start' direction="row" spacing="16">
+        {[0,1,2,3,4].map(value=> (
           <Grid key={value} item>
             <Card className={classes.card}>
               <CardMedia
@@ -81,7 +76,7 @@ class RecipeReviewCard extends React.Component {
                 <Typography gutterBottom variant="subheading">
                  {videoData.title}
                 </Typography>
-                </CardContent>
+              </CardContent>
                 <CardActions>
                 <Typography gutterBottom variant="caption">
                  {videoData.date}
@@ -92,12 +87,13 @@ class RecipeReviewCard extends React.Component {
           </Grid>
       ))}
     </Grid>
+    </div>
     );
   }
 }
 
-RecipeReviewCard.propTypes = {
+NewMCBattle.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(RecipeReviewCard);
+export default withStyles(styles)(NewMCBattle);
