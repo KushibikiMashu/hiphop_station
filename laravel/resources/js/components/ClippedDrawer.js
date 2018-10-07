@@ -16,7 +16,7 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import NewSongs from './NewSongs'
 import NewMCBattle from './NewMCBattle'
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 
 const styles = theme => ({
   root: {
