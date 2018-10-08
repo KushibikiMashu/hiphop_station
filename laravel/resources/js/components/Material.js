@@ -7,6 +7,8 @@ import NewSongs from './NewSongs'
 import NewMCBattle from './NewMCBattle'
 import ClippedDrawer from './ClippedDrawer'
 
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+
 export default class Material extends Component {
     render() {
         return (

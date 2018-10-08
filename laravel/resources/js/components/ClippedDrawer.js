@@ -20,6 +20,9 @@ import NewMCBattle from './NewMCBattle'
 
 import { grey900 } from '@material-ui/core/colors'
 
+import { BrowserRouter as Router } from 'react-router-dom';
+
+
 const drawerWidth = 220;
 
 const styles = theme => ({
@@ -105,6 +108,7 @@ function ClippedDrawer(props) {
   const { classes } = props;
 
   return (
+    <Router>
     <div className={classes.root}>
       <AppBar position="absolute" className={classes.appBar} style={{ backgroundColor: '#424242'}}>
         <Toolbar>
@@ -143,6 +147,7 @@ function ClippedDrawer(props) {
         <NewMCBattle />
       </main>
     </div>
+    </Router>
   );
 }
 
