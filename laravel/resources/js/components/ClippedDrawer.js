@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import { mailFolderListItems, otherMailFolderListItems } from './tileData';
 
+import { DrawerListItems } from './DrawerListItems';
+
 import SearchIcon from '@material-ui/icons/Search';
 import Input from '@material-ui/core/Input';
 import { fade } from '@material-ui/core/styles/colorManipulator';
@@ -16,7 +18,9 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import NewSongs from './NewSongs'
 import NewMCBattle from './NewMCBattle'
 
-const drawerWidth = 200;
+import { grey900 } from '@material-ui/core/colors'
+
+const drawerWidth = 220;
 
 const styles = theme => ({
   root: {
@@ -102,7 +106,7 @@ function ClippedDrawer(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="absolute" className={classes.appBar}>
+      <AppBar position="absolute" className={classes.appBar} style={{ backgroundColor: '#424242'}}>
         <Toolbar>
           <Typography variant="title" color="inherit" noWrap>
             Clipped drawer
@@ -131,9 +135,7 @@ function ClippedDrawer(props) {
         }}
       >
         <div className={classes.toolbar} />
-        <List>{mailFolderListItems}</List>
-        <Divider />
-        <List>{otherMailFolderListItems}</List>
+        <List>{DrawerListItems}</List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
