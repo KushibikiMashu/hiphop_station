@@ -20,7 +20,7 @@ import NewMCBattle from './NewMCBattle'
 
 import { grey900 } from '@material-ui/core/colors'
 
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 
 const drawerWidth = 220;
@@ -143,8 +143,9 @@ function ClippedDrawer(props) {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <NewSongs />
-        <NewMCBattle />
+          <Route exact path='/' component={NewSongs} />
+          <Route exact path='/video' />
+          <Route path='/battle' component={NewMCBattle} />
       </main>
     </div>
     </Router>
