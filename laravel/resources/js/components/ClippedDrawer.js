@@ -108,7 +108,7 @@ function ClippedDrawer(props) {
   const { classes } = props;
 
   return (
-    <Router>
+    <Router basename="/react/material">
     <div className={classes.root}>
       <AppBar position="absolute" className={classes.appBar} style={{ backgroundColor: '#424242'}}>
         <Toolbar>
