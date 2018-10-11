@@ -113,7 +113,7 @@ function ClippedDrawer(props) {
       <AppBar position="absolute" className={classes.appBar} style={{ backgroundColor: '#424242'}}>
         <Toolbar>
           <Typography variant="title" color="inherit" noWrap>
-            Clipped drawer
+            J-HIPHOP
           </Typography>
           <div className={classes.grow} />
           <div className={classes.search}>
@@ -144,7 +144,7 @@ function ClippedDrawer(props) {
       <main className={classes.content}>
         <div className={classes.toolbar} />
           <Route exact path='/' component={NewSongs} />
-          <Route exact path='/video' />
+          <Route path='/video' />
           <Route path='/battle' component={NewMCBattle} />
       </main>
     </div>

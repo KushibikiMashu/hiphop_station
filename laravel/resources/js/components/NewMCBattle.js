@@ -13,6 +13,9 @@ import Hidden from '@material-ui/core/Hidden';
 
 import NavigationIcon from '@material-ui/icons/Navigation';
 
+import request from 'superagent';
+const PATH = "http://localhost:3000/json/battle.json";
+
 const styles = theme => ({
   flex: {
     flexGrow: 1,
@@ -53,133 +56,85 @@ const styles = theme => ({
   }
 });
 
-const videoData = 
-  {
-    img: "https://i.ytimg.com/vi/5Q_anTqs-_8/mqdefault.jpg",
-    title: "裂固 vs GADORO/戦極MCBATTLE第15章(2016.11.06)@BEST BOUT2",
-    date: "2017-02-17 12:18:43"
+const videoData =
+{
+  img: "https://i.ytimg.com/vi/AlZ3H-A2BeQ/mqdefault.jpg",
+  title: "R-指定 UMB 3連覇達成＆Creepy Nuts本格始動 コメント",
+  date: "2018-10-5"
+};
+
+
+
+class NewSongs extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: null
+    };
+  }
+
+  componentWillMount() {
+    request.get(PATH)
+      .end((err, res) => {
+        this.loadedJson(err, res);
+      });
   };
 
-class NEwMCBattle extends React.Component {
+  loadedJson(err, res) {
+    if (err) {
+      console.log('JSON読み込みエラー');
+      return;
+    }
+    console.log(res.body);
+    this.setState({
+      items: res.body
+    });
+    console.log(this.state.items);
+  };
 
   render() {
+    // asyncでres.bodyがstateに登録されるようにする
+    if (!this.state.items) {
+      return false;
+    }
+
     const { classes } = this.props;
+    const songs = this.state.items.map(e => {
+      return <Grid item>
+        <Card className={classes.card}>
+          <CardMedia
+            className={classes.media}
+            image={e.img}
+          />
+          <CardContent className={classes.cardContent}>
+            <Typography gutterBottom variant="subheading">
+              {e.title}
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Typography gutterBottom variant="caption">
+              {e.date}
+            </Typography>
+          </CardActions>
+        </Card>
+      </Grid>
+    });
 
     return (
       <div className={classes.flex}>
-      <Typography variant="headline">
-        MCバトル
+        <Typography variant="headline">
+          MCバトル
       </Typography>
-      <Grid container justify='center' direction="row" spacing="16">
-        {/* {[0,1,2,3,4].map(value=> ( */}
-          <Grid  item>
-            <Card className={classes.card}>
-              <CardMedia
-                className={classes.media}
-                image={videoData.img}
-              />
-              <CardContent className={classes.cardContent}>
-                <Typography gutterBottom variant="subheading">
-                 {videoData.title}
-                </Typography>
-              </CardContent>
-                <CardActions>
-                <Typography gutterBottom variant="caption">
-                 {videoData.date}
-                </Typography>
-                </CardActions>
-              
-            </Card>
-          </Grid>
-          <Grid  item>
-            <Card className={classes.card}>
-              <CardMedia
-                className={classes.media}
-                image={videoData.img}
-              />
-              <CardContent className={classes.cardContent}>
-                <Typography gutterBottom variant="subheading">
-                 {videoData.title}
-                </Typography>
-              </CardContent>
-                <CardActions>
-                <Typography gutterBottom variant="caption">
-                 {videoData.date}
-                </Typography>
-                </CardActions>
-              
-            </Card>
-          </Grid>
-          <Grid  item>
-            <Card className={classes.card}>
-              <CardMedia
-                className={classes.media}
-                image={videoData.img}
-              />
-              <CardContent className={classes.cardContent}>
-                <Typography gutterBottom variant="subheading">
-                 {videoData.title}
-                </Typography>
-              </CardContent>
-                <CardActions>
-                <Typography gutterBottom variant="caption">
-                 {videoData.date}
-                </Typography>
-                </CardActions>
-              
-            </Card>
-          </Grid>
-          <Hidden>
-          <Grid  item>
-            <Card className={classes.card}>
-              <CardMedia
-                className={classes.media}
-                image={videoData.img}
-              />
-              <CardContent className={classes.cardContent}>
-                <Typography gutterBottom variant="subheading">
-                {videoData.title}
-                </Typography>
-              </CardContent>
-                <CardActions>
-                <Typography gutterBottom variant="caption">
-                 {videoData.date}
-                </Typography>
-                </CardActions>
-            </Card>
-          </Grid>
-          </Hidden>
-
-          <Hidden only={['sm', 'md']}>
-            <Grid item>
-              <Card className={classes.card}>
-                <CardMedia
-                  className={classes.media}
-                  image={videoData.img}
-                />
-                <CardContent className={classes.cardContent}>
-                  <Typography gutterBottom variant="subheading">
-                  {videoData.title}
-                  </Typography>
-                </CardContent>
-                  <CardActions>
-                  <Typography gutterBottom variant="caption">
-                  {videoData.date}
-                  </Typography>
-                  </CardActions>
-                
-              </Card>
-            </Grid>
-          </Hidden>
-      {/* ))} */}
-    </Grid>
-    </div>
+        <Grid container justify='center' direction="row" spacing="16">
+          {songs}
+        </Grid>
+     </div>
     );
   }
 }
 
-NEwMCBattle.propTypes = {
+NewSongs.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(NEwMCBattle);
+export default withStyles(styles)(NewSongs);
