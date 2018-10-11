@@ -12,10 +12,10 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 export default class Material extends Component {
     render() {
         return (
-            <div className="test_container">
+            <React.Fragment>
                 <CssBaseline />
                 <ClippedDrawer />
-            </div>
+            </React.Fragment>
         );
     }
 }

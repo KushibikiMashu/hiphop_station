@@ -19,4 +19,8 @@ Route::get('/redis', 'CreepyNutsController@display');
 
 Route::get('/react/sample', 'SampleController@react');
 
+Route::get('/react/material/', 'MaterialUiSampleController@react');
 Route::get('/react/material', 'MaterialUiSampleController@react');
+Route::get('/react/material/video', 'MaterialUiSampleController@react');
+Route::get('/react/material/battle', 'MaterialUiSampleController@react');
+Route::get('/react/material/channel', 'MaterialUiSampleController@react');
