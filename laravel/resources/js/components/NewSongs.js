@@ -51,6 +51,7 @@ const styles = theme => ({
     paddingBottom: 4,
     paddingLeft: 12,
     paddingRight: 12,
+    // height: 86,
   },
   root: {
     justifyContent: 'center'
@@ -100,13 +101,13 @@ class NewSongs extends React.Component {
         return false;
       }
 
-      return <Grid item>
+      return <Grid item key={i}> 
         <Card className={classes.card}>
           <CardMedia
             className={classes.media}
             image={e.img}
             component={Link}
-            to={'/' + e.hash}
+            to={'/video/' + e.hash}
           />
           <CardContent className={classes.cardContent}>
             <Typography gutterBottom variant="subheading">
@@ -130,7 +131,7 @@ class NewSongs extends React.Component {
         <Typography variant="headline">
           最新曲
       </Typography>
-        <Grid container justify='center' direction="row" spacing="16">
+        <Grid container justify='center' direction="row" spacing={16}>
           {songs}
         </Grid>
      </div>
