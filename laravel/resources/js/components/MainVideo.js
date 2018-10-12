@@ -15,9 +15,6 @@ import NavigationIcon from '@material-ui/icons/Navigation';
 import { Link } from 'react-router-dom';
 
 import request from 'superagent';
-import MainVideo from './MainVideo';
-import RecommendVideos from './RecommendVideos';
-
 const PATH = "http://localhost:3000/json/songs.json";
 
 const styles = theme => ({
@@ -60,7 +57,7 @@ const styles = theme => ({
     }
 });
 
-class VideoPlayer extends React.Component {
+class MainVideo extends React.Component {
     constructor(props) {
         super(props);
         // this.state = {
@@ -95,20 +92,39 @@ class VideoPlayer extends React.Component {
 
         const { classes } = this.props;
 
-        var path = location.pathname
-
         return (
             <React.Fragment>
-                <MainVideo />
-                {path}
-                <RecommendVideos />
+                <Grid container justify='center' spacing={16}>
+                    <Grid item>
+                        <div style={{ display: "block", textAlign: "center" }}>
+                            <Card className={classes.card}>
+                                {/* <CardMedia className={classes.media}> */}
+                                <iframe width="640" height="360" src="https://www.youtube.com/embed/0zWdlZsMwME" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
+                                {/* </CardMedia> */}
+                                <CardContent className={classes.cardContent}>
+                                    <Typography gutterBottom variant="subheading">
+                                        aaa
+                                </Typography>
+                                </CardContent>
+                                <CardActions>
+                                    <Typography variant="caption">
+                                        bbb
+                                </Typography>
+                                    <Typography variant="caption">
+                                        ccc
+                                </Typography>
+                                </CardActions>
+                            </Card>
+                        </div>
+                    </Grid>
+                </Grid>
             </React.Fragment>
         );
     }
 }
 
-VideoPlayer.propTypes = {
+MainVideo.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(VideoPlayer);
+export default withStyles(styles)(MainVideo);
