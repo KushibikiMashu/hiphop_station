@@ -29,7 +29,7 @@ const drawerWidth = 220;
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    height: 800,
+    height: 5000,
     zIndex: 1,
     overflow: 'hidden',
     position: 'relative',
@@ -111,29 +111,15 @@ function ClippedDrawer(props) {
   return (
     <Router basename="/react/material">
     <div className={classes.root}>
-      <AppBar position="absolute" className={classes.appBar} style={{ backgroundColor: '#424242'}}>
+      <AppBar position="fixed" className={classes.appBar} style={{ backgroundColor: '#424242'}}>
         <Toolbar>
-          <Typography variant="title" color="inherit" noWrap>
-            J-HIPHOP
+          <Typography variant="title" color="inherit" noWrap style={{ margin: "0 auto"}}>
+            日本語ラップStation（仮）
           </Typography>
-          <div className={classes.grow} />
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <Input
-              placeholder="Search…"
-              disableUnderline
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-            />
-          </div>
         </Toolbar>
       </AppBar>
 
-      <Drawer
+      {/* <Drawer
         variant="permanent"
         classes={{
           paper: classes.drawerPaper,
@@ -141,7 +127,7 @@ function ClippedDrawer(props) {
       >
         <div className={classes.toolbar} />
         <List>{DrawerListItems}</List>
-      </Drawer>
+      </Drawer> */}
       <main className={classes.content}>
         <div className={classes.toolbar} />
           <Route exact path='/' component={NewSongs} />

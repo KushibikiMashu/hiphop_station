@@ -20,8 +20,6 @@ const PATH = "http://localhost:3000/json/songs.json";
 const styles = theme => ({
   flex: {
     flexGrow: 1,
-    marginLeft: 20,
-    marginBottom: 20,
   },
   card: {
     maxWidth: 260,
@@ -109,11 +107,13 @@ class NewSongs extends React.Component {
             component={Link}
             to={'/video/' + e.hash}
           />
-          <CardContent className={classes.cardContent}>
-            <Typography gutterBottom variant="subheading">
-              {e.title}
-            </Typography>
-          </CardContent>
+          <a href={'/react/material/video/' + e.hash} style={{textDecoration : "none"}}>
+            <CardContent className={classes.cardContent}>
+              <Typography gutterBottom variant="subheading">
+                {e.title}
+              </Typography>
+            </CardContent>
+          </a>
           <CardActions>
           <Typography variant="caption">
               {e.channel}
@@ -128,7 +128,7 @@ class NewSongs extends React.Component {
 
     return (
       <div className={classes.flex}>
-        <Typography variant="headline">
+        <Typography variant="headline" style={{textAlign: "center", paddingBottom: "10px"}}>
           最新曲
       </Typography>
         <Grid container justify='center' direction="row" spacing={16}>
