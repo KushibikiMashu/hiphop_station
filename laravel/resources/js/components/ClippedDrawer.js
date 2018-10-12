@@ -17,6 +17,7 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 
 import NewSongs from './NewSongs'
 import NewMCBattle from './NewMCBattle'
+import VideoPlayer from './VideoPlayer'
 
 import { grey900 } from '@material-ui/core/colors'
 
@@ -146,6 +147,7 @@ function ClippedDrawer(props) {
           <Route exact path='/' component={NewSongs} />
           <Route path='/video' />
           <Route path='/battle' component={NewMCBattle} />
+          <Route path='/video/:hash' component={VideoPlayer} />
       </main>
     </div>
     </Router>

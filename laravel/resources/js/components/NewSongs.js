@@ -12,9 +12,10 @@ import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
 
 import NavigationIcon from '@material-ui/icons/Navigation';
+import { Link } from 'react-router-dom';
 
 import request from 'superagent';
-const PATH = " http://localhost:3000/json/battle.json";
+const PATH = "http://localhost:3000/json/songs.json";
 
 const styles = theme => ({
   flex: {
@@ -23,7 +24,7 @@ const styles = theme => ({
     marginBottom: 20,
   },
   card: {
-    maxWidth: 210,
+    maxWidth: 260,
   },
   media: {
     height: 0,
@@ -55,15 +56,6 @@ const styles = theme => ({
     justifyContent: 'center'
   }
 });
-
-const videoData =
-{
-  img: "https://i.ytimg.com/vi/AlZ3H-A2BeQ/mqdefault.jpg",
-  title: "R-指定 UMB 3連覇達成＆Creepy Nuts本格始動 コメント",
-  date: "2018-10-5"
-};
-
-
 
 class NewSongs extends React.Component {
   constructor(props) {
@@ -98,13 +90,23 @@ class NewSongs extends React.Component {
       return false;
     }
 
+    var i = 0;
+
     const { classes } = this.props;
     const songs = this.state.items.map(e => {
+      i++;
+
+      if(i > 20){
+        return false;
+      }
+
       return <Grid item>
         <Card className={classes.card}>
           <CardMedia
             className={classes.media}
             image={e.img}
+            component={Link}
+            to={'/' + e.hash}
           />
           <CardContent className={classes.cardContent}>
             <Typography gutterBottom variant="subheading">
@@ -112,7 +114,10 @@ class NewSongs extends React.Component {
             </Typography>
           </CardContent>
           <CardActions>
-            <Typography gutterBottom variant="caption">
+          <Typography variant="caption">
+              {e.channel}
+            </Typography>
+            <Typography variant="caption">
               {e.date}
             </Typography>
           </CardActions>
