@@ -22,5 +22,9 @@ Route::get('/react/sample', 'SampleController@react');
 Route::get('/react/material/', 'MaterialUiSampleController@react');
 Route::get('/react/material', 'MaterialUiSampleController@react');
 Route::get('/react/material/video', 'MaterialUiSampleController@react');
+Route::get('/react/material/video/{hash?}', 'MaterialUiSampleController@react');
+
 Route::get('/react/material/battle', 'MaterialUiSampleController@react');
+Route::get('/react/material/battle/{hash?}', 'MaterialUiSampleController@react');
 Route::get('/react/material/channel', 'MaterialUiSampleController@react');
+Route::get('/react/material/channel/{hash?}', 'MaterialUiSampleController@react');
