@@ -21,7 +21,7 @@ import VideoPlayer from './VideoPlayer'
 
 import { grey900 } from '@material-ui/core/colors'
 
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 
 const drawerWidth = 220;
@@ -113,9 +113,9 @@ function ClippedDrawer(props) {
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar} style={{ backgroundColor: '#424242'}}>
         <Toolbar>
-          <Typography variant="title" color="inherit" noWrap style={{ margin: "0 auto"}}>
-            日本語ラップStation（仮）
-          </Typography>
+            <Typography variant="title" color="inherit" noWrap style={{ margin: "0 auto", textDecoration: "none"}} component={Link} to="/">
+              日本語ラップStation（仮）
+            </Typography>
         </Toolbar>
       </AppBar>
 
