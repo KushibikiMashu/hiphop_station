@@ -10,10 +10,10 @@ import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
+import Button from '@material-ui/core/Button';
 
 import NavigationIcon from '@material-ui/icons/Navigation';
 import { Link } from 'react-router-dom';
-import InfiniteScroll from 'react-infinite-scroller';
 
 import request from 'superagent';
 const PATH = "http://localhost:3000/json/songs.json";
@@ -42,19 +42,23 @@ const styles = theme => ({
       // marginRight: -8,
     },
   },
-  expandOpen: {
-    transform: 'rotate(180deg)',
+  headline: {
+    textAlign: 'center',
+    marginTop: -8,
+    paddingBottom: 12,
   },
   cardContent: {
-    paddingTop: 4,
+    paddingTop: 8,
     paddingBottom: 4,
     paddingLeft: 12,
     paddingRight: 12,
-    // height: 86,
   },
   root: {
     justifyContent: 'center'
-  }
+  },
+  button: {
+    marginTop: 12,
+  },
 });
 
 class NewSongs extends React.Component {
@@ -87,13 +91,10 @@ class NewSongs extends React.Component {
     });
   };
 
-  // InfiniteScrollコンポーネントのコールバック関数
-  // 新たに10個の動画サムネイルを読み込む
-  loadVideos(){
+  // 「LOAD MORE」ボタンをクリックすると、新たに10個の動画を表示する
+  loadVideos() {
+    console.log(this.state);
     if (this.state.loadedVideosCount >= this.state.items.length) {
-      this.setState({
-        hasMoreVideos: false
-      });
       return;
     }
 
@@ -102,6 +103,7 @@ class NewSongs extends React.Component {
     });
   }
 
+  // loadVideos関数が呼ばれると、再度render関数が作動する
   render() {
     // asyncでres.bodyがstateに登録されるようにする
     if (!this.state.items) {
@@ -110,11 +112,12 @@ class NewSongs extends React.Component {
 
     const { classes } = this.props;
 
+    // loadedVideosCountの数だけ動画を読み込む
     var videos = [];
     const items = this.state.items;
     for (var i = 0; i < this.state.loadedVideosCount; i++) {
       videos.push(
-        <Grid item>
+        <Grid item key={i}>
           <Card className={classes.card}>
             <CardMedia
               className={classes.media}
@@ -144,22 +147,17 @@ class NewSongs extends React.Component {
 
     return (
       <div className={classes.flex}>
-        <Typography variant="headline" style={{ textAlign: "center", paddingBottom: "10px" }}>
+        <Typography variant="headline" className={classes.headline}>
           最新曲
         </Typography>
         <Grid container justify='center' direction="row" spacing={16}>
-        {/* {defaultVideos} */}
+          {videos}
         </Grid>
-        <InfiniteScroll
-          pageStart={0}
-          loadMore={this.loadVideos.bind(this)}
-          hasMore={this.state.hasMoreVideos}
-          loader={<div className="loader" key={0}>Loading ...</div>}
-        >
-          <Grid container justify='center' direction="row" spacing={16}>
-            {videos}
-          </Grid>
-        </InfiniteScroll>
+        <Grid container justify='center' direction="row">
+          <Button variant="extendedFab" aria-label="Load" className={classes.button} onClick={() => { this.loadVideos() }}>
+            LOAD MORE
+          </Button>
+        </Grid>
       </div>
     );
   }
