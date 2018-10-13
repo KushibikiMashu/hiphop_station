@@ -18,6 +18,7 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import NewSongs from './NewSongs'
 import NewMCBattle from './NewMCBattle'
 import VideoPlayer from './VideoPlayer'
+import SwipeableTemporaryDrawer from './SwipeableTemporaryDrawer'
 
 import { grey900 } from '@material-ui/core/colors'
 
@@ -115,18 +116,9 @@ function ClippedDrawer(props) {
             <Typography variant="title" color="inherit" noWrap style={{ margin: "0 auto", textDecoration: "none" }} component={Link} to="/">
               日本語ラップStation（仮）
             </Typography>
+            <SwipeableTemporaryDrawer />
           </Toolbar>
         </AppBar>
-
-        {/* <Drawer
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.toolbar} />
-        <List>{DrawerListItems}</List>
-      </Drawer> */}
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Route exact path='/' component={NewSongs} />
