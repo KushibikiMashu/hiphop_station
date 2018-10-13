@@ -13,6 +13,7 @@ import Hidden from '@material-ui/core/Hidden';
 
 import NavigationIcon from '@material-ui/icons/Navigation';
 import { Link } from 'react-router-dom';
+import InfiniteScroll from 'react-infinite-scroller';
 
 import request from 'superagent';
 const PATH = "http://localhost:3000/json/songs.json";
@@ -60,10 +61,13 @@ class NewSongs extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: null
+      items: null,
+      hasMoreVideos: true,
+      loadedVideosCount: 20, // デフォルトの動画表示数
     };
   }
 
+  // コンポーネントがマウントする前に動画情報のJSONを読み込む
   componentWillMount() {
     request.get(PATH)
       .end((err, res) => {
@@ -71,6 +75,7 @@ class NewSongs extends React.Component {
       });
   };
 
+  // 読み込んだ全ての動画情報を配列でitemsに格納
   loadedJson(err, res) {
     if (err) {
       console.log('JSON読み込みエラー');
@@ -80,8 +85,22 @@ class NewSongs extends React.Component {
     this.setState({
       items: res.body
     });
-    console.log(this.state.items);
   };
+
+  // InfiniteScrollコンポーネントのコールバック関数
+  // 新たに10個の動画サムネイルを読み込む
+  loadVideos(){
+    if (this.state.loadedVideosCount >= this.state.items.length) {
+      this.setState({
+        hasMoreVideos: false
+      });
+      return;
+    }
+
+    this.setState({
+      loadedVideosCount: this.state.loadedVideosCount + 10
+    });
+  }
 
   render() {
     // asyncでres.bodyがstateに登録されるようにする
@@ -89,52 +108,59 @@ class NewSongs extends React.Component {
       return false;
     }
 
-    var i = 0;
-
     const { classes } = this.props;
-    const songs = this.state.items.map(e => {
-      i++;
 
-      if(i > 20){
-        return false;
-      }
-
-      return <Grid item key={i}> 
-        <Card className={classes.card}>
-          <CardMedia
-            className={classes.media}
-            image={e.img}
-            component={Link}
-            to={'/video/' + e.hash}
-          />
-          <a href={'/react/material/video/' + e.hash} style={{textDecoration : "none"}}>
-            <CardContent className={classes.cardContent}>
-              <Typography gutterBottom variant="subheading">
-                {e.title}
+    var videos = [];
+    const items = this.state.items;
+    for (var i = 0; i < this.state.loadedVideosCount; i++) {
+      videos.push(
+        <Grid item>
+          <Card className={classes.card}>
+            <CardMedia
+              className={classes.media}
+              image={items[i].img}
+              component={Link}
+              to={'/video/' + items[i].hash}
+            />
+            <a href={'/react/material/video/' + items[i].hash} style={{ textDecoration: "none" }}>
+              <CardContent className={classes.cardContent}>
+                <Typography gutterBottom variant="subheading">
+                  {items[i].title}
+                </Typography>
+              </CardContent>
+            </a>
+            <CardActions>
+              <Typography variant="caption">
+                {items[i].channel}
               </Typography>
-            </CardContent>
-          </a>
-          <CardActions>
-          <Typography variant="caption">
-              {e.channel}
-            </Typography>
-            <Typography variant="caption">
-              {e.date}
-            </Typography>
-          </CardActions>
-        </Card>
-      </Grid>
-    });
+              <Typography variant="caption">
+                {items[i].date}
+              </Typography>
+            </CardActions>
+          </Card>
+        </Grid>
+      )
+    }
 
     return (
       <div className={classes.flex}>
-        <Typography variant="headline" style={{textAlign: "center", paddingBottom: "10px"}}>
+        <Typography variant="headline" style={{ textAlign: "center", paddingBottom: "10px" }}>
           最新曲
-      </Typography>
+        </Typography>
         <Grid container justify='center' direction="row" spacing={16}>
-          {songs}
+        {/* {defaultVideos} */}
         </Grid>
-     </div>
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={this.loadVideos.bind(this)}
+          hasMore={this.state.hasMoreVideos}
+          loader={<div className="loader" key={0}>Loading ...</div>}
+        >
+          <Grid container justify='center' direction="row" spacing={16}>
+            {videos}
+          </Grid>
+        </InfiniteScroll>
+      </div>
     );
   }
 }
