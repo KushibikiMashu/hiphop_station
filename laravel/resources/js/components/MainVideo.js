@@ -99,12 +99,12 @@ class MainVideo extends React.Component {
                         <div style={{ display: "block", textAlign: "center" }}>
                             <Card className={classes.card}>
                                 {/* <CardMedia className={classes.media}> */}
-                                <iframe width="640" height="360" src="https://www.youtube.com/embed/0zWdlZsMwME" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
+                                <iframe width="640" height="360" src="https://www.youtube.com/embed/BqeUz6HaGqQ" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
                                 {/* </CardMedia> */}
                                 <CardContent className={classes.cardContent}>
                                     <Typography gutterBottom variant="subheading">
                                         aaa
-                                </Typography>
+                                    </Typography>
                                 </CardContent>
                                 <CardActions>
                                     <Typography variant="caption">

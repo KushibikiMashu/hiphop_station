@@ -92,72 +92,80 @@ class RecommendVideos extends React.Component {
 
         const { classes } = this.props;
 
+        // mapで8個生成する
+        const recommendVideo = (
+            <Grid container justify='center' direction="row" spacing={16}>
+                <Grid item>
+                    <Card className={classes.card}>
+                        <CardMedia
+                            className={classes.media}
+                            image="https://i.ytimg.com/vi/JUt2y2TpemY/mqdefault.jpg"
+                            component={Link}
+                            to={'/video/JUt2y2TpemY'}
+                        />
+                        {/* <iframe width="312" height="175.5" src="https://www.youtube.com/embed/JUt2y2TpemY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> */}
+                        {/* <a href={'/react/material/video/' + e.hash} style={{textDecoration : "none"}}> */}
+                        <CardContent className={classes.cardContent}>
+                            <Typography gutterBottom variant="subheading">
+                                {/* {e.title} */}
+                                AKLO X ZORN / A to Z TOUR 2018
+                            </Typography>
+                        </CardContent>
+                        {/* </a> */}
+                        <CardActions>
+                            <Typography variant="caption">
+                                {/* {e.channel} */}
+                                hotmuzik1989
+                            </Typography>
+                            <Typography variant="caption">
+                                {/* {e.date} */}
+                                2018-09-28T03:29:35.000Z
+                            </Typography>
+                        </CardActions>
+                    </Card>
+                </Grid>
+                <Grid item>
+                    <Card className={classes.card}>
+                        <CardMedia
+                            className={classes.media}
+                            image="https://i.ytimg.com/vi/aVjnTPZj5rk/mqdefault.jpg"
+                            component={Link}
+                            to={'/video/aVjnTPZj5rk'}
+                        />
+                        {/* <iframe width="312" height="175.5" src="https://www.youtube.com/embed/aVjnTPZj5rk" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> */}
+                        {/* <a href={'/react/material/video/' + e.hash} style={{textDecoration : "none"}}> */}
+                        <CardContent className={classes.cardContent}>
+                            <Typography gutterBottom variant="subheading">
+                                {/* {e.title} */}
+                                SIMON JAP - くそったれFor Life Remix
+                            </Typography>
+                        </CardContent>
+                        {/* </a> */}
+                        <CardActions>
+                            <Typography variant="caption">
+                                {/* {e.channel} */}
+                                Shinjyuku Tokyo
+                            </Typography>
+                            <Typography variant="caption">
+                                {/* {e.date} */}
+                                2018-09-25T16:53:38.000Z
+                            </Typography>
+                        </CardActions>
+                    </Card>
+                </Grid>
+            </Grid>
+        );
+
         return (
             <React.Fragment>
-                <Typography variant="headline" style={{textAlign: "center"}}>
+                <Typography variant="headline" style={{ textAlign: "center", marginTop: 20, marginBottom: 10 }}>
                     あなたへのオススメ
                 </Typography>
                 <div className={classes.flex}>
-                    <Grid container justify='center' direction="row" spacing={16}>
-                        <Grid item> 
-                            <Card className={classes.card}>
-                            {/* <CardMedia
-                                className={classes.media}
-                                image={e.img}
-                                component={Link}
-                                to={'/video/' + e.hash}
-                            /> */}
-                            <iframe width="312" height="175.5" src="https://www.youtube.com/embed/0zWdlZsMwME" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                            {/* <a href={'/react/material/video/' + e.hash} style={{textDecoration : "none"}}> */}
-                                <CardContent className={classes.cardContent}>
-                                <Typography gutterBottom variant="subheading">
-                                    {/* {e.title} */}
-                                    aaa
-                                </Typography>
-                                </CardContent>
-                            {/* </a> */}
-                            <CardActions>
-                            <Typography variant="caption">
-                                {/* {e.channel} */}
-                                bbb
-                                </Typography>
-                                <Typography variant="caption">
-                                {/* {e.date} */}
-                                ccc
-                                </Typography>
-                            </CardActions>
-                            </Card>
-                        </Grid>
-                        <Grid item> 
-                            <Card className={classes.card}>
-                            {/* <CardMedia
-                                className={classes.media}
-                                image={e.img}
-                                component={Link}
-                                to={'/video/' + e.hash}
-                            /> */}
-                            <iframe width="312" height="175.5" src="https://www.youtube.com/embed/0zWdlZsMwME" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                            {/* <a href={'/react/material/video/' + e.hash} style={{textDecoration : "none"}}> */}
-                                <CardContent className={classes.cardContent}>
-                                <Typography gutterBottom variant="subheading">
-                                    {/* {e.title} */}
-                                    aaa
-                                </Typography>
-                                </CardContent>
-                            {/* </a> */}
-                            <CardActions>
-                            <Typography variant="caption">
-                                {/* {e.channel} */}
-                                bbb
-                                </Typography>
-                                <Typography variant="caption">
-                                {/* {e.date} */}
-                                ccc
-                                </Typography>
-                            </CardActions>
-                            </Card>
-                        </Grid>
-                    </Grid>
+                    {recommendVideo}
+                    {recommendVideo}
+                    {recommendVideo}
+                    {recommendVideo}
                 </div>
             </React.Fragment>
         );

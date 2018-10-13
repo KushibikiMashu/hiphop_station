@@ -100,7 +100,8 @@ class NewSongs extends React.Component {
 
     const { classes } = this.props;
     const songs = this.state.items.map(e => {
-      return <Grid item>
+      return (
+      <Grid item>
         <Card className={classes.card}>
           <CardMedia
             className={classes.media}
@@ -118,6 +119,7 @@ class NewSongs extends React.Component {
           </CardActions>
         </Card>
       </Grid>
+      )
     });
 
     return (

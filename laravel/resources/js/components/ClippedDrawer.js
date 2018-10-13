@@ -110,16 +110,16 @@ function ClippedDrawer(props) {
 
   return (
     <Router basename="/react/material">
-    <div className={classes.root}>
-      <AppBar position="fixed" className={classes.appBar} style={{ backgroundColor: '#424242'}}>
-        <Toolbar>
-            <Typography variant="title" color="inherit" noWrap style={{ margin: "0 auto", textDecoration: "none"}} component={Link} to="/">
+      <div className={classes.root}>
+        <AppBar position="fixed" className={classes.appBar} style={{ backgroundColor: '#424242' }}>
+          <Toolbar>
+            <Typography variant="title" color="inherit" noWrap style={{ margin: "0 auto", textDecoration: "none" }} component={Link} to="/">
               日本語ラップStation（仮）
             </Typography>
-        </Toolbar>
-      </AppBar>
+          </Toolbar>
+        </AppBar>
 
-      {/* <Drawer
+        {/* <Drawer
         variant="permanent"
         classes={{
           paper: classes.drawerPaper,
@@ -128,14 +128,14 @@ function ClippedDrawer(props) {
         <div className={classes.toolbar} />
         <List>{DrawerListItems}</List>
       </Drawer> */}
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
           <Route exact path='/' component={NewSongs} />
           <Route path='/video' />
           <Route path='/battle' component={NewMCBattle} />
           <Route path='/video/:hash' component={VideoPlayer} />
-      </main>
-    </div>
+        </main>
+      </div>
     </Router>
   );
 }
