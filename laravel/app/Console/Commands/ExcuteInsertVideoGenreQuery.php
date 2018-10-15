@@ -50,25 +50,25 @@ class ExcuteUpdateVideoGenreQuery extends Command
 
         // 戦国MCBattleとUMB、ifktvの特定の動画をbattleに分類する
         DB::table('video')
-        ->where('channel_id', '=', '8')
-        ->orWhere('channel_id', '=', '9')
-        ->orWhere([
+            ->where('channel_id', '=', '8')
+            ->orWhere('channel_id', '=', '9')
+            ->orWhere([
             ['channel_id', '=', '23'],
             ['title', 'like', '%SPOTLIGHT%']
             ])
-        ->orWhere([
+            ->orWhere([
                 ['channel_id', '=', '23'],
                 ['title', 'like', '%ENTER%']
                 ])
-        ->update(['genre' => 'battle']);
+            ->update(['genre' => 'battle']);
 
         // 特定の条件の動画をsongに分類する
         DB::table('video')
-        ->where('title', 'like', '%【MV】%')
-        ->orWhere('title', 'like', '%Music Video%')
-        ->orWhere('title', 'like', '%MusicVideo%')
-        ->orWhere('title', 'like', '% CHECK YOUR MIC%')
-        ->update(['genre' => 'song']);
+            ->where('title', 'like', '%【MV】%')
+            ->orWhere('title', 'like', '%Music Video%')
+            ->orWhere('title', 'like', '%MusicVideo%')
+            ->orWhere('title', 'like', '% CHECK YOUR MIC%')
+            ->update(['genre' => 'song']);
 
         // genreをradio(Creepy Nuts)、interview(Neet Tokyoなど)、othersに分類する？
         // MVPではothersだけのリリースでOK
