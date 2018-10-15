@@ -60,20 +60,21 @@ class GetChannelData extends Command
             $now = Carbon::now();
 
             DB::insert(
-                'insert into channel (title, channel_hash, published_at, video_count, created_at, updated_at) 
+                'insert into channel (title, hash, published_at, video_count, created_at, updated_at) 
                 values (?, ?, ?, ?, ?, ?)',
                 [$title, $hash, $published_at, (int)$video_count, $now, $now]
             );
 
             // channel_thumbnailsテーブルに挿入するデータ
-            $channel_id = DB::table('channel')->where('channel_hash', '=', $hash)->first()->id;
+            $channel_id = DB::table('channel')->where('hash', '=', $hash)->first()->id;
+            $std = $channel->snippet->thumbnails->default->url;
             $medium = $channel->snippet->thumbnails->medium->url;
             $high = $channel->snippet->thumbnails->high->url;
             
             DB::insert(
-                'insert into channel_thumbnails (channel_id, medium, high, created_at, updated_at) 
-                values (?, ?, ?, ?, ?)',
-                [$channel_id, $medium, $high, $now, $now]
+                'insert into channel_thumbnail (channel_id, std, medium, high, created_at, updated_at) 
+                values (?, ?, ?, ?, ?, ?)',
+                [$channel_id, $std, $medium, $high, $now, $now]
             );
         }
     }
