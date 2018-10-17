@@ -64,11 +64,13 @@ class CreateResponseJsonFromYoutubeAPIForTest extends Command
         // 最新の動画を取得
         $after = $this->fetch_max_published_datetime();
         $before = substr($now->format(DateTime::ATOM), 0, 19) . '.000Z';
-        $res = Youtube::listChannelVideos('UC2UCB_L3Kh6Kv5pL3pJZFlA', 50, $after, $before);
+        $res = Youtube::listChannelVideos('UCzHhZATibT1t6iYEzDbbIaw', 50, $after, $before);
+
+        if($res === false) dd('No new video'); 
 
         // testフォルダにJSONを出力
         $json = json_encode($res, JSON_UNESCAPED_UNICODE);
-        $file = dirname(__FILE__) . '/../../../tests/json/response.json';
+        $file = dirname(__FILE__) . '/../../../tests/json/add_response.json';
         file_put_contents($file, $json);
     }
 

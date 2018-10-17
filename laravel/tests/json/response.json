@@ -229,5 +229,104 @@
             "channelTitle": "Shinjyuku Tokyo",
             "liveBroadcastContent": "none"
         }
+    },
+    {
+        "kind": "youtube#searchResult",
+        "etag": "\"XI7nbFXulYBIpL0ayR_gDh3eu1k\/0X1NgXF0Sny-jp_gArobi4_bddA\"",
+        "id": {
+            "kind": "youtube#video",
+            "videoId": "IKdBX_cqtAs"
+        },
+        "snippet": {
+            "publishedAt": "2018-10-15T11:18:00.000Z",
+            "channelId": "UCpS3tsdYezxUSqYlwj4rEgw",
+            "title": "KOWICHI - Dirty Force One feat. T-Pablow & Tiji Jojo (Official Video)",
+            "description": "Dirty Force One feat. T-Pablow & Tiji Jojo \/ Prod. MURVSAKI Directed by: HAVIT ART STUDIO KOWICHI - Value (CD 初回版DVD付き) 2018 10\/17 In Store KSUP ...",
+            "thumbnails": {
+                "default": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/IKdBX_cqtAs\/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "medium": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/IKdBX_cqtAs\/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "high": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/IKdBX_cqtAs\/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                }
+            },
+            "channelTitle": "FLY BOY RECORDS",
+            "liveBroadcastContent": "none"
+        }
+    },
+    {
+        "kind": "youtube#searchResult",
+        "etag": "\"XI7nbFXulYBIpL0ayR_gDh3eu1k\/dEv4-ri-aHqnFoW8onR9Xt1E22M\"",
+        "id": {
+            "kind": "youtube#video",
+            "videoId": "KrgAu_2pi64"
+        },
+        "snippet": {
+            "publishedAt": "2018-10-11T08:56:34.000Z",
+            "channelId": "UCzHhZATibT1t6iYEzDbbIaw",
+            "title": "YOUNG FREEZ \/ SON OF GOLD feat. JP THE WAVY (Official Music Video)",
+            "description": "Words by YOUNG FREEZ , JP THE WAVY Track by JIGG Produced by JIGG Directed by Hideki AMEMIYA(HAVIT ART STUDIO) YOUNG FREEZ \/ YOU. NOW ON ...",
+            "thumbnails": {
+                "default": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/KrgAu_2pi64\/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "medium": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/KrgAu_2pi64\/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "high": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/KrgAu_2pi64\/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                }
+            },
+            "channelTitle": "Manhattan Records \/ Manhattan Recordings",
+            "liveBroadcastContent": "none"
+        }
+    },
+    {
+        "kind": "youtube#searchResult",
+        "etag": "\"XI7nbFXulYBIpL0ayR_gDh3eu1k\/qmlKbnAMNpCDeQUM9Nqzs9yCHtk\"",
+        "id": {
+            "kind": "youtube#video",
+            "videoId": "sLbz5gf0CR4"
+        },
+        "snippet": {
+            "publishedAt": "2018-10-03T08:36:56.000Z",
+            "channelId": "UCzHhZATibT1t6iYEzDbbIaw",
+            "title": "RICK NOVA - Virus [Short Ver.]  (Official Music Video)",
+            "description": "Directed by Lilsom prod. by Hatake Shocknin □RICK NOVA instagram : https:\/\/www.instagram.com\/rick_nova_ Twitter : http:\/\/twitter.com\/ricky1914 spotify ...",
+            "thumbnails": {
+                "default": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/sLbz5gf0CR4\/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "medium": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/sLbz5gf0CR4\/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "high": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/sLbz5gf0CR4\/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                }
+            },
+            "channelTitle": "Manhattan Records \/ Manhattan Recordings",
+            "liveBroadcastContent": "none"
+        }
     }
 ]

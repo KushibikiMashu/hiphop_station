@@ -53,12 +53,12 @@ class ExcuteUpdateVideoGenreQuery extends Command
             ->where('channel_id', '=', '8')
             ->orWhere('channel_id', '=', '9')
             ->orWhere([
-            ['channel_id', '=', '23'],
-            ['title', 'like', '%SPOTLIGHT%']
-            ])
+                    ['channel_id', '=', '23'],
+                    ['title', 'like', '%SPOTLIGHT%']
+                ])
             ->orWhere([
-                ['channel_id', '=', '23'],
-                ['title', 'like', '%ENTER%']
+                    ['channel_id', '=', '23'],
+                    ['title', 'like', '%ENTER%']
                 ])
             ->update(['genre' => 'battle']);
 
@@ -67,7 +67,7 @@ class ExcuteUpdateVideoGenreQuery extends Command
             ->where('title', 'like', '%【MV】%')
             ->orWhere('title', 'like', '%Music Video%')
             ->orWhere('title', 'like', '%MusicVideo%')
-            ->orWhere('title', 'like', '% CHECK YOUR MIC%')
+            ->orWhere('title', 'like', '%CHECK YOUR MIC%')
             ->update(['genre' => 'song']);
 
         // genreをradio(Creepy Nuts)、interview(Neet Tokyoなど)、othersに分類する？
