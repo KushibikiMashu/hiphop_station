@@ -1,0 +1,233 @@
+[
+    {
+        "kind": "youtube#searchResult",
+        "etag": "\"XI7nbFXulYBIpL0ayR_gDh3eu1k\/7Vp85luTyiQuwAfevCcV8US0cJM\"",
+        "id": {
+            "kind": "youtube#video",
+            "videoId": "RdtiPcvX-D4"
+        },
+        "snippet": {
+            "publishedAt": "2018-10-09T10:00:06.000Z",
+            "channelId": "UC2UCB_L3Kh6Kv5pL3pJZFlA",
+            "title": "ROUND1-1 SHABAZ vs 百足： SCHOOL OF RAP 2018 GRAND CHAMPIONSHIP",
+            "description": "2019\/1\/6(sun) KING OF KINGS 2018 GRAND CHAMPIONSHIP FINAL at 豊洲PIT http:\/\/www.kokjapan.com\/",
+            "thumbnails": {
+                "default": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/RdtiPcvX-D4\/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "medium": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/RdtiPcvX-D4\/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "high": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/RdtiPcvX-D4\/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                }
+            },
+            "channelTitle": "Shinjyuku Tokyo",
+            "liveBroadcastContent": "none"
+        }
+    },
+    {
+        "kind": "youtube#searchResult",
+        "etag": "\"XI7nbFXulYBIpL0ayR_gDh3eu1k\/2rfxSivibRnzzFR7zlKS4kjSGqk\"",
+        "id": {
+            "kind": "youtube#video",
+            "videoId": "t5POMN_o1K8"
+        },
+        "snippet": {
+            "publishedAt": "2018-10-10T10:00:02.000Z",
+            "channelId": "UC2UCB_L3Kh6Kv5pL3pJZFlA",
+            "title": "ROUND1-2 Randy Wati Sati vs がーどまん：SCHOOL OF RAP 2018 GRAND CHAMPIONSHIP",
+            "description": "2019\/1\/6(sun) KING OF KINGS 2018 GRAND CHAMPIONSHIP FINAL at 豊洲PIT http:\/\/www.kokjapan.com\/",
+            "thumbnails": {
+                "default": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/t5POMN_o1K8\/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "medium": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/t5POMN_o1K8\/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "high": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/t5POMN_o1K8\/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                }
+            },
+            "channelTitle": "Shinjyuku Tokyo",
+            "liveBroadcastContent": "none"
+        }
+    },
+    {
+        "kind": "youtube#searchResult",
+        "etag": "\"XI7nbFXulYBIpL0ayR_gDh3eu1k\/QX437fVp30-LOvxEGf9yPbVsAWk\"",
+        "id": {
+            "kind": "youtube#video",
+            "videoId": "eGRMQwSCtUU"
+        },
+        "snippet": {
+            "publishedAt": "2018-10-11T10:00:03.000Z",
+            "channelId": "UC2UCB_L3Kh6Kv5pL3pJZFlA",
+            "title": "ROUND1-3 TERA_Z vs よんろく：SCHOOL OF RAP 2018 GRAND CHAMPIONSHIP",
+            "description": "2019\/1\/6(sun) KING OF KINGS 2018 GRAND CHAMPIONSHIP FINAL at 豊洲PIT http:\/\/www.kokjapan.com\/",
+            "thumbnails": {
+                "default": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/eGRMQwSCtUU\/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "medium": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/eGRMQwSCtUU\/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "high": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/eGRMQwSCtUU\/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                }
+            },
+            "channelTitle": "Shinjyuku Tokyo",
+            "liveBroadcastContent": "none"
+        }
+    },
+    {
+        "kind": "youtube#searchResult",
+        "etag": "\"XI7nbFXulYBIpL0ayR_gDh3eu1k\/Incz2dDh4mHj_0O9ycKo_3BIIok\"",
+        "id": {
+            "kind": "youtube#video",
+            "videoId": "8JrNOq58A9c"
+        },
+        "snippet": {
+            "publishedAt": "2018-10-08T10:00:06.000Z",
+            "channelId": "UC2UCB_L3Kh6Kv5pL3pJZFlA",
+            "title": "KOK UPDATE VOL.42「FINALIST NO.5 ミメイ」",
+            "description": "予選通過者に関西選抜と9SARI選抜を加え、さらにREXX・凱旋・MRJなど人気の高まっている新興MC BATTLEの協力を得て開催したSCHOOL OF RAP 2018 GRAND ...",
+            "thumbnails": {
+                "default": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/8JrNOq58A9c\/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "medium": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/8JrNOq58A9c\/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "high": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/8JrNOq58A9c\/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                }
+            },
+            "channelTitle": "Shinjyuku Tokyo",
+            "liveBroadcastContent": "none"
+        }
+    },
+    {
+        "kind": "youtube#searchResult",
+        "etag": "\"XI7nbFXulYBIpL0ayR_gDh3eu1k\/EA5sERY93k9olkE8Ni6K2hymcWo\"",
+        "id": {
+            "kind": "youtube#video",
+            "videoId": "uIo8n9r5DR0"
+        },
+        "snippet": {
+            "publishedAt": "2018-10-12T10:00:03.000Z",
+            "channelId": "UC2UCB_L3Kh6Kv5pL3pJZFlA",
+            "title": "ROUND1-4 T-Swagg vs LIT0：SCHOOL OF RAP 2018 GRAND CHAMPIONSHIP",
+            "description": "2019\/1\/6(sun) KING OF KINGS 2018 GRAND CHAMPIONSHIP FINAL at 豊洲PIT http:\/\/www.kokjapan.com\/",
+            "thumbnails": {
+                "default": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/uIo8n9r5DR0\/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "medium": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/uIo8n9r5DR0\/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "high": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/uIo8n9r5DR0\/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                }
+            },
+            "channelTitle": "Shinjyuku Tokyo",
+            "liveBroadcastContent": "none"
+        }
+    },
+    {
+        "kind": "youtube#searchResult",
+        "etag": "\"XI7nbFXulYBIpL0ayR_gDh3eu1k\/nOGshGmIWxxZybW3MTeZ7NeBWPI\"",
+        "id": {
+            "kind": "youtube#video",
+            "videoId": "bHe0RG1U7VI"
+        },
+        "snippet": {
+            "publishedAt": "2018-10-15T10:00:03.000Z",
+            "channelId": "UC2UCB_L3Kh6Kv5pL3pJZFlA",
+            "title": "ROUND1-5 SHOHEI vs ミメイ：SCHOOL OF RAP 2018 GRAND CHAMPIONSHIP",
+            "description": "2019\/1\/6(sun) KING OF KINGS 2018 GRAND CHAMPIONSHIP FINAL at 豊洲PIT http:\/\/www.kokjapan.com\/",
+            "thumbnails": {
+                "default": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/bHe0RG1U7VI\/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "medium": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/bHe0RG1U7VI\/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "high": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/bHe0RG1U7VI\/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                }
+            },
+            "channelTitle": "Shinjyuku Tokyo",
+            "liveBroadcastContent": "none"
+        }
+    },
+    {
+        "kind": "youtube#searchResult",
+        "etag": "\"XI7nbFXulYBIpL0ayR_gDh3eu1k\/8gMSV1sqzNZ8RgLS7dGQS1X55I8\"",
+        "id": {
+            "kind": "youtube#video",
+            "videoId": "f4NC6DP0Vyw"
+        },
+        "snippet": {
+            "publishedAt": "2018-10-16T10:00:03.000Z",
+            "channelId": "UC2UCB_L3Kh6Kv5pL3pJZFlA",
+            "title": "ROUND1-6 Qoredy vs Luiz：SCHOOL OF RAP 2018 GRAND CHAMPIONSHIP",
+            "description": "2019\/1\/6(sun) KING OF KINGS 2018 GRAND CHAMPIONSHIP FINAL at 豊洲PIT http:\/\/www.kokjapan.com\/",
+            "thumbnails": {
+                "default": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/f4NC6DP0Vyw\/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "medium": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/f4NC6DP0Vyw\/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "high": {
+                    "url": "https:\/\/i.ytimg.com\/vi\/f4NC6DP0Vyw\/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                }
+            },
+            "channelTitle": "Shinjyuku Tokyo",
+            "liveBroadcastContent": "none"
+        }
+    }
+]
