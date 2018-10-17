@@ -17,7 +17,9 @@ class Kernel extends ConsoleKernel
         Commands\GetVideoData::class,
         Commands\GenerateJson::class,
         Commands\ExcuteUpdateVideoGenreQuery::class,
+        Commands\FetchLatestVideosFromYoutubeAPI::class,
         Commands\UpdateAddressOfStdVideoThumbnail::class,
+        Commands\CreateResponseJsonFromYoutubeAPIForTest::class,
     ];
 
     /**

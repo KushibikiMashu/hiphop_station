@@ -3,10 +3,10 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Alaouy\Youtube\Facades\Youtube;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Carbon;
 use DateTime;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use Alaouy\Youtube\Facades\Youtube;
 
 class GetVideoData extends Command
 {
@@ -46,7 +46,7 @@ class GetVideoData extends Command
         date_default_timezone_set("Asia/Tokyo");
         $number = $this->argument("id");
         $channel_query = DB::table('channel')->where([
-            ['id', '=', $number]
+                ['id', '=', $number]
             ])->get();
 
         $now = Carbon::now();
@@ -58,7 +58,7 @@ class GetVideoData extends Command
             if($record->video_count === 0 || count($video_exist) > 1){
                 continue;
             }
-           $videos[] = $this->fetch_channel_data($record->channel_hash, $record->published_at, $now_timestamp);
+           $videos[] = $this->fetch_channel_data($record->hash, $record->published_at, $now_timestamp);
         }
 
         if(count($videos) === 0){
@@ -69,26 +69,27 @@ class GetVideoData extends Command
         for($i = 0; $i < count($videos); $i++){
             for($j = 0; $j < count($videos[$i]); $j++){
                 // videoテーブルにデータを挿入する
-                $channel_id = DB::table('channel')->where('channel_hash', '=', $videos[$i][$j]->snippet->channelId)->first()->id;
-                $hash = $videos[$i][$j]->id->videoId;
+                $channel_id = DB::table('channel')->where('hash', '=', $videos[$i][$j]->snippet->channelId)->first()->id;
                 $title = $videos[$i][$j]->snippet->title;
+                $hash = $videos[$i][$j]->id->videoId;
                 $video_published_at = $videos[$i][$j]->snippet->publishedAt;
 
                 DB::insert(
-                    'insert into video (channel_id, title, video_hash, published_at, created_at, updated_at) 
+                    'insert into video (channel_id, title, hash, published_at, created_at, updated_at) 
                     values (?, ?, ?, ?, ?, ?)',
                     [ $channel_id, $title, $hash, $video_published_at, $now, $now]
                 );
 
                 // video_thumbnailsテーブルにデータを挿入する
-                $video_id = DB::table('video')->where('video_hash', '=', $hash)->first()->id;
+                $video_id = DB::table('video')->where('hash', '=', $hash)->first()->id;
+                $std = $videos[$i][$j]->snippet->thumbnails->default->url;
                 $medium = $videos[$i][$j]->snippet->thumbnails->medium->url;
                 $high = $videos[$i][$j]->snippet->thumbnails->high->url;
 
                 DB::insert(
-                    'insert into video_thumbnails (video_id, medium, high, created_at, updated_at) 
+                    'insert into video_thumbnails (video_id, std, medium, high, created_at, updated_at) 
                     values (?, ?, ?, ?, ?)',
-                    [$video_id, $medium, $high, $now, $now]
+                    [$video_id, $std, $medium, $high, $now, $now]
                 );
             }
         }
@@ -104,7 +105,8 @@ class GetVideoData extends Command
      *
      * @return (array)videos
      */
-    private function fetch_channel_data($channel_hash, $channel_published_at, $now_timestamp){
+    private function fetch_channel_data($channel_hash, $channel_published_at, $now_timestamp)
+    {
         $videos = [];
         $pub_date = new DateTime($channel_published_at);
         $pub_timestamp = strtotime($channel_published_at);

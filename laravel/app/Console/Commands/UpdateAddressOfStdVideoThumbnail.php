@@ -43,8 +43,7 @@ class UpdateAddressOfStdVideoThumbnail extends Command
             ->get();
 
         $id = 1;
-        foreach($results as $result){
-
+        foreach($results as $result){            
             DB::table('video_thumbnail')
                 ->where('id', '=', $id)
                 ->update(['std' => 'https://i.ytimg.com/vi/' . $result->hash . '/default.jpg']);
