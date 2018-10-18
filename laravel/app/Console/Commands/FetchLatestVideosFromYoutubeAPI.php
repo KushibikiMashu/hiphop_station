@@ -11,6 +11,10 @@ use Exception;
 
 class FetchLatestVideosFromYoutubeAPI extends Command
 {
+
+    const VIDEO_TABLE = 'video';
+    const CHANNEL_TABLE = 'channel';
+
     /**
      * The name and signature of the console command.
      *
@@ -259,15 +263,15 @@ class FetchLatestVideosFromYoutubeAPI extends Command
         return false;
     }
 
-    protected function set_video_query()
+    private function set_video_query()
     {
-        $this->video_query = DB::table('video')
+        $this->video_query = DB::table(self::VIDEO_TABLE)
             ->get();
     }
 
-    protected function set_channel_query()
+    private function set_channel_query()
     {
-        $this->channel_query = DB::table('channel')
+        $this->channel_query = DB::table(self::CHANNEL_TABLE)
             ->get();
     }
 }
