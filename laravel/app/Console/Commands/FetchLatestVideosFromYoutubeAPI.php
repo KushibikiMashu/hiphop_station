@@ -7,7 +7,6 @@ use DateTime;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Alaouy\Youtube\Facades\Youtube;
-use Exception;
 
 class FetchLatestVideosFromYoutubeAPI extends Command
 {
@@ -77,30 +76,56 @@ class FetchLatestVideosFromYoutubeAPI extends Command
         date_default_timezone_set("Asia/Tokyo");
         $now = Carbon::now();
 
-        $res = $this->read_API_response_file();
+        $channel_data = $this->read_API_response_file();
 
         try {
+            // Youtube APIで新着動画を取得する
             $after = $this->fetch_max_published_datetime();
             $before = substr($now->format(DateTime::ATOM), 0, 19) . '.000Z';
+            // $channel_data = $res = [];
+            
+            // foreach($this->channel_query as $query) {
+            //     $res = Youtube::listChannelVideos($query->hash, 30, $after, $before);
+            //     if(!$res) continue;
+            //     $channel_data[] = $res;
+            // }
 
-            // TODO Youtube APIでresponseを取得する
+            // 新着動画がなければ処理を終える
+            // if(empty($channel_data)) return;
 
-            // videoテーブルに挿入するデータを取得
-            for($i = 0; $i < count($res); $i++){
-                $video_records[] = $this->prepare_video_record($i, $res, $now);
+            // videoテーブルに挿入する連想配列を取得
+            foreach($channel_data as $channel_videos) {
+                foreach($channel_videos as $channel_video){
+                    // videoのhashが重複していればskipする
+                    $hash = $channel_video->id->videoId;
+                    if(isset($this->flipped_video_hash[$hash])){
+                        continue;
+                    }
+                    $video_records[] = $this->prepare_video_record($channel_video, $now);
+                }
             }
+
+            // 動画が全て重複していれば処理を終える
+            if(empty($video_records)) return;
 
             // テスト終了後、video_copyをvideoに変更
             DB::table($video_table_name)->insert($video_records);
 
-            // video_thumbnailsテーブルに挿入するデータを取得
-            for($i = 0; $i < count($res); $i++){
-                $video_thumbnail_records[] = $this->prepare_video_thumbnail_record($i, $res, $now);
+            // video_thumbnailsテーブルに挿入する連想配列を取得
+            foreach($channel_data as $channel_videos) {
+                foreach($channel_videos as $channel_video){
+                    // videoのhashがダブったらskipする
+                    $hash = $channel_video->id->videoId;
+                    if(isset($this->flipped_video_hash[$hash])){
+                        continue;
+                    }
+                    $video_thumbnail_records[] = $this->prepare_video_thumbnail_record($channel_video, $now);
+                }
             }
 
             // テスト終了後、video_copyをvideoに変更
             DB::table($video_thumbnail_table_name)->insert($video_thumbnail_records);
-            
+
         } catch (Exception $e) {
             report($e);
             report($now);
@@ -141,7 +166,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
      */
     private function read_API_response_file(): array
     {
-        $file = dirname(__FILE__) . '/../../../tests/json/response.json';
+        $file = dirname(__FILE__) . '/../../../tests/json/res.json';
         $json = file_get_contents($file);
         return json_decode($json);
     }
@@ -149,23 +174,22 @@ class FetchLatestVideosFromYoutubeAPI extends Command
     /**
      * videoテーブルに格納するレコードを作成する
      *
-     * @param integer $i
-     * @param array $res
+     * @param object $channel_video
      * @param datetime $now
      * @return array
      */
-    private function prepare_video_record(int $i, array $res, datetime $now): array
+    private function prepare_video_record(object $channel_video, datetime $now): array
     {
-        $channel_id = DB::table('channel')->where('hash', '=', $res[$i]->snippet->channelId)->first()->id;
-        $title = $res[$i]->snippet->title;
+        $channel_id = DB::table('channel')->where('hash', '=', $channel_video->snippet->channelId)->first()->id;
+        $title = $channel_video->snippet->title;
         $genre = $this->determine_video_genre($channel_id, $title);
 
         return [
             'channel_id' => $channel_id,
             'title' => $title,
-            'hash' => $res[$i]->id->videoId,
+            'hash' => $channel_video->id->videoId,
             'genre' => $genre,
-            'published_at' => $res[$i]->snippet->publishedAt,
+            'published_at' => $channel_video->snippet->publishedAt,
             'created_at' => $now,
             'updated_at' => $now,
         ];
@@ -232,21 +256,20 @@ class FetchLatestVideosFromYoutubeAPI extends Command
     /**
      * video_thumbnailテーブルに格納するレコードを作成する
      *
-     * @param integer $i
-     * @param array $res
+     * @param array $channel_video
      * @param datetime $now
      * @return array
      */
-    private function prepare_video_thumbnail_record(int $i, array $res, datetime $now): array
+    private function prepare_video_thumbnail_record(object $channel_video, datetime $now): array
     {
 
     $video_table_name = 'video_copy';
 
         return [
-            'video_id' => DB::table($video_table_name)->where('hash', '=', $res[$i]->id->videoId)->first()->id,
-            'std' => $res[$i]->snippet->thumbnails->default->url,
-            'medium' => $res[$i]->snippet->thumbnails->medium->url,
-            'high' => $res[$i]->snippet->thumbnails->high->url,
+            'video_id' => DB::table($video_table_name)->where('hash', '=', $channel_video->id->videoId)->first()->id,
+            'std' => $channel_video->snippet->thumbnails->default->url,
+            'medium' => $channel_video->snippet->thumbnails->medium->url,
+            'high' => $channel_video->snippet->thumbnails->high->url,
             'created_at' => $now,
             'updated_at' => $now,
         ];
