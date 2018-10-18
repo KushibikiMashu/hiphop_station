@@ -42,6 +42,13 @@ class FetchLatestVideosFromYoutubeAPI extends Command
      * @var array
      */
     private $video_query;
+    
+    /**
+     * keyは動画のhash、valueは添字の連想配列
+     *
+     * @var array
+     */
+    private $flipped_video_hash;
 
     /**
      * Create a new command instance.
@@ -53,6 +60,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
         parent::__construct();
         $this->set_video_query();
         $this->set_channel_query();
+        $this->set_flipped_video_hash();
     }
 
     /**
@@ -273,5 +281,18 @@ class FetchLatestVideosFromYoutubeAPI extends Command
     {
         $this->channel_query = DB::table(self::CHANNEL_TABLE)
             ->get();
+    }
+
+    /**
+     * 動画のダブルチェックのためにhashを格納した配列を用意する
+     * keyはhash、valueは添字
+     */
+    private function set_flipped_video_hash()
+    {
+        $video_hashes = [];
+        foreach($this->video_query as $query){
+            $video_hashes[] = $query->hash;
+        }
+        $this->flipped_video_hash = array_flip($video_hashes);
     }
 }
