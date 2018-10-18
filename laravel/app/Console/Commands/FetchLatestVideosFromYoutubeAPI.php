@@ -10,9 +10,9 @@ use Alaouy\Youtube\Facades\Youtube;
 
 class FetchLatestVideosFromYoutubeAPI extends Command
 {
-
-    const VIDEO_TABLE = 'video';
     const CHANNEL_TABLE = 'channel';
+    const VIDEO_TABLE = 'video';
+    const VIDEO_THUMBNAIL_TABLE = 'video_thumbnail';
 
     /**
      * The name and signature of the console command.
@@ -70,64 +70,50 @@ class FetchLatestVideosFromYoutubeAPI extends Command
      */
     public function handle()
     {
-        $video_table_name = 'video_copy';
-        $video_thumbnail_table_name = 'video_thumbnail_copy';
-
         date_default_timezone_set("Asia/Tokyo");
         $now = Carbon::now();
-
-        $channel_data = $this->read_API_response_file();
 
         try {
             // Youtube APIで新着動画を取得する
             $after = $this->fetch_max_published_datetime();
             $before = substr($now->format(DateTime::ATOM), 0, 19) . '.000Z';
-            // $channel_data = $res = [];
+            $channel_data = $res = [];
             
-            // foreach($this->channel_query as $query) {
-            //     $res = Youtube::listChannelVideos($query->hash, 30, $after, $before);
-            //     if(!$res) continue;
-            //     $channel_data[] = $res;
-            // }
+            foreach($this->channel_query as $query) {
+                $res = Youtube::listChannelVideos($query->hash, 30, $after, $before);
+                if(!$res) continue;
+                $channel_data[] = $res;
+            }
 
             // 新着動画がなければ処理を終える
-            // if(empty($channel_data)) return;
+            if(empty($channel_data)) return;
 
             // videoテーブルに挿入する連想配列を取得
             foreach($channel_data as $channel_videos) {
                 foreach($channel_videos as $channel_video){
                     // videoのhashが重複していればskipする
                     $hash = $channel_video->id->videoId;
-                    if(isset($this->flipped_video_hash[$hash])){
-                        continue;
-                    }
+                    if(isset($this->flipped_video_hash[$hash])) continue;
                     $video_records[] = $this->prepare_video_record($channel_video, $now);
                 }
             }
 
             // 動画が全て重複していれば処理を終える
             if(empty($video_records)) return;
-
-            // テスト終了後、video_copyをvideoに変更
-            DB::table($video_table_name)->insert($video_records);
+            DB::table(self::VIDEO_TABLE)->insert($video_records);
 
             // video_thumbnailsテーブルに挿入する連想配列を取得
             foreach($channel_data as $channel_videos) {
                 foreach($channel_videos as $channel_video){
-                    // videoのhashがダブったらskipする
                     $hash = $channel_video->id->videoId;
-                    if(isset($this->flipped_video_hash[$hash])){
-                        continue;
-                    }
+                    if(isset($this->flipped_video_hash[$hash])) continue;
                     $video_thumbnail_records[] = $this->prepare_video_thumbnail_record($channel_video, $now);
                 }
             }
 
-            // テスト終了後、video_copyをvideoに変更
-            DB::table($video_thumbnail_table_name)->insert($video_thumbnail_records);
+            DB::table(self::VIDEO_THUMBNAIL_TABLE)->insert($video_thumbnail_records);
 
         } catch (Exception $e) {
-            report($e);
             report($now);
             report('Failed to fetch latest videos.');
 
@@ -142,7 +128,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
      */
     private function fetch_max_published_datetime(): string
     {
-        $max = ['id' => '', 'datetime' => '2000-01-01 00:00:00'];
+        $max = ['id' => '', 'datetime' => Carbon::now()->subYear()->format('Y-m-d H:i:s')];
         foreach($this->video_query as $query) {
             $date = date('Y-m-d H:i:s', strtotime($query->published_at));
             if($max['datetime'] < $date){
@@ -262,11 +248,8 @@ class FetchLatestVideosFromYoutubeAPI extends Command
      */
     private function prepare_video_thumbnail_record(object $channel_video, datetime $now): array
     {
-
-    $video_table_name = 'video_copy';
-
         return [
-            'video_id' => DB::table($video_table_name)->where('hash', '=', $channel_video->id->videoId)->first()->id,
+            'video_id' => DB::table(self::VIDEO_TABLE)->where('hash', '=', $channel_video->id->videoId)->first()->id,
             'std' => $channel_video->snippet->thumbnails->default->url,
             'medium' => $channel_video->snippet->thumbnails->medium->url,
             'high' => $channel_video->snippet->thumbnails->high->url,
