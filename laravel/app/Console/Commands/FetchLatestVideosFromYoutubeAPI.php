@@ -137,7 +137,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
             }
         }
 
-        $max_datetime_query = DB::table('video')
+        $max_datetime_query = DB::table(self::VIDEO_TABLE)
                             ->select('published_at')
                             ->where('id', '=', $max['id'])
                             ->get();
@@ -166,7 +166,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
      */
     private function prepare_video_record(object $channel_video, datetime $now): array
     {
-        $channel_id = DB::table('channel')->where('hash', '=', $channel_video->snippet->channelId)->first()->id;
+        $channel_id = DB::table(self::CHANNEL_TABLE)->where('hash', '=', $channel_video->snippet->channelId)->first()->id;
         $title = $channel_video->snippet->title;
         $genre = $this->determine_video_genre($channel_id, $title);
 
