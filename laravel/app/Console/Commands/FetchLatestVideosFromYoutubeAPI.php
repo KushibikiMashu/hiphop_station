@@ -14,6 +14,12 @@ class FetchLatestVideosFromYoutubeAPI extends Command
     const VIDEO_TABLE = 'video';
     const VIDEO_THUMBNAIL_TABLE = 'video_thumbnail';
 
+    const words = [
+        '2' => ['KOK', 'KING OF KINGS', 'SCHOOL OF RAP'],
+        '23' => ['SPOTLIGHT', 'ENTER'],
+        'song' => ['【MV】', 'Music Video', 'MusicVideo']
+    ];
+
     /**
      * The name and signature of the console command.
      *
@@ -26,27 +32,13 @@ class FetchLatestVideosFromYoutubeAPI extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Fetch latest videos';
 
-    /**
-     * channelテーブルの全レコード
-     *
-     * @var array
-     */
+    // channelテーブルの全レコード
     private $channel_query;
-
-    /**
-     * videoテーブルの全レコード
-     *
-     * @var array
-     */
+    // videoテーブルの全レコード
     private $video_query;
-    
-    /**
-     * keyは動画のhash、valueは添字の連想配列
-     *
-     * @var array
-     */
+    //keyは動画のhash、valueは添字の連想配列
     private $flipped_video_hash;
 
     /**
@@ -57,8 +49,8 @@ class FetchLatestVideosFromYoutubeAPI extends Command
     public function __construct()
     {
         parent::__construct();
-        $this->set_video_query();
-        $this->set_channel_query();
+        $this->video_query = DB::table(self::VIDEO_TABLE)->get();
+        $this->channel_query = DB::table(self::CHANNEL_TABLE)->get();
         $this->set_flipped_video_hash();
     }
 
@@ -193,27 +185,27 @@ class FetchLatestVideosFromYoutubeAPI extends Command
             // 基本的にsong
             case '2':
                 // 配列はプロパティで持つ
-                if($this->array_strpos($title, ['KOK', 'KING OF KINGS', 'SCHOOL OF RAP']) === true){
+                if($this->array_strpos($title, self::words['2']) === true){
                     $flag = 1;
                 }
                 break;
             // 基本的にbattle
             case '8':
                 $flag = 1;
-                if($this->array_strpos($title, ['【MV】', 'Music Video', 'MusicVideo']) === true){
+                if($this->array_strpos($title, self::words['song']) === true){
                     $flag = 0;
                 }
                 break;
             // 基本的にbattle            
             case '9':
                 $flag = 1;
-                if($this->array_strpos($title, ['【MV】', 'Music Video', 'MusicVideo']) === true){
+                if($this->array_strpos($title, self::words['song']) === true){
                     $flag = 0;
                 }
                 break;
             // 基本的にsong
             case '23':
-                if($this->array_strpos($title, ['SPOTLIGHT', 'ENTER']) === true){
+                if($this->array_strpos($title, self::words['23']) === true){
                     $flag = 1;
                 }
                 break;
@@ -275,18 +267,6 @@ class FetchLatestVideosFromYoutubeAPI extends Command
             }
         }
         return false;
-    }
-
-    private function set_video_query()
-    {
-        $this->video_query = DB::table(self::VIDEO_TABLE)
-            ->get();
-    }
-
-    private function set_channel_query()
-    {
-        $this->channel_query = DB::table(self::CHANNEL_TABLE)
-            ->get();
     }
 
     /**
