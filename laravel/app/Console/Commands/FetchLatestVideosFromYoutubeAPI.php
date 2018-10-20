@@ -10,10 +10,9 @@ use Alaouy\Youtube\Facades\Youtube;
 
 class FetchLatestVideosFromYoutubeAPI extends Command
 {
-    const CHANNEL_TABLE = 'channel';
-    const VIDEO_TABLE = 'video';
-    const VIDEO_THUMBNAIL_TABLE = 'video_thumbnail';
-
+    /**
+     * genreをbattle, songに振り分けるための動画タイトルのキーワード
+     */
     const words = [
         '2' => ['KOK', 'KING OF KINGS', 'SCHOOL OF RAP'],
         '23' => ['SPOTLIGHT', 'ENTER'],
@@ -25,7 +24,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
      *
      * @var string
      */
-    protected $signature = 'fetch:newVideo';
+    protected $signature = 'fetch:newVideos';
 
     /**
      * The console command description.
@@ -49,8 +48,8 @@ class FetchLatestVideosFromYoutubeAPI extends Command
     public function __construct()
     {
         parent::__construct();
-        $this->video_query = DB::table(self::VIDEO_TABLE)->get();
-        $this->channel_query = DB::table(self::CHANNEL_TABLE)->get();
+        $this->video_query = DB::table(config('const.TABLE.VIDEO'))->get();
+        $this->channel_query = DB::table(config('const.TABLE.CHANNEL'))->get();
         $this->set_flipped_video_hash();
     }
 
@@ -92,7 +91,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
 
             // 動画が全て重複していれば処理を終える
             if(empty($video_records)) return;
-            DB::table(self::VIDEO_TABLE)->insert($video_records);
+            DB::table(config('const.TABLE.VIDEO'))->insert($video_records);
 
             // video_thumbnailsテーブルに挿入する連想配列を取得
             foreach($channel_data as $channel_videos) {
@@ -103,7 +102,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
                 }
             }
 
-            DB::table(self::VIDEO_THUMBNAIL_TABLE)->insert($video_thumbnail_records);
+            DB::table(config('const.TABLE.VIDEO_THUMBNAIL'))->insert($video_thumbnail_records);
 
         } catch (Exception $e) {
             report($now);
@@ -129,7 +128,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
             }
         }
 
-        $max_datetime_query = DB::table(self::VIDEO_TABLE)
+        $max_datetime_query = DB::table(config('const.TABLE.VIDEO'))
                             ->select('published_at')
                             ->where('id', '=', $max['id'])
                             ->get();
@@ -158,7 +157,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
      */
     private function prepare_video_record(object $channel_video, datetime $now): array
     {
-        $channel_id = DB::table(self::CHANNEL_TABLE)->where('hash', '=', $channel_video->snippet->channelId)->first()->id;
+        $channel_id = DB::table(config('const.TABLE.CHANNEL'))->where('hash', '=', $channel_video->snippet->channelId)->first()->id;
         $title = $channel_video->snippet->title;
         $genre = $this->determine_video_genre($channel_id, $title);
 
@@ -241,7 +240,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
     private function prepare_video_thumbnail_record(object $channel_video, datetime $now): array
     {
         return [
-            'video_id' => DB::table(self::VIDEO_TABLE)->where('hash', '=', $channel_video->id->videoId)->first()->id,
+            'video_id' => DB::table(config('const.TABLE.VIDEO'))->where('hash', '=', $channel_video->id->videoId)->first()->id,
             'std' => $channel_video->snippet->thumbnails->default->url,
             'medium' => $channel_video->snippet->thumbnails->medium->url,
             'high' => $channel_video->snippet->thumbnails->high->url,
