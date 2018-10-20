@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Channel;
+use App\Video;
 use Illuminate\Console\Command;
 
 class CreateJsonOfLatestVideoAndChannel extends Command
@@ -18,7 +20,17 @@ class CreateJsonOfLatestVideoAndChannel extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Create new json file referring latest records of Channel and Video tables';
+
+    /**
+     * channelテーブルの全レコード
+     * videoテーブルの全レコード
+     *
+     * @var array
+     * @var array
+     */
+    private $channel_query;
+    private $video_query_orderby_published_at;
 
     /**
      * Create a new command instance.
@@ -28,32 +40,53 @@ class CreateJsonOfLatestVideoAndChannel extends Command
     public function __construct()
     {
         parent::__construct();
+        $this->channel_query = Channel::all()->toArray();
+        $this->video_query_orderby_published_at = Video::orderBy('published_at', 'desc')->get()->toArray();
     }
 
     /**
-     * (方針)オブジェクト指向。疎結合
+     * (方針)オブジェクト指向。疎結合。関数を短く記述する
      * 再利用できるモジュール。モジュールは関数型のように。
      * 参照透過性。副作用なし。
-     *
-     * @return mixed
      */
     public function handle()
     {
-        // 作成するjsonはmain, battle, song, channel, channelごとのvideo（工夫次第で不要）
-        // video [channel_id => '', title => '', hash => '', genre => '', published_at => '']
-        // channel
-        // song, battle, channelごとのjsonが不要になる方法
-        // video video.channel_id === 23なら、video.hashを使用する
-        // video video.genre === songなら、video.hashを使用する
-        // video video.genre === battleなら、video.hashを使用する
+        $channels = $this->channel_query;
+        $main = $this->video_query_orderby_published_at;
 
-        // 設計
-        // DBから値を読み取る
-        // published_atで昇順に並び替える
-        // 上記の連想配列を作成
-        // jsonにencodeする
-        // public/json配下に出力する
-        // これをvideoとchannelで行う
+        $queries = ['channels' => $channels, 'main' => $main];
+        foreach ($queries as $filename => $query) {
+            $this->create_json($this->unset_datetime_keys($query), $filename);
+        }
+    }
 
+    /**
+     * JSONを作成する
+     *
+     * @param array $array
+     * @param string $file_name
+     * @return void
+     */
+    private function create_json(array $array, string $filename)
+    {
+        $json = json_encode($array, JSON_UNESCAPED_UNICODE);
+        $file = dirname(__FILE__) . "/../../../public/json/{$filename}.json";
+        file_put_contents($file, $json);
+    }
+
+    /**
+     * 連想配列からkeyがcreated_at,update_atであるキー/値を削除する
+     *
+     * @param array $query
+     * @return array
+     */
+    private function unset_datetime_keys(array $query): array
+    {
+        $new_query = [];
+        foreach ($query as $record) {
+            unset($record['created_at'], $record['updated_at']);
+            $new_query[] = $record;
+        }
+        return $new_query;
     }
 }
