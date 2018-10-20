@@ -11,7 +11,7 @@ class CreateJsonOfLatestVideoAndChannel extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'create:newJson';
 
     /**
      * The console command description.

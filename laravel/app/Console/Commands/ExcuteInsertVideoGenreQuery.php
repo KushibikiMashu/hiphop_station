@@ -12,7 +12,7 @@ class ExcuteUpdateVideoGenreQuery extends Command
      *
      * @var string
      */
-    protected $signature = 'ExcuteUpdateVideoGenreQuery';
+    protected $signature = 'update:genre';
 
     /**
      * The console command description.

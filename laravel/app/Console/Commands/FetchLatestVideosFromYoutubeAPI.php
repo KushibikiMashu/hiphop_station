@@ -19,7 +19,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
      *
      * @var string
      */
-    protected $signature = 'FetchLatestVideosFromYoutubeAPI';
+    protected $signature = 'fetch:newVideo';
 
     /**
      * The console command description.
