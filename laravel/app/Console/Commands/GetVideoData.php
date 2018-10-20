@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
+use Alaouy\Youtube\Facades\Youtube;
 use DateTime;
+use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Alaouy\Youtube\Facades\Youtube;
 
 class GetVideoData extends Command
 {
@@ -46,28 +46,28 @@ class GetVideoData extends Command
         date_default_timezone_set("Asia/Tokyo");
         $number = $this->argument("id");
         $channel_query = DB::table('channel')->where([
-                ['id', '=', $number]
-            ])->get();
+            ['id', '=', $number],
+        ])->get();
 
         $now = Carbon::now();
         $now_timestamp = strtotime($now);
         $videos = [];
-        foreach($channel_query as $record){
-             // チャンネルの動画数が0、もしくはすでに動画を取得している場合はskip
+        foreach ($channel_query as $record) {
+            // チャンネルの動画数が0、もしくはすでに動画を取得している場合はskip
             $video_exist = DB::table('video')->where('channel_id', '=', $record->id)->get();
-            if($record->video_count === 0 || count($video_exist) > 1){
+            if ($record->video_count === 0 || count($video_exist) > 1) {
                 continue;
             }
-           $videos[] = $this->fetch_channel_data($record->hash, $record->published_at, $now_timestamp);
+            $videos[] = $this->fetch_channel_data($record->hash, $record->published_at, $now_timestamp);
         }
 
-        if(count($videos) === 0){
+        if (count($videos) === 0) {
             echo "There is no video in variable videos.\n";
             exit;
         }
 
-        for($i = 0; $i < count($videos); $i++){
-            for($j = 0; $j < count($videos[$i]); $j++){
+        for ($i = 0; $i < count($videos); $i++) {
+            for ($j = 0; $j < count($videos[$i]); $j++) {
                 // videoテーブルにデータを挿入する
                 $channel_id = DB::table('channel')->where('hash', '=', $videos[$i][$j]->snippet->channelId)->first()->id;
                 $title = $videos[$i][$j]->snippet->title;
@@ -75,9 +75,9 @@ class GetVideoData extends Command
                 $video_published_at = $videos[$i][$j]->snippet->publishedAt;
 
                 DB::insert(
-                    'insert into video (channel_id, title, hash, published_at, created_at, updated_at) 
+                    'insert into video (channel_id, title, hash, published_at, created_at, updated_at)
                     values (?, ?, ?, ?, ?, ?)',
-                    [ $channel_id, $title, $hash, $video_published_at, $now, $now]
+                    [$channel_id, $title, $hash, $video_published_at, $now, $now]
                 );
 
                 // video_thumbnailsテーブルにデータを挿入する
@@ -87,7 +87,7 @@ class GetVideoData extends Command
                 $high = $videos[$i][$j]->snippet->thumbnails->high->url;
 
                 DB::insert(
-                    'insert into video_thumbnails (video_id, std, medium, high, created_at, updated_at) 
+                    'insert into video_thumbnails (video_id, std, medium, high, created_at, updated_at)
                     values (?, ?, ?, ?, ?)',
                     [$video_id, $std, $medium, $high, $now, $now]
                 );
@@ -111,7 +111,7 @@ class GetVideoData extends Command
         $pub_date = new DateTime($channel_published_at);
         $pub_timestamp = strtotime($channel_published_at);
 
-        while($pub_timestamp < $now_timestamp){
+        while ($pub_timestamp < $now_timestamp) {
             $res = [];
             $after = Carbon::createFromTimestamp($pub_timestamp)->format(DateTime::ATOM);
             $after = substr($after, 0, 19) . '.000Z';
@@ -119,19 +119,19 @@ class GetVideoData extends Command
             $before = substr($before, 0, 19) . '.000Z';
 
             // beforeが現在時刻を超えたら、現在時刻を利用する
-            if($now_timestamp < strtotime($before)){
+            if ($now_timestamp < strtotime($before)) {
                 $before_now = Carbon::createFromTimestamp($now_timestamp)->addweek()->format(DateTime::ATOM);
                 $before = substr($before_now, 0, 19) . '.000Z';
             }
 
             // $resはfalseもしくはarray(1)
             $res = Youtube::listChannelVideos($channel_hash, 10, $after, $before);
-            if(is_array($res)){
+            if (is_array($res)) {
                 $videos[] = $res[0];
             }
 
             // タイムスタンプを１週間分インクリメントする
-            $pub_timestamp = strtotime($pub_date->modify('+1 weeks')->format('Y-m-d H:i:s')); 
+            $pub_timestamp = strtotime($pub_date->modify('+1 weeks')->format('Y-m-d H:i:s'));
         }
 
         return $videos;
