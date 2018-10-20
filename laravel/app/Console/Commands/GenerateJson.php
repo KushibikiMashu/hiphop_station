@@ -39,20 +39,20 @@ class GenerateJson extends Command
     public function handle()
     {
         $videos = DB::table('video')
-                    ->orderBy('published_at', 'desc')
-                    ->get();
+            ->orderBy('published_at', 'desc')
+            ->get();
         $channels = DB::table('channel')
-                    ->get();
+            ->get();
 
         $songs = [];
         $i = 0;
 
-        foreach($videos as $video){
+        foreach ($videos as $video) {
             $songs[$i]['hash'] = $video->video_hash;
             $songs[$i]['title'] = $video->title;
-            $songs[$i]['date']  = $video->published_at;
-            $songs[$i]['channel']  = $channels[$video->channel_id - 1]->title;
-            $songs[$i]['img']  = 'https://i.ytimg.com/vi/' . $video->video_hash . '/hqdefault.jpg';
+            $songs[$i]['date'] = $video->published_at;
+            $songs[$i]['channel'] = $channels[$video->channel_id - 1]->title;
+            $songs[$i]['img'] = 'https://i.ytimg.com/vi/' . $video->video_hash . '/hqdefault.jpg';
             $i++;
         }
 

@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
+use Alaouy\Youtube\Facades\Youtube;
 use DateTime;
+use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Alaouy\Youtube\Facades\Youtube;
 
 class FetchLatestVideosFromYoutubeAPI extends Command
 {
@@ -16,7 +16,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
     const words = [
         '2' => ['KOK', 'KING OF KINGS', 'SCHOOL OF RAP'],
         '23' => ['SPOTLIGHT', 'ENTER'],
-        'song' => ['【MV】', 'Music Video', 'MusicVideo']
+        'song' => ['【MV】', 'Music Video', 'MusicVideo'],
     ];
 
     /**
@@ -69,35 +69,49 @@ class FetchLatestVideosFromYoutubeAPI extends Command
             $after = $this->fetch_max_published_datetime();
             $before = substr($now->format(DateTime::ATOM), 0, 19) . '.000Z';
             $channel_data = $res = [];
-            
-            foreach($this->channel_query as $query) {
+
+            foreach ($this->channel_query as $query) {
                 $res = Youtube::listChannelVideos($query->hash, 30, $after, $before);
-                if(!$res) continue;
+                if (!$res) {
+                    continue;
+                }
+
                 $channel_data[] = $res;
             }
 
             // 新着動画がなければ処理を終える
-            if(empty($channel_data)) return;
+            if (empty($channel_data)) {
+                return;
+            }
 
             // videoテーブルに挿入する連想配列を取得
-            foreach($channel_data as $channel_videos) {
-                foreach($channel_videos as $channel_video){
+            foreach ($channel_data as $channel_videos) {
+                foreach ($channel_videos as $channel_video) {
                     // videoのhashが重複していればskipする
                     $hash = $channel_video->id->videoId;
-                    if(isset($this->flipped_video_hash[$hash])) continue;
+                    if (isset($this->flipped_video_hash[$hash])) {
+                        continue;
+                    }
+
                     $video_records[] = $this->prepare_video_record($channel_video, $now);
                 }
             }
 
             // 動画が全て重複していれば処理を終える
-            if(empty($video_records)) return;
+            if (empty($video_records)) {
+                return;
+            }
+
             DB::table(config('const.TABLE.VIDEO'))->insert($video_records);
 
             // video_thumbnailsテーブルに挿入する連想配列を取得
-            foreach($channel_data as $channel_videos) {
-                foreach($channel_videos as $channel_video){
+            foreach ($channel_data as $channel_videos) {
+                foreach ($channel_videos as $channel_video) {
                     $hash = $channel_video->id->videoId;
-                    if(isset($this->flipped_video_hash[$hash])) continue;
+                    if (isset($this->flipped_video_hash[$hash])) {
+                        continue;
+                    }
+
                     $video_thumbnail_records[] = $this->prepare_video_thumbnail_record($channel_video, $now);
                 }
             }
@@ -120,20 +134,20 @@ class FetchLatestVideosFromYoutubeAPI extends Command
     private function fetch_max_published_datetime(): string
     {
         $max = ['id' => '', 'datetime' => Carbon::now()->subYear()->format('Y-m-d H:i:s')];
-        foreach($this->video_query as $query) {
+        foreach ($this->video_query as $query) {
             $date = date('Y-m-d H:i:s', strtotime($query->published_at));
-            if($max['datetime'] < $date){
+            if ($max['datetime'] < $date) {
                 $max['id'] = $query->id;
                 $max['datetime'] = $date;
             }
         }
 
         $max_datetime_query = DB::table(config('const.TABLE.VIDEO'))
-                            ->select('published_at')
-                            ->where('id', '=', $max['id'])
-                            ->get();
+            ->select('published_at')
+            ->where('id', '=', $max['id'])
+            ->get();
 
-        return  $max_datetime_query[0]->published_at;
+        return $max_datetime_query[0]->published_at;
     }
 
     /**
@@ -174,37 +188,37 @@ class FetchLatestVideosFromYoutubeAPI extends Command
 
     private function determine_video_genre(int $channel_id, string $title): string
     {
-        /** 
+        /**
          * titleとchannel_idでgenreを分類する
          * shinjuku tokyo, UMB, 戦国MCBattle, ifktv
          * $flagで状態を持つ。0はsong。1はbattle。今後2はinterviewの予定
          */
         $flag = 0;
-        switch($channel_id) {
+        switch ($channel_id) {
             // 基本的にsong
             case '2':
                 // 配列はプロパティで持つ
-                if($this->array_strpos($title, self::words['2']) === true){
+                if ($this->array_strpos($title, self::words['2']) === true) {
                     $flag = 1;
                 }
                 break;
             // 基本的にbattle
             case '8':
                 $flag = 1;
-                if($this->array_strpos($title, self::words['song']) === true){
+                if ($this->array_strpos($title, self::words['song']) === true) {
                     $flag = 0;
                 }
                 break;
-            // 基本的にbattle            
+            // 基本的にbattle
             case '9':
                 $flag = 1;
-                if($this->array_strpos($title, self::words['song']) === true){
+                if ($this->array_strpos($title, self::words['song']) === true) {
                     $flag = 0;
                 }
                 break;
             // 基本的にsong
             case '23':
-                if($this->array_strpos($title, self::words['23']) === true){
+                if ($this->array_strpos($title, self::words['23']) === true) {
                     $flag = 1;
                 }
                 break;
@@ -212,7 +226,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
                 break;
         }
 
-        switch($flag) {
+        switch ($flag) {
             case 0:
                 $genre = 'song';
                 break;
@@ -260,8 +274,8 @@ class FetchLatestVideosFromYoutubeAPI extends Command
     private function array_strpos(string $haystack, array $needles, int $offset = 0): bool
     {
         // $haystackの中に$needlesがあれば、trueを返す
-        foreach($needles as $needle) {
-            if(strpos($haystack, $needle, $offset) !== false) {
+        foreach ($needles as $needle) {
+            if (strpos($haystack, $needle, $offset) !== false) {
                 return true;
             }
         }
@@ -275,7 +289,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
     private function set_flipped_video_hash()
     {
         $video_hashes = [];
-        foreach($this->video_query as $query){
+        foreach ($this->video_query as $query) {
             $video_hashes[] = $query->hash;
         }
         $this->flipped_video_hash = array_flip($video_hashes);

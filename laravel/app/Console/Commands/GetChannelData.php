@@ -2,11 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use Alaouy\Youtube\Facades\Youtube;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
-use DateTime;
+use Illuminate\Support\Facades\DB;
 
 class GetChannelData extends Command
 {
@@ -48,7 +47,7 @@ class GetChannelData extends Command
         $json = file_get_contents(dirname(__FILE__) . '/youtube_channel.json');
         $arr = json_decode($json);
 
-        foreach($arr as $data){
+        foreach ($arr as $data) {
             $hash = $data->hash;
             // チャンネルの情報を取得する
             $channel = Youtube::getChannelById($hash);
@@ -60,9 +59,9 @@ class GetChannelData extends Command
             $now = Carbon::now();
 
             DB::insert(
-                'insert into channel (title, hash, published_at, video_count, created_at, updated_at) 
+                'insert into channel (title, hash, published_at, video_count, created_at, updated_at)
                 values (?, ?, ?, ?, ?, ?)',
-                [$title, $hash, $published_at, (int)$video_count, $now, $now]
+                [$title, $hash, $published_at, (int) $video_count, $now, $now]
             );
 
             // channel_thumbnailsテーブルに挿入するデータ
@@ -70,9 +69,9 @@ class GetChannelData extends Command
             $std = $channel->snippet->thumbnails->default->url;
             $medium = $channel->snippet->thumbnails->medium->url;
             $high = $channel->snippet->thumbnails->high->url;
-            
+
             DB::insert(
-                'insert into channel_thumbnail (channel_id, std, medium, high, created_at, updated_at) 
+                'insert into channel_thumbnail (channel_id, std, medium, high, created_at, updated_at)
                 values (?, ?, ?, ?, ?, ?)',
                 [$channel_id, $std, $medium, $high, $now, $now]
             );

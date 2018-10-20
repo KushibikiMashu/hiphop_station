@@ -41,7 +41,7 @@ class CreateJsonOfLatestVideoAndChannel extends Command
     {
         // 作成するjsonはmain, battle, song, channel, channelごとのvideo（工夫次第で不要）
         // video [channel_id => '', title => '', hash => '', genre => '', published_at => '']
-        // channel 
+        // channel
         // song, battle, channelごとのjsonが不要になる方法
         // video video.channel_id === 23なら、video.hashを使用する
         // video video.genre === songなら、video.hashを使用する

@@ -53,13 +53,13 @@ class ExcuteUpdateVideoGenreQuery extends Command
             ->where('channel_id', '=', '8')
             ->orWhere('channel_id', '=', '9')
             ->orWhere([
-                    ['channel_id', '=', '23'],
-                    ['title', 'like', '%SPOTLIGHT%']
-                ])
+                ['channel_id', '=', '23'],
+                ['title', 'like', '%SPOTLIGHT%'],
+            ])
             ->orWhere([
-                    ['channel_id', '=', '23'],
-                    ['title', 'like', '%ENTER%']
-                ])
+                ['channel_id', '=', '23'],
+                ['title', 'like', '%ENTER%'],
+            ])
             ->update(['genre' => 'battle']);
 
         // 特定の条件の動画をsongに分類する

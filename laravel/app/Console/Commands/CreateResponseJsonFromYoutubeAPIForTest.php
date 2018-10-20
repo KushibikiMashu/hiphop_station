@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
+use Alaouy\Youtube\Facades\Youtube;
 use DateTime;
+use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Alaouy\Youtube\Facades\Youtube;
 
 class CreateResponseJsonFromYoutubeAPIForTest extends Command
 {
@@ -66,7 +66,9 @@ class CreateResponseJsonFromYoutubeAPIForTest extends Command
         $before = substr($now->format(DateTime::ATOM), 0, 19) . '.000Z';
         $res = Youtube::listChannelVideos('UCzHhZATibT1t6iYEzDbbIaw', 50, $after, $before);
 
-        if($res === false) dd('No new video'); 
+        if ($res === false) {
+            dd('No new video');
+        }
 
         // testフォルダにJSONを出力
         $json = json_encode($res, JSON_UNESCAPED_UNICODE);
@@ -82,18 +84,18 @@ class CreateResponseJsonFromYoutubeAPIForTest extends Command
     private function fetch_max_published_datetime()
     {
         $max = ['id' => '', 'datetime' => '2000-01-01 00:00:00'];
-        foreach($this->video_query as $query) {
+        foreach ($this->video_query as $query) {
             $date = date('Y-m-d H:i:s', strtotime($query->published_at));
-            if($max['datetime'] < $date){
+            if ($max['datetime'] < $date) {
                 $max['id'] = $query->id;
                 $max['datetime'] = $date;
             }
         }
 
         $max_datetime_query = DB::table('video')
-                            ->select('published_at')
-                            ->where('id', '=', $max['id'])
-                            ->get();
+            ->select('published_at')
+            ->where('id', '=', $max['id'])
+            ->get();
         $max_datetime = $max_datetime_query[0]->published_at;
 
         return $max_datetime;
@@ -102,12 +104,12 @@ class CreateResponseJsonFromYoutubeAPIForTest extends Command
     protected function set_video_query()
     {
         $this->video_query = DB::table('video')
-                                 ->get();
+            ->get();
     }
 
     protected function set_channel_query()
     {
         $this->channel_query = DB::table('channel')
-                                    ->get();
+            ->get();
     }
 }
