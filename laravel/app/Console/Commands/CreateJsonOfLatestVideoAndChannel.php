@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Channel;
 use App\Video;
+use App\Video_Thumbnails;
 use Illuminate\Console\Command;
 
 class CreateJsonOfLatestVideoAndChannel extends Command
@@ -40,8 +41,8 @@ class CreateJsonOfLatestVideoAndChannel extends Command
     public function __construct()
     {
         parent::__construct();
-        $this->channel_query = Channel::all()->toArray();
-        $this->video_query_orderby_published_at = Video::orderBy('published_at', 'desc')->get()->toArray();
+        $this->channel_query = Channel::all();
+        $this->video_query_orderby_published_at = Video::orderBy('published_at', 'desc')->get();
     }
 
     /**
@@ -51,9 +52,9 @@ class CreateJsonOfLatestVideoAndChannel extends Command
      */
     public function handle()
     {
-        $channels = $this->unset_keys($this->channel_query, ['id', 'video_count', 'published_at', 'created_at', 'updated_at']);
-        $video_query = $this->unset_keys($this->video_query_orderby_published_at, ['created_at', 'updated_at']);
-        $main = $this->add_channel_data($video_query, $channels);
+        $channels = $this->unset_keys($this->channel_query->toArray(), ['id', 'video_count', 'published_at', 'created_at', 'updated_at']);
+        $video_query = $this->unset_keys($this->video_query_orderby_published_at->toArray(), ['created_at', 'updated_at']);
+        $main = $this->add_extra_data($video_query, $channels);
 
         $queries = ['channels' => $channels, 'main' => $main];
         foreach ($queries as $filename => $query) {
@@ -94,19 +95,23 @@ class CreateJsonOfLatestVideoAndChannel extends Command
     }
 
     /**
-     * 動画に紐づくchannel情報を追加する
+     * 動画に紐づくchannel情報とサムネイルのURLを追加する
      *
      * @param array $query
      * @param array $channels
      * @return array
      */
-    private function add_channel_data(array $video_query, array $channels): array
+    private function add_extra_data(array $video_query, array $channels): array
     {
         $new_query = [];
         foreach ($video_query as $record) {
             $record['channel'] = $channels[$record['channel_id'] - 1];
+            $record['thumbnail'] = 'https://i.ytimg.com/vi/' . $record['hash'] . '/hqdefault.jpg';
             $new_query[] = $record;
         }
         return $new_query;
     }
+
+    private function add_video_thumbnails_data(array $video_query, array $video_thumbnails): array
+    {}
 }
