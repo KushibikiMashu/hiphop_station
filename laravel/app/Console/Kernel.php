@@ -31,6 +31,15 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('fetch:video')
+            ->everyTenMinutes()
+            ->timezone('Asia/Tokyo')
+            ->after(function () {
+                $create_json = new App\Console\Commands\CreateJsonOfLatestVideoAndChannel;
+                $create_json->handle();
+            })
+            ->withoutOverlapping();
+
         // $schedule->command('inspire')
         //          ->hourly();
 
