@@ -107,11 +107,12 @@ class CreateJsonOfLatestVideoAndChannel extends Command
         foreach ($video_query as $record) {
             $record['channel'] = $channels[$record['channel_id'] - 1];
             $record['thumbnail'] = 'https://i.ytimg.com/vi/' . $record['hash'] . '/hqdefault.jpg';
+            // $record['thumbnail'] = [ 
+            //     'path' => 'filepath,
+            //     'url'  =>   'https://i.ytimg.com/vi/' . $record['hash'] . '/hqdefault.jpg'
+            // ];
             $new_query[] = $record;
         }
         return $new_query;
     }
-
-    private function add_video_thumbnails_data(array $video_query, array $video_thumbnails): array
-    {}
 }
