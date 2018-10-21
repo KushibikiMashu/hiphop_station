@@ -51,12 +51,13 @@ class CreateJsonOfLatestVideoAndChannel extends Command
      */
     public function handle()
     {
-        $channels = $this->channel_query;
-        $main = $this->video_query_orderby_published_at;
+        $channels = $this->unset_keys($this->channel_query, ['id', 'video_count', 'published_at', 'created_at', 'updated_at']);
+        $video_query = $this->unset_keys($this->video_query_orderby_published_at, ['created_at', 'updated_at']);
+        $main = $this->add_channel_data($video_query, $channels);
 
         $queries = ['channels' => $channels, 'main' => $main];
         foreach ($queries as $filename => $query) {
-            $this->create_json($this->unset_datetime_keys($query), $filename);
+            $this->create_json($query, $filename);
         }
     }
 
@@ -80,11 +81,30 @@ class CreateJsonOfLatestVideoAndChannel extends Command
      * @param array $query
      * @return array
      */
-    private function unset_datetime_keys(array $query): array
+    private function unset_keys(array $query, array $keys): array
     {
         $new_query = [];
         foreach ($query as $record) {
-            unset($record['created_at'], $record['updated_at']);
+            foreach ($keys as $key) {
+                unset($record[$key]);
+            }
+            $new_query[] = $record;
+        }
+        return $new_query;
+    }
+
+    /**
+     * 動画に紐づくchannel情報を追加する
+     *
+     * @param array $query
+     * @param array $channels
+     * @return array
+     */
+    private function add_channel_data(array $video_query, array $channels): array
+    {
+        $new_query = [];
+        foreach ($video_query as $record) {
+            $record['channel'] = $channels[$record['channel_id'] - 1];
             $new_query[] = $record;
         }
         return $new_query;
