@@ -16,7 +16,7 @@ import NavigationIcon from '@material-ui/icons/Navigation';
 import { Link } from 'react-router-dom';
 
 import request from 'superagent';
-const PATH = "http://localhost:3000/json/songs.json";
+const PATH = "http://localhost:3000/json/main.json";
 
 const styles = theme => ({
   flex: {
@@ -121,7 +121,7 @@ class NewSongs extends React.Component {
           <Card className={classes.card}>
             <CardMedia
               className={classes.media}
-              image={items[i].img}
+              image={items[i].thumbnail}
               component={Link}
               to={'/video/' + items[i].hash}
             />
@@ -134,10 +134,10 @@ class NewSongs extends React.Component {
             </a>
             <CardActions>
               <Typography variant="caption">
-                {items[i].channel}
+                {items[i].channel.title}
               </Typography>
               <Typography variant="caption">
-                {items[i].date}
+                {items[i].published_at}
               </Typography>
             </CardActions>
           </Card>
