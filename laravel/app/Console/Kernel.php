@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\CreateJsonOfLatestVideoAndChannel;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -32,30 +33,13 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('fetch:video')
-            ->everyTenMinutes()
+            ->everyFiveMinutes()
             ->timezone('Asia/Tokyo')
             ->after(function () {
-                $create_json = new App\Console\Commands\CreateJsonOfLatestVideoAndChannel;
+                $create_json = new CreateJsonOfLatestVideoAndChannel;
                 $create_json->handle();
             })
             ->withoutOverlapping();
-
-        // $schedule->command('inspire')
-        //          ->hourly();
-
-        // cronにこれを追加する
-        // * * * * * php /path-to-your-project/artisan schedule:run >> /dev/null 2>&1
-
-        // $schedule->call(function(){
-        //    Redisでメモリからディスクに値を書き込み
-        // })->hourly();
-
-        // $schedule->call(function(){
-        //    APIを叩くチャンネルを取得する
-        //    YoutubeのAPIを叩く
-        //    値をRedisでメモリに保存する
-        // })->->everyFiveMinutes();
-
     }
 
     /**
