@@ -90,7 +90,7 @@ class MainVideo extends React.Component {
         //     return false;
         // }
 
-        const { classes } = this.props;
+        const { classes, hash } = this.props;
 
         return (
             <React.Fragment>
@@ -99,20 +99,20 @@ class MainVideo extends React.Component {
                         <div style={{ display: "block", textAlign: "center" }}>
                             <Card className={classes.card}>
                                 {/* <CardMedia className={classes.media}> */}
-                                <iframe width="640" height="360" src="https://www.youtube.com/embed/BqeUz6HaGqQ" frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
+                                <iframe width="640" height="360" src={"https://www.youtube.com/embed/" + hash} frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
                                 {/* </CardMedia> */}
                                 <CardContent className={classes.cardContent}>
                                     <Typography gutterBottom variant="subheading">
-                                        aaa
+                                        UMB 2018 大阪予選チャンピオン "KZ" Free Style & インタビュー & BATTLE highlight"
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
                                     <Typography variant="caption">
-                                        bbb
-                                </Typography>
+                                        UMB
+                                    </Typography>
                                     <Typography variant="caption">
-                                        ccc
-                                </Typography>
+                                        2018-09-29T03:16:13.000Z
+                                    </Typography>
                                 </CardActions>
                             </Card>
                         </div>
