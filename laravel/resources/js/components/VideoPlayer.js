@@ -95,12 +95,12 @@ class VideoPlayer extends React.Component {
 
         const { classes } = this.props;
 
-        var path = location.pathname
+        var path = location.pathname;
+        var hash = path.split('/').pop();
 
         return (
             <React.Fragment>
-                <MainVideo />
-                {path}
+                <MainVideo hash={hash}/>
                 <RecommendVideos />
             </React.Fragment>
         );
