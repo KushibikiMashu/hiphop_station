@@ -82,6 +82,9 @@ class FetchLatestVideosFromYoutubeAPI extends Command
             // 新着動画がなければ処理を終える
             if (empty($channel_data)) {
                 return;
+            } else {
+                var_dump(count($channel_data));
+                var_dump("個\n");
             }
 
             // videoテーブルに挿入する連想配列を取得

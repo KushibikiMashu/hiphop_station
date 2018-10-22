@@ -77,3 +77,10 @@ $ npm install @material-ui/core
 $ npm install @material-ui/icons
 $ npm install --save-dev @babel/preset-es2016
 ```
+
+Add Laravel task schedule to crontab
+
+```
+$ vi /etc/crontabs/laravel_schedule
+* * * * * cd /var/www/laravel && php artisan schedule:run >> /dev/null 2>&1
+```
