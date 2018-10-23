@@ -24,8 +24,10 @@ import { grey900 } from '@material-ui/core/colors'
 
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
-
 const drawerWidth = 220;
+
+import request from 'superagent';
+const PATH = "http://localhost:3000/json/main.json";
 
 const styles = theme => ({
   root: {
@@ -38,10 +40,6 @@ const styles = theme => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
   },
-  drawerPaper: {
-    position: 'relative',
-    width: drawerWidth,
-  },
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
@@ -49,86 +47,64 @@ const styles = theme => ({
     minWidth: 0, // So the Typography noWrap works
   },
   toolbar: theme.mixins.toolbar,
-  grow: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
-  title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
-  },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing.unit,
-      width: 'auto',
-    },
-  },
-  searchIcon: {
-    width: theme.spacing.unit * 9,
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputRoot: {
-    color: 'inherit',
-    width: '100%',
-  },
-  inputInput: {
-    paddingTop: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 10,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: 120,
-      '&:focus': {
-        width: 200,
-      },
-    },
-  },
 });
 
-function ClippedDrawer(props) {
-  const { classes } = props;
 
-  return (
-    <Router basename="/react/material">
-      <div className={classes.root}>
-        <AppBar position="fixed" className={classes.appBar} style={{ backgroundColor: '#424242' }}>
-          <Toolbar>
-            <Typography variant="title" color="inherit" noWrap style={{ margin: "0 auto", textDecoration: "none" }} component={Link} to="/">
-              日本語ラップStation（仮）
-            </Typography>
-            <SwipeableTemporaryDrawer />
-          </Toolbar>
-        </AppBar>
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          <Route exact path='/' component={NewSongs} />
-          <Route path='/video' />
-          <Route path='/battle' component={NewMCBattle} />
-          <Route path='/video/:hash' component={VideoPlayer} />
-        </main>
-      </div>
-    </Router>
-  );
+
+class ClippedDrawer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: null
+    };
+  }
+
+   // コンポーネントがマウントする前に動画情報のJSONを読み込む
+   componentWillMount() {
+    request.get(PATH)
+      .end((err, res) => {
+        this.loadedJson(err, res);
+      });
+  };
+
+  // 読み込んだ全ての動画情報を配列でitemsに格納
+  loadedJson(err, res) {
+    if (err) {
+      console.log('JSON読み込みエラー');
+      return;
+    }
+    console.log(res.body);
+    this.setState({
+      items: res.body
+    });
+  };
+  
+  render() {
+    const { classes } = this.props;
+
+  
+    return (
+      <Router basename="/react/material">
+        <div className={classes.root}>
+          <AppBar position="fixed" className={classes.appBar} style={{ backgroundColor: '#424242' }}>
+            <Toolbar>
+              <Typography variant="title" color="inherit" noWrap style={{ margin: "0 auto", textDecoration: "none" }} component={Link} to="/">
+                日本語ラップStation
+              </Typography>
+              {/* <SwipeableTemporaryDrawer /> */}
+            </Toolbar>
+          </AppBar>
+          <main className={classes.content}>
+            <div className={classes.toolbar} />
+            <Route exact path='/' component={NewSongs} />
+            <Route path='/video' />
+            <Route path='/battle' component={NewMCBattle} />
+            <Route path='/video/:hash' render={() => <VideoPlayer videos={this.state.items} />} />
+          </main>
+        </div>
+      </Router>
+    );
+  }
 }
 
 ClippedDrawer.propTypes = {
