@@ -18,97 +18,62 @@ import request from 'superagent';
 import MainVideo from './MainVideo';
 import RecommendVideos from './RecommendVideos';
 
-const PATH = "http://localhost:3000/json/songs.json";
-
-const styles = theme => ({
-    flex: {
-        flexGrow: 1,
-    },
-    card: {
-        // maxWidth: 560,
-        // maxHeight: 600,
-        justifyContent: 'center',
-    },
-    media: {
-        height: 0,
-        paddingTop: '56.25%', // 16:9
-    },
-    actions: {
-        display: 'flex',
-    },
-    expand: {
-        transform: 'rotate(0deg)',
-        transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-        }),
-        marginLeft: 'auto',
-        [theme.breakpoints.up('sm')]: {
-            // marginRight: -8,
-        },
-    },
-    expandOpen: {
-        transform: 'rotate(180deg)',
-    },
-    cardContent: {
-        paddingTop: 4,
-        paddingBottom: 4,
-        paddingLeft: 12,
-        paddingRight: 12,
-    },
-    root: {
-        justifyContent: 'center'
-    }
-});
+const PATH = "http://localhost:3000/json/main.json";
 
 class VideoPlayer extends React.Component {
     constructor(props) {
         super(props);
-        // this.state = {
-        //     items: null
-        // };
+        this.state = {
+            items: null,
+        };
     }
 
-    // componentWillMount() {
-    //     request.get(PATH)
-    //         .end((err, res) => {
-    //             this.loadedJson(err, res);
-    //         });
-    // };
+    componentWillMount() {
+        request.get(PATH)
+            .end((err, res) => {
+                this.loadedJson(err, res);
+            });
+    };
 
-    // loadedJson(err, res) {
-    //     if (err) {
-    //         console.log('JSON読み込みエラー');
-    //         return;
-    //     }
-    //     console.log(res.body);
-    //     this.setState({
-    //         items: res.body
-    //     });
-    //     console.log(this.state.items);
-    // };
+    loadedJson(err, res) {
+        if (err) {
+            console.log('JSON読み込みエラー');
+            return;
+        }
+        // console.log(res.body);
+        this.setState({
+            items: res.body
+        });
+        // console.log(this.state.items);
+    };
 
     render() {
-        // asyncでres.bodyがstateに登録されるようにする
-        // if (!this.state.items) {
-        //     return false;
-        // }
-
-        const { classes } = this.props;
-
+        if (!this.state.items) {
+            return false;
+        }
         var path = location.pathname;
         var hash = path.split('/').pop();
 
+        var videos = this.props.videos;
+        var playingVideo = {};
+        videos.map(video => {
+            if(video.hash !== hash) {
+                return;
+            }
+            playingVideo = video;
+        });
+
         return (
             <React.Fragment>
-                <MainVideo hash={hash}/>
-                <RecommendVideos />
+                <MainVideo hash={hash} video={playingVideo} />
+                {/* <RecommendVideos /> */}
             </React.Fragment>
         );
     }
 }
 
-VideoPlayer.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
+// VideoPlayer.propTypes = {
+//     classes: PropTypes.object.isRequired,
+// };
 
-export default withStyles(styles)(VideoPlayer);
+export default VideoPlayer;
