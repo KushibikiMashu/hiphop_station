@@ -17,6 +17,7 @@ import { Link } from 'react-router-dom';
 import request from 'superagent';
 import MainVideo from './MainVideo';
 import RecommendVideos from './RecommendVideos';
+import Button from '@material-ui/core/Button';
 
 const PATH = "http://localhost:3000/json/main.json";
 
@@ -66,6 +67,15 @@ class VideoPlayer extends React.Component {
         return (
             <React.Fragment>
                 <MainVideo hash={hash} video={playingVideo} />
+                <div style={{'display': 'flex', justifyContent: 'center', marginTop: 12}}>
+                    <Button
+                    variant="extendedFab" 
+                    component={Link}
+                    to={'/'}
+                    >
+                        HOME
+                    </Button>
+                </div>
                 {/* <RecommendVideos /> */}
             </React.Fragment>
         );
