@@ -93,13 +93,12 @@ class NewSongs extends React.Component {
 
   // 「LOAD MORE」ボタンをクリックすると、新たに10個の動画を表示する
   loadVideos() {
-    console.log(this.state);
     if (this.state.loadedVideosCount >= this.state.items.length) {
       return;
     }
 
     this.setState({
-      loadedVideosCount: this.state.loadedVideosCount + 10
+      loadedVideosCount: this.state.loadedVideosCount + 25
     });
   }
 
