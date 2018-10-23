@@ -3,7 +3,7 @@ services:
   nginx:
     image: nginx:stable-alpine
     volumes:
-      - ./nginx/conf.d/local:/etc/nginx/conf.d
+      - ./nginx/conf.d/prod:/etc/nginx/conf.d
       - ./nginx/log:/var/log/nginx
       - ./laravel:/var/www/laravel
     ports:
