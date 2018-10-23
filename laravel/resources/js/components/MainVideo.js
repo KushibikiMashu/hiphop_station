@@ -60,37 +60,12 @@ const styles = theme => ({
 class MainVideo extends React.Component {
     constructor(props) {
         super(props);
-        // this.state = {
-        //     items: null
-        // };
     }
 
-    // componentWillMount() {
-    //     request.get(PATH)
-    //         .end((err, res) => {
-    //             this.loadedJson(err, res);
-    //         });
-    // };
-
-    // loadedJson(err, res) {
-    //     if (err) {
-    //         console.log('JSON読み込みエラー');
-    //         return;
-    //     }
-    //     console.log(res.body);
-    //     this.setState({
-    //         items: res.body
-    //     });
-    //     console.log(this.state.items);
-    // };
-
     render() {
-        // asyncでres.bodyがstateに登録されるようにする
-        // if (!this.state.items) {
-        //     return false;
-        // }
-
         const { classes, hash } = this.props;
+        var video = this.props.video;
+        var src = "https://www.youtube.com/embed/" + video.hash;
 
         return (
             <React.Fragment>
@@ -99,19 +74,19 @@ class MainVideo extends React.Component {
                         <div style={{ display: "block", textAlign: "center" }}>
                             <Card className={classes.card}>
                                 {/* <CardMedia className={classes.media}> */}
-                                <iframe width="640" height="360" src={"https://www.youtube.com/embed/" + hash} frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
+                                <iframe width="640" height="360" src={src} frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
                                 {/* </CardMedia> */}
                                 <CardContent className={classes.cardContent}>
                                     <Typography gutterBottom variant="subheading">
-                                        UMB 2018 大阪予選チャンピオン "KZ" Free Style & インタビュー & BATTLE highlight"
+                                        {video.title}
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
                                     <Typography variant="caption">
-                                        UMB
+                                        {video.channel.title}
                                     </Typography>
                                     <Typography variant="caption">
-                                        2018-09-29T03:16:13.000Z
+                                        {video.published_at}
                                     </Typography>
                                 </CardActions>
                             </Card>
