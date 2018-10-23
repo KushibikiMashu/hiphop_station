@@ -83,8 +83,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
             if (empty($channel_data)) {
                 return;
             } else {
-                var_dump(count($channel_data));
-                var_dump("個\n");
+                $this->info($channel_data[0][0]->snippet->title ."（合計" . (string)count($channel_data) . "個）");
             }
 
             // videoテーブルに挿入する連想配列を取得
