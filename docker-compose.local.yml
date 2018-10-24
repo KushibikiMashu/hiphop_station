@@ -1,0 +1,48 @@
+version: '2'
+services:
+  nginx:
+    image: nginx:stable-alpine
+    volumes:
+      - ./nginx/conf.d/local:/etc/nginx/conf.d
+      - ./nginx/log:/var/log/nginx
+      - ./laravel:/var/www/laravel
+    ports:
+      - 3000:80
+    links:
+      - phpfpm:phpfpm
+      - redis:redis
+      - mysql:mysql
+    restart: always
+
+  phpfpm:
+    image: php:7.2-fpm-alpine
+    build: 
+      context: ./php-fpm
+    volumes:
+      - ./php-fpm/php.ini:/usr/local/etc/php/php.ini
+      - ./php-fpm/php-fpm.conf:/usr/local/etc/php-fpm.conf # 全体の設定ファイル
+      - ./php-fpm/php-fpm.d:/usr/local/etc/php-fpm.d # プール向け設定ファイル
+      - ./php-fpm/log/php-fpm:/usr/local/var/log
+      - ./php-fpm/log/php:/var/log/php
+      - ./laravel:/var/www/laravel
+    restart: always
+
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - ./mysql:/etc/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER:     user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: hiphop_station
+    restart: always
+
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    restart: always
