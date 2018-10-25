@@ -3,6 +3,3 @@
 
 /nginx/log/*
 /php-fpm/log/*
-
-# build & minifyしたjsファイル
-/laravel/public/js/*
