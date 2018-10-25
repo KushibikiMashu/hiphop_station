@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('', 'MaterialUiSampleController@react');
+Route::get('/', 'MaterialUiSampleController@react');
 Route::get('/video', 'MaterialUiSampleController@react');
 Route::get('/video/{hash?}', 'MaterialUiSampleController@react');
 

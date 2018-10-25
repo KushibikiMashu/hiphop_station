@@ -84,7 +84,7 @@ class ClippedDrawer extends React.Component {
 
   
     return (
-      <Router basename="/react/material">
+      <Router basename="/">
         <div className={classes.root}>
           <AppBar position="fixed" className={classes.appBar} style={{ backgroundColor: '#424242' }}>
             <Toolbar>
