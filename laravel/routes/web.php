@@ -11,20 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('', 'MaterialUiSampleController@react');
+Route::get('/video', 'MaterialUiSampleController@react');
+Route::get('/video/{hash?}', 'MaterialUiSampleController@react');
 
-Route::get('/redis', 'CreepyNutsController@display');
-
-Route::get('/react/sample', 'SampleController@react');
-
-Route::get('/react/material/', 'MaterialUiSampleController@react');
-Route::get('/react/material', 'MaterialUiSampleController@react');
-Route::get('/react/material/video', 'MaterialUiSampleController@react');
-Route::get('/react/material/video/{hash?}', 'MaterialUiSampleController@react');
-
-Route::get('/react/material/battle', 'MaterialUiSampleController@react');
-Route::get('/react/material/battle/{hash?}', 'MaterialUiSampleController@react');
-Route::get('/react/material/channel', 'MaterialUiSampleController@react');
-Route::get('/react/material/channel/{hash?}', 'MaterialUiSampleController@react');
+Route::get('/battle', 'MaterialUiSampleController@react');
+Route::get('/battle/{hash?}', 'MaterialUiSampleController@react');
+Route::get('/channel', 'MaterialUiSampleController@react');
+Route::get('/channel/{hash?}', 'MaterialUiSampleController@react');
