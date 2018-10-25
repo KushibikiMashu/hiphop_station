@@ -27,7 +27,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 const drawerWidth = 220;
 
 import request from 'superagent';
-const PATH = "http://localhost:3000/json/main.json";
+const PATH = "http://ec2-54-163-220-138.compute-1.amazonaws.com/json/main.json";
 
 const styles = theme => ({
   root: {

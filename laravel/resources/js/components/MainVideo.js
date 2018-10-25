@@ -15,7 +15,7 @@ import NavigationIcon from '@material-ui/icons/Navigation';
 import { Link } from 'react-router-dom';
 
 import request from 'superagent';
-const PATH = "http://localhost:3000/json/songs.json";
+const PATH = "http://ec2-54-163-220-138.compute-1.amazonaws.com/json/songs.json";
 
 const styles = theme => ({
     flex: {

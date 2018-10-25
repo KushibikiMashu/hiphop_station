@@ -14,7 +14,7 @@ import Hidden from '@material-ui/core/Hidden';
 import NavigationIcon from '@material-ui/icons/Navigation';
 
 import request from 'superagent';
-const PATH = "http://localhost:3000/json/battle.json";
+const PATH = "http://ec2-54-163-220-138.compute-1.amazonaws.com/json/battle.json";
 
 const styles = theme => ({
   flex: {
