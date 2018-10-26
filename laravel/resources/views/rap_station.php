@@ -2,7 +2,7 @@
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
-        <title>Material UI Sample</title>
+        <title>Rap Station</title>
     </head>
     <body>
         <div id="material"></div>

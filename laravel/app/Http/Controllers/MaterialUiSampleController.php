@@ -8,6 +8,6 @@ class MaterialUiSampleController extends Controller
 {
     public function react()
     {
-        return view('material_ui_sample');
+        return view('rap_station');
     }
 }
