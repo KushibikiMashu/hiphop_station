@@ -12,6 +12,3 @@ npm-debug.log
 yarn-error.log
 .env
 .phpunit.result.cache
-
-# コンパイルしたjsを管理対象外にする
-/public/js/app.js
