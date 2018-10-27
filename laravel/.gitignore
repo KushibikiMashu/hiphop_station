@@ -14,7 +14,7 @@ yarn-error.log
 .phpunit.result.cache
 
 # JSONファイルをGit管理対象外にする
-/public/json
+/public/json/*
 
 # コンパイルしたjsを管理対象外にする
 /public/js/app.js
