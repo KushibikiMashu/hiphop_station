@@ -85,7 +85,7 @@ class NewSongs extends React.Component {
       console.log('JSON読み込みエラー');
       return;
     }
-    console.log(res.body);
+    // console.log(res.body);
     this.setState({
       items: res.body
     });
