@@ -7,6 +7,7 @@ use DateTime;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Console\Commands\Services\CustomizedYoutubeAPI;
 
 class FetchLatestVideosFromYoutubeAPI extends Command
 {
@@ -69,9 +70,10 @@ class FetchLatestVideosFromYoutubeAPI extends Command
             $after = $this->fetch_max_published_datetime();
             $before = substr($now->format(DateTime::ATOM), 0, 19) . '.000Z';
             $channel_data = $res = [];
+            $youtube = new CustomizedYoutubeAPI(env('YOUTUBE_API_KEY'));
 
             foreach ($this->channel_query as $query) {
-                $res = Youtube::listChannelVideos($query->hash, 30, $after, $before);
+                $res = $youtube->listChannelVideos($query->hash, 30, $after, $before);
                 if (!$res) {
                     continue;
                 }

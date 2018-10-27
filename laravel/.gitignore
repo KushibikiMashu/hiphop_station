@@ -13,15 +13,6 @@ yarn-error.log
 .env
 .phpunit.result.cache
 
-# カスタマイズしたYoutube.phpを使用する
-!/vendor/alaouy/
-/vendor/alaouy/*
-!/vendor/alaouy/youtube/
-/vendor/alaouy/youtube/*
-!/vendor/alaouy/youtube/src/
-/vendor/alaouy/youtube/src/*
-!/vendor/alaouy/youtube/src/Youtube.php
-
 # JSONファイルをGit管理対象外にする
 /public/json
 
