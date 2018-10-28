@@ -14,7 +14,7 @@ cp docker-compose.${ENV_NAME}.yml docker-compose.yml
 
 # Install PHP
 if which php > /dev/null 2>&1; then
-    echo 'PHP has already installed'.
+    echo 'PHP has already installed'
 else
     # on EC2
     echo 'Install PHP'
