@@ -18,7 +18,7 @@ if which php > /dev/null 2>&1; then
     echo "PHP has already installed".
 else
     # on EC2
-    sudo amazon-linux-extras install php7.2
+    sudo amazon-linux-extras install -y php7.2
     sudo yum install -y php-mbstring php-xml
     echo 'PHP installed'.
 fi
