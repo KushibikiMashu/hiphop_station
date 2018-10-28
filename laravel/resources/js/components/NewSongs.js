@@ -16,7 +16,9 @@ import NavigationIcon from '@material-ui/icons/Navigation';
 import { Link } from 'react-router-dom';
 
 import request from 'superagent';
-const PATH = "http://ec2-54-163-220-138.compute-1.amazonaws.com/json/main.json";
+import { pathToJson } from './const';
+
+const PATH = pathToJson("main");
 
 const styles = theme => ({
   flex: {

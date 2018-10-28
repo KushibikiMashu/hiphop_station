@@ -19,7 +19,8 @@ import MainVideo from './MainVideo';
 import RecommendVideos from './RecommendVideos';
 import Button from '@material-ui/core/Button';
 
-const PATH = "http://ec2-54-163-220-138.compute-1.amazonaws.com/json/main.json";
+import { pathToJson } from './const';
+const PATH = pathToJson("main");
 
 class VideoPlayer extends React.Component {
     constructor(props) {
