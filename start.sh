@@ -37,9 +37,10 @@ else
 fi
 
 # Set up for Laravel
-cd laravel
+cd laravel && composer install
 
-composer install
-cp .env.${ENV_NAME} .env
-sudo chmod -R 777 storage && sudo chmod -R 777 bootstrap
-php artisan key:generate
+cd laravel \
+     && cp .env.${ENV_NAME} .env \
+     && sudo chmod -R 777 storage \
+     && sudo chmod -R 777 bootstrap \
+     && php artisan key:generate
