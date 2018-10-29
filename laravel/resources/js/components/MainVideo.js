@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
+import ResponsiveIframe from './ResponsiveIframe';
 
 import NavigationIcon from '@material-ui/icons/Navigation';
 import { Link } from 'react-router-dom';
@@ -22,7 +23,7 @@ const styles = theme => ({
         flexGrow: 1,
     },
     card: {
-        // maxWidth: 560,
+        width: '100%',
         // maxHeight: 600,
         justifyContent: 'center',
     },
@@ -74,7 +75,8 @@ class MainVideo extends React.Component {
                         <div style={{ display: "block", textAlign: "center" }}>
                             <Card className={classes.card}>
                                 {/* <CardMedia className={classes.media}> */}
-                                <iframe width="640" height="360" src={src} frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
+                                <ResponsiveIframe src={src} />
+                                {/*<iframe width="640" height="360" src={src} frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>*/}
                                 {/* </CardMedia> */}
                                 <CardContent className={classes.cardContent}>
                                     <Typography gutterBottom variant="subheading">

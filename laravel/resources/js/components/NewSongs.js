@@ -127,11 +127,11 @@ class NewSongs extends React.Component {
               to={'/video/' + items[i].hash}
             />
             {/* <a href={'/react/material/video/' + items[i].hash} style={{ textDecoration: "none" }}> */}
-              <CardContent className={classes.cardContent}>
-                <Typography gutterBottom variant="subheading">
-                  {items[i].title}
-                </Typography>
-              </CardContent>
+            <CardContent className={classes.cardContent}>
+              <Typography gutterBottom variant="subheading">
+                {items[i].title}
+              </Typography>
+            </CardContent>
             {/* </a> */}
             <CardActions>
               <Typography variant="caption">
