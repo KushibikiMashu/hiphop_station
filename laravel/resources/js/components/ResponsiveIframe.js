@@ -14,7 +14,7 @@ class ResponsiveIframe extends React.Component {
         const ifremeProps = {
             size: isSmallScreen ? "small" : "large",
             // width: isSmallScreen ? "100%" : 640,
-            width: isSmallScreen ? "100%" : "100%",
+            width: isSmallScreen ? "100%" : 640,
             height: isSmallScreen ? 280 : 460
         };
 
