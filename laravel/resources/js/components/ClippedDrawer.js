@@ -1,35 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import { mailFolderListItems, otherMailFolderListItems } from './tileData';
-
-import { DrawerListItems } from './DrawerListItems';
-
-import SearchIcon from '@material-ui/icons/Search';
-import Input from '@material-ui/core/Input';
-import { fade } from '@material-ui/core/styles/colorManipulator';
+import { grey900 } from '@material-ui/core/colors'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 import NewSongs from './NewSongs'
 import NewMCBattle from './NewMCBattle'
 import VideoPlayer from './VideoPlayer'
-import SwipeableTemporaryDrawer from './SwipeableTemporaryDrawer'
-
-import { grey900 } from '@material-ui/core/colors'
-
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-
-const drawerWidth = 220;
 
 import request from 'superagent';
-
 import { pathToJson } from './const';
-
 const PATH = pathToJson("main");
 
 const styles = theme => ({
@@ -77,12 +60,11 @@ class ClippedDrawer extends React.Component {
       console.log('JSON読み込みエラー');
       return;
     }
-    // console.log(res.body);
     this.setState({
       items: res.body
     });
   };
-  
+
   render() {
     const { classes } = this.props;
 
@@ -94,7 +76,6 @@ class ClippedDrawer extends React.Component {
               <Typography variant="title" color="inherit" noWrap style={{ margin: "0 auto", textDecoration: "none" }} component={Link} to="/">
                 日本語ラップStation
               </Typography>
-              {/* <SwipeableTemporaryDrawer /> */}
             </Toolbar>
           </AppBar>
           <main className={classes.content}>
