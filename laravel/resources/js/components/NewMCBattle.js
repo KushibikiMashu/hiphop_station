@@ -1,18 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import classnames from 'classnames';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
-import red from '@material-ui/core/colors/red';
 import Grid from '@material-ui/core/Grid';
-import Hidden from '@material-ui/core/Hidden';
-
-import NavigationIcon from '@material-ui/icons/Navigation';
-
 import request from 'superagent';
 const PATH = "http://ec2-54-163-220-138.compute-1.amazonaws.com/json/battle.json";
 
@@ -29,41 +23,13 @@ const styles = theme => ({
     height: 0,
     paddingTop: '56.25%', // 16:9
   },
-  actions: {
-    display: 'flex',
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-    marginLeft: 'auto',
-    [theme.breakpoints.up('sm')]: {
-      // marginRight: -8,
-    },
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
   cardContent: {
     paddingTop: 4,
     paddingBottom: 4,
     paddingLeft: 12,
     paddingRight: 12,
   },
-  root: {
-    justifyContent: 'center'
-  }
 });
-
-const videoData =
-{
-  img: "https://i.ytimg.com/vi/AlZ3H-A2BeQ/mqdefault.jpg",
-  title: "R-指定 UMB 3連覇達成＆Creepy Nuts本格始動 コメント",
-  date: "2018-10-5"
-};
-
-
 
 class NewSongs extends React.Component {
   constructor(props) {
@@ -82,10 +48,8 @@ class NewSongs extends React.Component {
 
   loadedJson(err, res) {
     if (err) {
-      console.log('JSON読み込みエラー');
       return;
     }
-    // console.log(res.body);
     this.setState({
       items: res.body
     });

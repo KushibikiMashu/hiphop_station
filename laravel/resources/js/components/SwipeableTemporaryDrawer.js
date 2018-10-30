@@ -34,7 +34,6 @@ class SwipeableTemporaryDrawer extends React.Component {
                 >
                     <MenuIcon />
                 </IconButton>
-
                 <SwipeableDrawer
                     anchor="top"
                     open={this.state.top}

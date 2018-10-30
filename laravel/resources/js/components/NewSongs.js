@@ -1,23 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import classnames from 'classnames';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
-import red from '@material-ui/core/colors/red';
 import Grid from '@material-ui/core/Grid';
-import Hidden from '@material-ui/core/Hidden';
 import Button from '@material-ui/core/Button';
-
-import NavigationIcon from '@material-ui/icons/Navigation';
 import { Link } from 'react-router-dom';
-
 import request from 'superagent';
 import { pathToJson } from './const';
-
 const PATH = pathToJson("main");
 
 const styles = theme => ({
@@ -31,19 +24,6 @@ const styles = theme => ({
     height: 0,
     paddingTop: '56.25%', // 16:9
   },
-  actions: {
-    display: 'flex',
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-    marginLeft: 'auto',
-    [theme.breakpoints.up('sm')]: {
-      // marginRight: -8,
-    },
-  },
   headline: {
     textAlign: 'center',
     marginTop: -8,
@@ -54,9 +34,6 @@ const styles = theme => ({
     paddingBottom: 4,
     paddingLeft: 12,
     paddingRight: 12,
-  },
-  root: {
-    justifyContent: 'center'
   },
   button: {
     marginTop: 12,
@@ -84,10 +61,8 @@ class NewSongs extends React.Component {
   // 読み込んだ全ての動画情報を配列でitemsに格納
   loadedJson(err, res) {
     if (err) {
-      console.log('JSON読み込みエラー');
       return;
     }
-    // console.log(res.body);
     this.setState({
       items: res.body
     });
@@ -126,13 +101,11 @@ class NewSongs extends React.Component {
               component={Link}
               to={'/video/' + items[i].hash}
             />
-            {/* <a href={'/react/material/video/' + items[i].hash} style={{ textDecoration: "none" }}> */}
             <CardContent className={classes.cardContent}>
               <Typography gutterBottom variant="subheading">
                 {items[i].title}
               </Typography>
             </CardContent>
-            {/* </a> */}
             <CardActions>
               <Typography variant="caption">
                 {items[i].channel.title}
