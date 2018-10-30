@@ -1,31 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import classnames from 'classnames';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
-import red from '@material-ui/core/colors/red';
 import Grid from '@material-ui/core/Grid';
-import Hidden from '@material-ui/core/Hidden';
-
-import NavigationIcon from '@material-ui/icons/Navigation';
 import { Link } from 'react-router-dom';
-
-import request from 'superagent';
-import { pathToJson } from './const';
-
-const PATH = pathToJson("songs");
 
 const styles = theme => ({
     flex: {
         flexGrow: 1,
     },
     card: {
-        // maxWidth: 560,
-        // maxHeight: 600,
         justifyContent: 'center',
     },
     media: {
@@ -62,36 +50,9 @@ const styles = theme => ({
 class RecommendVideos extends React.Component {
     constructor(props) {
         super(props);
-        // this.state = {
-        //     items: null
-        // };
     }
 
-    // componentWillMount() {
-    //     request.get(PATH)
-    //         .end((err, res) => {
-    //             this.loadedJson(err, res);
-    //         });
-    // };
-
-    // loadedJson(err, res) {
-    //     if (err) {
-    //         console.log('JSON読み込みエラー');
-    //         return;
-    //     }
-    //     console.log(res.body);
-    //     this.setState({
-    //         items: res.body
-    //     });
-    //     console.log(this.state.items);
-    // };
-
     render() {
-        // asyncでres.bodyがstateに登録されるようにする
-        // if (!this.state.items) {
-        //     return false;
-        // }
-
         const { classes } = this.props;
 
         // mapで8個生成する
@@ -105,22 +66,16 @@ class RecommendVideos extends React.Component {
                             component={Link}
                             to={'/video/JUt2y2TpemY'}
                         />
-                        {/* <iframe width="312" height="175.5" src="https://www.youtube.com/embed/JUt2y2TpemY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> */}
-                        {/* <a href={'/react/material/video/' + e.hash} style={{textDecoration : "none"}}> */}
                         <CardContent className={classes.cardContent}>
                             <Typography gutterBottom variant="subheading">
-                                {/* {e.title} */}
                                 AKLO X ZORN / A to Z TOUR 2018
                             </Typography>
                         </CardContent>
-                        {/* </a> */}
                         <CardActions>
                             <Typography variant="caption">
-                                {/* {e.channel} */}
                                 hotmuzik1989
                             </Typography>
                             <Typography variant="caption">
-                                {/* {e.date} */}
                                 2018-09-28T03:29:35.000Z
                             </Typography>
                         </CardActions>
@@ -134,22 +89,16 @@ class RecommendVideos extends React.Component {
                             component={Link}
                             to={'/video/aVjnTPZj5rk'}
                         />
-                        {/* <iframe width="312" height="175.5" src="https://www.youtube.com/embed/aVjnTPZj5rk" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> */}
-                        {/* <a href={'/react/material/video/' + e.hash} style={{textDecoration : "none"}}> */}
                         <CardContent className={classes.cardContent}>
                             <Typography gutterBottom variant="subheading">
-                                {/* {e.title} */}
                                 SIMON JAP - くそったれFor Life Remix
                             </Typography>
                         </CardContent>
-                        {/* </a> */}
                         <CardActions>
                             <Typography variant="caption">
-                                {/* {e.channel} */}
                                 Shinjyuku Tokyo
                             </Typography>
                             <Typography variant="caption">
-                                {/* {e.date} */}
                                 2018-09-25T16:53:38.000Z
                             </Typography>
                         </CardActions>
