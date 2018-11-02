@@ -13,7 +13,7 @@ $ ./start.second.sh
 $ docker-compose up -d
 ```
 
-Install predis and React to Laravel
+Set React in Laravel
 ```
 $ cd laravel
 $ php artisan preset react
