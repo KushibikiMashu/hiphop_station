@@ -3,6 +3,8 @@
 namespace App\Console;
 
 use App\Console\Commands\CreateJsonOfLatestVideoAndChannel;
+use App\Console\Commands\fetchVideoThumbnailImage;
+use App\VideoThumbnail;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -27,7 +29,7 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
@@ -37,6 +39,8 @@ class Kernel extends ConsoleKernel
             ->after(function () {
                 $create_json = new CreateJsonOfLatestVideoAndChannel;
                 $create_json->handle();
+                $fetch_videoThumbnail = new fetchVideoThumbnailImage(new VideoThumbnail);
+                $fetch_videoThumbnail->handle();
             })
             ->timezone('Asia/Tokyo')
             ->withoutOverlapping();
