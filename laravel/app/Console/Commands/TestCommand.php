@@ -44,6 +44,19 @@ class TestCommand extends Command
 
     private function testFlipVideoHashAndId()
     {
-        return false;
+        // コレクションの関数を使用
+        $flipped_array = Video::get()->pluck('hash')->flip();
+
+        // FetchLatestVideosFromYoutubeAPIクラスのset_flipped_video_hash関数
+        $video_query = DB::table(config('const.TABLE.VIDEO'))->get();
+        $video_hashes = [];
+        foreach ($video_query as $query) {
+            $video_hashes[] = $query->hash;
+        }
+        $flipped_video_hash = array_flip($video_hashes);
+
+        // $flipped_video_hashはid順だが、$flipped_arrayの順番がid通りではないため
+        // return false
+        return ($flipped_array === $flipped_video_hash);
     }
 }

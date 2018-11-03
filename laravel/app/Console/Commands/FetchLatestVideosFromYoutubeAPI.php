@@ -85,7 +85,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
             if (empty($channel_data)) {
                 return;
             } else {
-                $this->info($channel_data[0][0]->snippet->title ."（合計" . (string)count($channel_data) . "個）");
+                $this->info($channel_data[0][0]->snippet->title . "（合計" . (string)count($channel_data) . "個）");
             }
 
             // videoテーブルに挿入する連想配列を取得
@@ -292,10 +292,6 @@ class FetchLatestVideosFromYoutubeAPI extends Command
      */
     private function set_flipped_video_hash()
     {
-        $video_hashes = [];
-        foreach ($this->video_query as $query) {
-            $video_hashes[] = $query->hash;
-        }
-        $this->flipped_video_hash = array_flip($video_hashes);
+        $this->flipped_video_hash = \App\Video::get()->pluck('hash')->flip();
     }
 }
