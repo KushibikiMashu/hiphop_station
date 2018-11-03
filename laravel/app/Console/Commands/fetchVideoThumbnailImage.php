@@ -76,8 +76,11 @@ class fetchVideoThumbnailImage extends Command
     {
         $url = $record->{$size};
         $hash = substr(pathinfo($url)['dirname'], -11);
-        $path = public_path("image/video_thumbnail/{$size}/{$hash}.jpg");
-        $data = file_get_contents($url);
-        file_put_contents($path, $data);
+        $image_path = "image/video_thumbnail/{$size}/{$hash}.jpg";
+        if (!file_exists(public_path($image_path))) {
+            $path = public_path($image_path);
+            $data = file_get_contents($url);
+            if ($data) file_put_contents($path, $data);
+        }
     }
 }
