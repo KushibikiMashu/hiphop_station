@@ -6,6 +6,7 @@ use DateTime;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Console\Commands\Services\CustomizedYoutubeAPI;
 
 class FetchLatestVideosFromYoutubeAPI extends Command
@@ -73,15 +74,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
                 if (!$res) {
                     continue;
                 }
-
                 $channel_data[] = $res;
-            }
-
-            // 新着動画がなければ処理を終える
-            if (empty($channel_data)) {
-                return;
-            } else {
-                $this->info($channel_data[0][0]->snippet->title . "（合計" . (string)count($channel_data) . "個）");
             }
 
             // keyはvideoのhash、valueは添字
@@ -94,14 +87,20 @@ class FetchLatestVideosFromYoutubeAPI extends Command
                     if (isset($flipped_video_hash[$channel_video->id->videoId])) {
                         continue;
                     }
-
                     $video_records[] = $this->prepare_video_record($channel_video, $now);
                 }
             }
 
             // 動画が全て重複していれば処理を終える
             if (empty($video_records)) {
+                $this->info("[{$now}] No new video fetched");
+                Log::info('No new video fetched');
                 return;
+            } else {
+                $this->info("[{$now}] The number of fetched video: " . (string)count($channel_data));
+                $this->info("[{$now}] The title of latest video is " . $channel_data[0][0]->snippet->title);
+                Log::info('The number of fetched video: ' . (string)count($channel_data));
+                Log::info('The title of latest video is ' . $channel_data[0][0]->snippet->title);
             }
 
             DB::table(config('const.TABLE.VIDEO'))->insert($video_records);
@@ -170,7 +169,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
      * @param datetime $now
      * @return array
      */
-    private function prepare_video_record(object $channel_video, datetime $now): array
+    private function prepare_video_record($channel_video, datetime $now): array
     {
         $channel_id = DB::table(config('const.TABLE.CHANNEL'))->where('hash', '=', $channel_video->snippet->channelId)->first()->id;
         $title = $channel_video->snippet->title;
@@ -241,7 +240,6 @@ class FetchLatestVideosFromYoutubeAPI extends Command
             default:
                 break;
         }
-
         return $genre;
     }
 
@@ -252,7 +250,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
      * @param datetime $now
      * @return array
      */
-    private function prepare_video_thumbnail_record(object $channel_video, datetime $now): array
+    private function prepare_video_thumbnail_record($channel_video, datetime $now): array
     {
         return [
             'video_id' => DB::table(config('const.TABLE.VIDEO'))->where('hash', '=', $channel_video->id->videoId)->first()->id,
