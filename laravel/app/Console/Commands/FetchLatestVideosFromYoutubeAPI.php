@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use Alaouy\Youtube\Facades\Youtube;
 use DateTime;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
@@ -38,8 +37,6 @@ class FetchLatestVideosFromYoutubeAPI extends Command
     private $channel_query;
     // videoテーブルの全レコード
     private $video_query;
-    //keyは動画のhash、valueは添字の連想配列
-    private $flipped_video_hash;
 
     /**
      * Create a new command instance.
@@ -51,16 +48,16 @@ class FetchLatestVideosFromYoutubeAPI extends Command
         parent::__construct();
         $this->video_query = DB::table(config('const.TABLE.VIDEO'))->get();
         $this->channel_query = DB::table(config('const.TABLE.CHANNEL'))->get();
-        $this->set_flipped_video_hash();
     }
 
     /**
      * YoutubeAPIから最新の動画を取得する
-     * （設計方針：一つの関数に一つの関心事。オブジェクト指向）
+     * (設計方針：一つの関数に一つの関心事。オブジェクト指向)
      *
-     * @return mixed
+     * @param CustomizedYoutubeAPI $youtube
+     * @return bool
      */
-    public function handle()
+    public function handle(CustomizedYoutubeAPI $youtube)
     {
         date_default_timezone_set("Asia/Tokyo");
         $now = Carbon::now();
@@ -70,7 +67,6 @@ class FetchLatestVideosFromYoutubeAPI extends Command
             $after = $this->fetch_max_published_datetime();
             $before = substr($now->format(DateTime::ATOM), 0, 19) . '.000Z';
             $channel_data = $res = [];
-            $youtube = new CustomizedYoutubeAPI(env('YOUTUBE_API_KEY'));
 
             foreach ($this->channel_query as $query) {
                 $res = $youtube->listChannelVideos($query->hash, 30, $after, $before);
@@ -88,12 +84,14 @@ class FetchLatestVideosFromYoutubeAPI extends Command
                 $this->info($channel_data[0][0]->snippet->title . "（合計" . (string)count($channel_data) . "個）");
             }
 
+            // keyはvideoのhash、valueは添字
+            $flipped_video_hash = $this->video_query->pluck('hash')->flip();
+
             // videoテーブルに挿入する連想配列を取得
             foreach ($channel_data as $channel_videos) {
                 foreach ($channel_videos as $channel_video) {
                     // videoのhashが重複していればskipする
-                    $hash = $channel_video->id->videoId;
-                    if (isset($this->flipped_video_hash[$hash])) {
+                    if (isset($flipped_video_hash[$channel_video->id->videoId])) {
                         continue;
                     }
 
@@ -111,8 +109,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
             // video_thumbnailsテーブルに挿入する連想配列を取得
             foreach ($channel_data as $channel_videos) {
                 foreach ($channel_videos as $channel_video) {
-                    $hash = $channel_video->id->videoId;
-                    if (isset($this->flipped_video_hash[$hash])) {
+                    if (isset($flipped_video_hash[$channel_video->id->videoId])) {
                         continue;
                     }
 
@@ -251,7 +248,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
     /**
      * video_thumbnailテーブルに格納するレコードを作成する
      *
-     * @param array $channel_video
+     * @param object $channel_video
      * @param datetime $now
      * @return array
      */
@@ -284,14 +281,5 @@ class FetchLatestVideosFromYoutubeAPI extends Command
             }
         }
         return false;
-    }
-
-    /**
-     * 動画のダブルチェックのためにhashを格納した配列を用意する
-     * keyはhash、valueは添字
-     */
-    private function set_flipped_video_hash()
-    {
-        $this->flipped_video_hash = \App\Video::get()->pluck('hash')->flip();
     }
 }
