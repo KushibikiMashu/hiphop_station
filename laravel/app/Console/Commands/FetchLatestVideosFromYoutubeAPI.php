@@ -121,8 +121,7 @@ class FetchLatestVideosFromYoutubeAPI extends Command
         } catch (Exception $e) {
             report($now);
             report('Failed to fetch latest videos.');
-
-            return false;
+            return;
         }
     }
 
