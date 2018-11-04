@@ -3,9 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Http\File;
-use Illuminate\Support\Facades\Storage;
-use App\Video;
 use App\VideoThumbnail;
 
 class fetchVideoThumbnailImage extends Command
