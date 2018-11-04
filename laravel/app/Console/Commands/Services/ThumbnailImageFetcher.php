@@ -52,6 +52,7 @@ class ThumbnailImageFetcher
         $table = self::getTableName();
         $url = str_replace('_live', '', $record->{$size});
         $hash = $this->fetchRecordHash($record);
+        if (!$hash) return;
         $image_path = "image/{$table}/{$size}/{$hash}.jpg";
         if (file_exists(public_path($image_path))) return;
 
@@ -76,9 +77,12 @@ class ThumbnailImageFetcher
     {
         $parent_table = self::getParentTableName();
         $parent_id = $parent_table . '_id';
-        return DB::table($parent_table)
-            ->where('id', '=', $record->{$parent_id})
-            ->get()[0]->hash;
+        if (DB::table($parent_table)->where('id', '=', $record->{$parent_id})->exists()){
+            return DB::table($parent_table)
+                ->where('id', '=', $record->{$parent_id})
+                ->get()[0]->hash;
+        }
+        return '';
     }
 
     /**
