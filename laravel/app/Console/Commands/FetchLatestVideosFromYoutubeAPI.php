@@ -253,9 +253,9 @@ class FetchLatestVideosFromYoutubeAPI extends Command
     {
         return [
             'video_id' => DB::table(config('const.TABLE.VIDEO'))->where('hash', '=', $channel_video->id->videoId)->first()->id,
-            'std' => $channel_video->snippet->thumbnails->default->url,
-            'medium' => $channel_video->snippet->thumbnails->medium->url,
-            'high' => $channel_video->snippet->thumbnails->high->url,
+            'std' => str_replace('_live', '', $channel_video->snippet->thumbnails->default->url),
+            'medium' => str_replace('_live', '', $channel_video->snippet->thumbnails->medium->url),
+            'high' => str_replace('_live', '', $channel_video->snippet->thumbnails->high->url),
             'created_at' => $now,
             'updated_at' => $now,
         ];
