@@ -40,8 +40,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('fetch:video')
             ->everyMinute()
             ->after(function () {
-                (new ThumbnailImageFetcher(new ChannelThumbnail))->fetchThumbnailInDatabase();
-                (new ThumbnailImageFetcher(new VideoThumbnail))->fetchThumbnailInDatabase();
+                (new ThumbnailImageFetcher(new ChannelThumbnail))->downloadImages();
+                (new ThumbnailImageFetcher(new VideoThumbnail))->downloadImages();
                 (new CreateJsonOfLatestVideoAndChannel)->handle();
             })
             ->timezone('Asia/Tokyo')
