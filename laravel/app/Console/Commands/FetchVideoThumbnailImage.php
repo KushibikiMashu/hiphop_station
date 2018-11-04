@@ -42,7 +42,7 @@ class FetchVideoThumbnailImage extends Command
         // publicディレクトリ配下、サイズごとに配置する
         // 画像名はhash.jpg
         $fetcher = new ThumbnailImageFetcher($videoThumbnail);
-        $fetcher->fetchThumbnailInDatabase();
+        $fetcher->downloadImages();
 
         // 将来的には...
         // S3に動画をアップ

@@ -37,6 +37,6 @@ class FetchChannelThumbnailImage extends Command
      */
     public function handle(ChannelThumbnail $channelThumbnail)
     {
-        (new ThumbnailImageFetcher($channelThumbnail))->fetchThumbnailInDatabase();
+        (new ThumbnailImageFetcher($channelThumbnail))->downloadImages();
     }
 }

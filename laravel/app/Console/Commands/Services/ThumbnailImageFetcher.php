@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Log;
 class ThumbnailImageFetcher
 {
 
-    private static $thumbnailTableName;
-    private static $thumbnailQuery;
+    private static $thumbnail_table_name;
+    private static $thumbnail_query;
     private static $parent_tableName;
     private static $parent_tableQuery;
 
@@ -21,7 +21,7 @@ class ThumbnailImageFetcher
     {
         self::setTableName($instance);
         self::setParentTableName($instance);
-        self::$thumbnailQuery = $instance->get();
+        self::$thumbnail_query = $instance->get();
         self::$parent_tableQuery = DB::table(self::getParentTableName())
             ->orderBy('id', 'asc')
             ->get();
@@ -30,13 +30,13 @@ class ThumbnailImageFetcher
     /**
      * XXX_thumbnailテーブルに格納されているアドレスの画像をダウンロードする
      */
-    public function fetchThumbnailInDatabase(): void
+    public function downloadImages(): void
     {
         $sizes = ['std', 'medium', 'high'];
         $query = $this->getThumbnailQuery();
         foreach ($query as $record) {
             foreach ($sizes as $size) {
-                $this->getImages($record, $size);
+                $this->fetchThumbnailInDatabase($record, $size);
             }
         }
     }
@@ -47,11 +47,12 @@ class ThumbnailImageFetcher
      * @param object $record
      * @param string $size
      */
-    private function getImages($record, string $size): void
+    private function fetchThumbnailInDatabase($record, string $size): void
     {
         $table = self::getTableName();
         $url = str_replace('_live', '', $record->{$size});
         $hash = $this->fetchRecordHash($record);
+        if (!$hash) return;
         $image_path = "image/{$table}/{$size}/{$hash}.jpg";
         if (file_exists(public_path($image_path))) return;
 
@@ -76,9 +77,12 @@ class ThumbnailImageFetcher
     {
         $parent_table = self::getParentTableName();
         $parent_id = $parent_table . '_id';
-        return DB::table($parent_table)
-            ->where('id', '=', $record->{$parent_id})
-            ->get()[0]->hash;
+        if (DB::table($parent_table)->where('id', '=', $record->{$parent_id})->exists()){
+            return DB::table($parent_table)
+                ->where('id', '=', $record->{$parent_id})
+                ->get()[0]->hash;
+        }
+        return '';
     }
 
     /**
@@ -103,7 +107,7 @@ class ThumbnailImageFetcher
 
     public static function setTableName($instance): void
     {
-        self::$thumbnailTableName = $instance->getTable();
+        self::$thumbnail_table_name = $instance->getTable();
     }
 
     /**
@@ -111,7 +115,7 @@ class ThumbnailImageFetcher
      */
     public static function getTableName(): string
     {
-        return self::$thumbnailTableName;
+        return self::$thumbnail_table_name;
     }
 
     public static function setParentTableName($instance): void
@@ -132,7 +136,7 @@ class ThumbnailImageFetcher
      */
     public static function getThumbnailQuery(): object
     {
-        return self::$thumbnailQuery;
+        return self::$thumbnail_query;
     }
 
     /**
