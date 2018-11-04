@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Channel;
 use App\Video;
-use App\Video_Thumbnails;
+use App\VideoThumbnail;
 use Illuminate\Console\Command;
 
 class CreateJsonOfLatestVideoAndChannel extends Command
@@ -66,7 +66,7 @@ class CreateJsonOfLatestVideoAndChannel extends Command
      * JSONを作成する
      *
      * @param array $array
-     * @param string $file_name
+     * @param string $filename
      * @return void
      */
     private function create_json(array $array, string $filename)
@@ -80,6 +80,7 @@ class CreateJsonOfLatestVideoAndChannel extends Command
      * 連想配列からkeyがcreated_at,update_atであるキー/値を削除する
      *
      * @param array $query
+     * @param array $keys
      * @return array
      */
     private function unset_keys(array $query, array $keys): array
@@ -97,20 +98,22 @@ class CreateJsonOfLatestVideoAndChannel extends Command
     /**
      * 動画に紐づくchannel情報とサムネイルのURLを追加する
      *
-     * @param array $query
+     * @param $video_query
      * @param array $channels
      * @return array
      */
-    private function add_extra_data(array $video_query, array $channels): array
+    private function add_extra_data($video_query, array $channels): array
     {
         $new_query = [];
+        $sizes = ['std', 'medium', 'high'];
         foreach ($video_query as $record) {
             $record['channel'] = $channels[$record['channel_id'] - 1];
             $record['thumbnail'] = 'https://i.ytimg.com/vi/' . $record['hash'] . '/hqdefault.jpg';
-            // $record['thumbnail'] = [ 
-            //     'path' => 'filepath,
-            //     'url'  =>   'https://i.ytimg.com/vi/' . $record['hash'] . '/hqdefault.jpg'
-            // ];
+            $record['thumbnail'] = [
+                'std'    => "/image/video_thumbnail/$sizes[0]/{$record['hash']}.jpg",
+                'medium' => "/image/video_thumbnail/$sizes[1]/{$record['hash']}.jpg",
+                'high'   => "/image/video_thumbnail/$sizes[2]/{$record['hash']}.jpg"
+            ];
             $new_query[] = $record;
         }
         return $new_query;
