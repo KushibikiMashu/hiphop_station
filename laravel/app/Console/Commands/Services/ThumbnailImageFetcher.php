@@ -8,9 +8,10 @@ use Illuminate\Support\Facades\Log;
 class ThumbnailImageFetcher
 {
 
-    private static $ThumbnailTableName;
+    private static $thumbnailTableName;
     private static $thumbnailQuery;
-    private static $parentTableQuery;
+    private static $parent_tableName;
+    private static $parent_tableQuery;
 
     /**
      * ThumbnailImageFetcher constructor.
@@ -18,10 +19,10 @@ class ThumbnailImageFetcher
      */
     public function __construct($instance)
     {
-        self::$ThumbnailTableName = $instance->getTable();
+        self::setTableName($instance);
+        self::setParentTableName($instance);
         self::$thumbnailQuery = $instance->get();
-        self::$parentTableQuery = DB::table(str_replace('_thumbnail', '', self::$ThumbnailTableName))
-            ->select('id', 'hash')
+        self::$parent_tableQuery = DB::table(self::getParentTableName())
             ->orderBy('id', 'asc')
             ->get();
     }
@@ -41,16 +42,16 @@ class ThumbnailImageFetcher
     }
 
     /**
-     *
+     * file_get_contentsで画像を取得する
      *
      * @param object $record
      * @param string $size
      */
     private function getImages($record, string $size): void
     {
-        $table = $this->getTableName();
+        $table = self::getTableName();
         $url = str_replace('_live', '', $record->{$size});
-        $hash = self::$parentTableQuery[$record->id -1]->hash;
+        $hash = $this->fetchRecordHash($record);
         $image_path = "image/{$table}/{$size}/{$hash}.jpg";
         if (file_exists(public_path($image_path))) return;
 
@@ -61,7 +62,48 @@ class ThumbnailImageFetcher
             file_put_contents(public_path($image_path), $data);
         } else {
             Log::warning('Cannot download image file from: ' . $url);
+            $this->deleteInvalidRecord($table, $record->id, $hash);
         }
+    }
+
+    /**
+     * RDBで親テーブルのレコードを取得
+     *
+     * @param $record
+     * @return string
+     */
+    private function fetchRecordHash($record): string
+    {
+        $parent_table = self::getParentTableName();
+        $parent_id = $parent_table . '_id';
+        return DB::table($parent_table)
+            ->where('id', '=', $record->{$parent_id})
+            ->get()[0]->hash;
+    }
+
+    /**
+     * YouTubeから削除された動画のIDをDBから削除する
+     *
+     * @param string $table
+     * @param int $id
+     * @param string $hash
+     */
+    private function deleteInvalidRecord(string $table, int $id, string $hash): void
+    {
+        $parent_table = self::getParentTableName();
+        if (DB::table($parent_table)->where('hash', '=', $hash)->exists()) {
+            DB::table($parent_table)->where('hash', '=', $hash)->delete();
+            Log::info('Delete id: ' . self::$parent_tableQuery[$id - 1]->id . " from {$parent_table} table.");
+        }
+        if (DB::table($table)->where('id', '=', $id)->exists()) {
+            DB::table($table)->where('id', '=', $id)->delete();
+            Log::info('Delete id: ' . $id . " from {$table} table.");
+        }
+    }
+
+    public static function setTableName($instance): void
+    {
+        self::$thumbnailTableName = $instance->getTable();
     }
 
     /**
@@ -69,7 +111,20 @@ class ThumbnailImageFetcher
      */
     public static function getTableName(): string
     {
-        return self::$ThumbnailTableName;
+        return self::$thumbnailTableName;
+    }
+
+    public static function setParentTableName($instance): void
+    {
+        self::$parent_tableName = str_replace('_thumbnail', '', $instance->getTable());
+    }
+
+    /**
+     * @return string
+     */
+    public static function getParentTableName(): string
+    {
+        return self::$parent_tableName;
     }
 
     /**
@@ -85,6 +140,6 @@ class ThumbnailImageFetcher
      */
     public static function getParentTableQuery(): object
     {
-        return self::$parentTableQuery;
+        return self::$parent_tableQuery;
     }
 }
