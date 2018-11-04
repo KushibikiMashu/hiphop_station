@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\VideoThumbnail;
 
-class fetchVideoThumbnailImage extends Command
+class FetchVideoThumbnailImage extends Command
 {
     /**
      * The name and signature of the console command.
