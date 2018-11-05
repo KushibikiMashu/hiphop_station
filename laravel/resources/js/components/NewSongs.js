@@ -97,7 +97,7 @@ class NewSongs extends React.Component {
           <Card className={classes.card}>
             <CardMedia
               className={classes.media}
-              image={items[i].thumbnail}
+              image={items[i].thumbnail.high}
               component={Link}
               to={'/video/' + items[i].hash}
             />
