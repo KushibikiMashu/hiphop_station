@@ -38,14 +38,13 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('fetch:video')
-            ->everyMinute()
+            ->everyFiveMinutes()
             ->after(function () {
                 (new ThumbnailImageFetcher(new ChannelThumbnail))->downloadImages();
                 (new ThumbnailImageFetcher(new VideoThumbnail))->downloadImages();
                 (new CreateJsonOfLatestVideoAndChannel)->handle();
             })
-            ->timezone('Asia/Tokyo')
-            ->withoutOverlapping();
+            ->timezone('Asia/Tokyo');
     }
 
     /**
