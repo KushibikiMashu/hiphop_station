@@ -7,10 +7,9 @@ services:
       - ./nginx/log:/var/log/nginx
       - ./laravel:/var/www/laravel
     ports:
-      - 3000:80
+      - 80:80
     links:
       - phpfpm:phpfpm
-      - redis:redis
       - mysql:mysql
     restart: always
 
@@ -39,10 +38,4 @@ services:
       MYSQL_USER:     user
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: hiphop_station
-    restart: always
-
-  redis:
-    image: redis:alpine
-    ports:
-      - 6379:6379
     restart: always
