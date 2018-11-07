@@ -52,7 +52,7 @@ class ThumbnailImageFetcherDependsOnFetchVideoThumbnailImageTest extends TestCas
 
     public function test_deleteInvalidRecord_YouTubeで削除済みの動画をDBから削除する()
     {
-        // Fakerでデータ入れる
+        // TODO Fakerでデータ入れる
         $videoId = Video::insertGetId([
             'channel_id'   => 1000,
             'title'        => 'test',
@@ -67,20 +67,16 @@ class ThumbnailImageFetcherDependsOnFetchVideoThumbnailImageTest extends TestCas
             'medium'   => 'medium',
             'high'     => 'high',
         ]);
-        $video = Video::where('id', '=', $videoId)->get();
-        $videoThumbnail = VideoThumbnail::where('id', '=', $videoThumbnailId)->get();
 
         // データが挿入されたことを確認
-        $this->assertSame(1000, $video[0]->channel_id);
-        $this->assertSame($videoId, $videoThumbnail[0]->video_id);
+        $this->assertTrue(Video::where('id', '=', $videoId)->exists());
+        $this->assertTrue(VideoThumbnail::where('id', '=', $videoThumbnailId)->exists());
 
         $method = $this->callPrivateMethod($this->instance, 'deleteInvalidRecord');
         $method->invoke($this->instance, 'video_thumbnail', $videoThumbnailId, 'abcdefg');
 
-        $deletedVideo = Video::where('id', '=', $videoId)->get();
-        $deletedVideoThumbnail = VideoThumbnail::where('id', '=', $videoThumbnailId)->get();
-        $this->assertEmpty($deletedVideo);
-        $this->assertEmpty($deletedVideoThumbnail);
+        $this->assertFalse(Video::where('id', '=', $videoId)->exists());
+        $this->assertFalse(VideoThumbnail::where('id', '=', $videoThumbnailId)->exists());
     }
 
     public function callPrivateMethod($class, $method)

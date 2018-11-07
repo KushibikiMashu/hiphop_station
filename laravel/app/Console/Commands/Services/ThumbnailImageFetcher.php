@@ -12,7 +12,7 @@ class ThumbnailImageFetcher
     public static $thumbnail_query;
     public static $parent_tableName;
     public static $parent_tableQuery;
-    public $instance;
+    public        $instance;
 
     /**
      * ThumbnailImageFetcher constructor.
@@ -79,7 +79,7 @@ class ThumbnailImageFetcher
     {
         $parent_table = self::getParentTableName();
         $parent_id = $parent_table . '_id';
-        if (DB::table($parent_table)->where('id', '=', $record->{$parent_id})->exists()){
+        if (DB::table($parent_table)->where('id', '=', $record->{$parent_id})->exists()) {
             return DB::table($parent_table)
                 ->where('id', '=', $record->{$parent_id})
                 ->get()[0]->hash;
