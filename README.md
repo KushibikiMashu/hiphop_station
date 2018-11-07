@@ -16,16 +16,9 @@ $ docker-compose up -d
 Set React in Laravel
 ```
 $ cd laravel
-$ php artisan preset react
-$ npm install
+$ composer install
+$ npm i
 $ npm run prod
-```
-
-Add Laravel task schedule to crontab
-
-```
-$ vi /etc/crontabs/laravel_schedule
-* * * * * cd /var/www/laravel && php artisan schedule:run >> /dev/null 2>&1
 ```
 
 Set your Youtube API key in the .env file
