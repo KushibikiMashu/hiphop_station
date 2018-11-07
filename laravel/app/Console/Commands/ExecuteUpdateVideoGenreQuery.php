@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class ExcuteUpdateVideoGenreQuery extends Command
+class ExecuteUpdateVideoGenreQuery extends Command
 {
     /**
      * The name and signature of the console command.

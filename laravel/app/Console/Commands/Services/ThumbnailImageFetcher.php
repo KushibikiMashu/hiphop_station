@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\Log;
 class ThumbnailImageFetcher
 {
 
-    private static $thumbnail_table_name;
-    private static $thumbnail_query;
-    private static $parent_tableName;
-    private static $parent_tableQuery;
+    public static $thumbnail_table_name;
+    public static $thumbnail_query;
+    public static $parent_tableName;
+    public static $parent_tableQuery;
+    public $instance;
 
     /**
      * ThumbnailImageFetcher constructor.
@@ -19,6 +20,7 @@ class ThumbnailImageFetcher
      */
     public function __construct($instance)
     {
+        $this->instance = $instance;
         self::setTableName($instance);
         self::setParentTableName($instance);
         self::$thumbnail_query = $instance->get();
@@ -97,7 +99,7 @@ class ThumbnailImageFetcher
         $parent_table = self::getParentTableName();
         if (DB::table($parent_table)->where('hash', '=', $hash)->exists()) {
             DB::table($parent_table)->where('hash', '=', $hash)->delete();
-            Log::info('Delete id: ' . self::$parent_tableQuery[$id - 1]->id . " from {$parent_table} table.");
+            Log::info('Delete id: ' . (string)$this->instance::where('id', '=', $id)->get()[0]->id . " from {$parent_table} table.");
         }
         if (DB::table($table)->where('id', '=', $id)->exists()) {
             DB::table($table)->where('id', '=', $id)->delete();

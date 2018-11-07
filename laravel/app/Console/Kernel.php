@@ -20,7 +20,6 @@ class Kernel extends ConsoleKernel
         Commands\GetChannelData::class,
         Commands\GetVideoData::class,
         Commands\GenerateJson::class,
-        Commands\ExcuteUpdateVideoGenreQuery::class,
         Commands\FetchVideoThumbnailImage::class,
         Commands\FetchChannelThumbnailImage::class,
         Commands\FetchLatestVideosFromYoutubeAPI::class,
