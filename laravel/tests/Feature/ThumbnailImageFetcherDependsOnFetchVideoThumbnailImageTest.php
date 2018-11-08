@@ -68,7 +68,7 @@ class ThumbnailImageFetcherDependsOnFetchVideoThumbnailImageTest extends TestCas
         $this->assertDatabaseHas('video', ['id' => $video->id]);
         $this->assertDatabaseHas('video_thumbnail', ['id' => $video_thumbnail->id]);
         $method = $this->callPrivateMethod($this->instance, 'deleteInvalidRecord');
-        $method->invoke($this->instance, $video_thumbnail->getTable(), $video_thumbnail->id, $video->hash);
+        $method->invoke($this->instance, $video_thumbnail->id, $video->hash);
         $this->assertDatabaseMissing('video', ['id' => $video->id]);
         $this->assertDatabaseMissing('video_thumbnail', ['id' => $video_thumbnail->id]);
     }

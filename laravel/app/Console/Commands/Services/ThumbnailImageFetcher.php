@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\Log;
 
 class ThumbnailImageFetcher
 {
-
+    
+    private $instance;
     private $thumbnail_table_name;
     private $thumbnail_query;
     private $parent_table_name;
     private $parent_table_query;
-    private $instance;
 
     /**
      * ThumbnailImageFetcher constructor.
@@ -36,6 +36,8 @@ class ThumbnailImageFetcher
     {
         $sizes = ['std', 'medium', 'high'];
         $query = $this->getThumbnailQuery();
+        // これだけで済む
+        // $query = $this->instance->get();
         foreach ($query as $record) {
             foreach ($sizes as $size) {
                 $this->fetchThumbnailInDatabase($record, $size);
@@ -58,15 +60,23 @@ class ThumbnailImageFetcher
         $image_path = "image/{$table}/{$size}/{$hash}.jpg";
         if (file_exists(public_path($image_path))) return;
 
+        $result = $this->canDownloadJpgFileFromUrl($url, $image_path);
+        if (!$result) {
+            Log::warning('Cannot download image file from: ' . $url);
+            $this->deleteInvalidRecord($record->id, $hash);
+        }
+    }
+
+    private function canDownloadJpgFileFromUrl($url, $image_path): bool
+    {
         // レスポンスコードが400系・500系でもwarningを出さない
         $context = stream_context_create(['http' => ['ignore_errors' => true]]);
         $data = file_get_contents($url, false, $context);
         if (strpos($http_response_header[0], '200') !== false) {
             file_put_contents(public_path($image_path), $data);
-        } else {
-            Log::warning('Cannot download image file from: ' . $url);
-            $this->deleteInvalidRecord($table, $record->id, $hash);
+            return true;
         }
+        return false;
     }
 
     /**
@@ -90,19 +100,19 @@ class ThumbnailImageFetcher
     /**
      * YouTubeから削除された動画のIDをDBから削除する
      *
-     * @param string $table
      * @param int $id
      * @param string $hash
      */
-    private function deleteInvalidRecord(string $table, int $id, string $hash): void
+    private function deleteInvalidRecord(int $id, string $hash): void
     {
+        $table = $this->getTableName();
         $parent_table = $this->getParentTableName();
-        if (DB::table($parent_table)->where('hash', '=', $hash)->exists()) {
-            DB::table($parent_table)->where('hash', '=', $hash)->delete();
-            Log::info('Delete id: ' . (string)$this->instance::where('id', '=', $id)->get()[0]->id . " from {$parent_table} table.");
+        if (DB::table($parent_table)->where('hash', $hash)->exists()) {
+            DB::table($parent_table)->where('hash', $hash)->delete();
+            Log::info('Delete id: ' . (string)$this->instance::where('id', $id)->get()[0]->id . " from {$parent_table} table.");
         }
-        if (DB::table($table)->where('id', '=', $id)->exists()) {
-            DB::table($table)->where('id', '=', $id)->delete();
+        if (DB::table($table)->where('id', $id)->exists()) {
+            DB::table($table)->where('id', $id)->delete();
             Log::info('Delete id: ' . $id . " from {$table} table.");
         }
     }
