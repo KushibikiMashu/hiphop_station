@@ -29,8 +29,8 @@ class ThumbnailImageFetcherDependsOnFetchVideoThumbnailImageTest extends TestCas
      */
     public function テーブル名を取得する(): void
     {
-        $this->assertSame('video_thumbnail', $this->instance::getTableName());
-        $this->assertSame('video', $this->instance::getParentTableName());
+        $this->assertSame('video_thumbnail', $this->instance->getTableName());
+        $this->assertSame('video', $this->instance->getParentTableName());
     }
 
     /**
@@ -39,10 +39,10 @@ class ThumbnailImageFetcherDependsOnFetchVideoThumbnailImageTest extends TestCas
     public function getThumbnailQuery__video_thumbnailテーブルのクエリの同一性を担保する(): void
     {
         $video_thumbnail = VideoThumbnail::get()[0];
-        $this->assertSame($video_thumbnail->id, $this->instance::getThumbnailQuery()[0]->id);
-        $this->assertSame($video_thumbnail->video_id, $this->instance::getThumbnailQuery()[0]->video_id);
-        $this->assertSame($video_thumbnail->medium, $this->instance::getThumbnailQuery()[0]->medium);
-        $this->assertSame($video_thumbnail->high, $this->instance::getThumbnailQuery()[0]->high);
+        $this->assertSame($video_thumbnail->id, $this->instance->getThumbnailQuery()[0]->id);
+        $this->assertSame($video_thumbnail->video_id, $this->instance->getThumbnailQuery()[0]->video_id);
+        $this->assertSame($video_thumbnail->medium, $this->instance->getThumbnailQuery()[0]->medium);
+        $this->assertSame($video_thumbnail->high, $this->instance->getThumbnailQuery()[0]->high);
     }
 
     /**
@@ -51,12 +51,12 @@ class ThumbnailImageFetcherDependsOnFetchVideoThumbnailImageTest extends TestCas
     public function getParentTableQuery__videoテーブルのクエリの同一性を担保する(): void
     {
         $video = Video::get()[0];
-        $this->assertSame($video->id, $this->instance::getParentTableQuery()[0]->id);
-        $this->assertSame($video->channel_id, $this->instance::getParentTableQuery()[0]->channel_id);
-        $this->assertSame($video->title, $this->instance::getParentTableQuery()[0]->title);
-        $this->assertSame($video->hash, $this->instance::getParentTableQuery()[0]->hash);
-        $this->assertSame($video->genre, $this->instance::getParentTableQuery()[0]->genre);
-        $this->assertSame($video->published_at, $this->instance::getParentTableQuery()[0]->published_at);
+        $this->assertSame($video->id, $this->instance->getParentTableQuery()[0]->id);
+        $this->assertSame($video->channel_id, $this->instance->getParentTableQuery()[0]->channel_id);
+        $this->assertSame($video->title, $this->instance->getParentTableQuery()[0]->title);
+        $this->assertSame($video->hash, $this->instance->getParentTableQuery()[0]->hash);
+        $this->assertSame($video->genre, $this->instance->getParentTableQuery()[0]->genre);
+        $this->assertSame($video->published_at, $this->instance->getParentTableQuery()[0]->published_at);
     }
 
     /**

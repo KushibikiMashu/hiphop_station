@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Log;
 class ThumbnailImageFetcher
 {
 
-    public static $thumbnail_table_name;
-    public static $thumbnail_query;
-    public static $parent_tableName;
-    public static $parent_tableQuery;
-    public        $instance;
+    private $thumbnail_table_name;
+    private $thumbnail_query;
+    private $parent_table_name;
+    private $parent_table_query;
+    private $instance;
 
     /**
      * ThumbnailImageFetcher constructor.
@@ -23,12 +23,10 @@ class ThumbnailImageFetcher
         // 三項演算子でvideoかchannelかを判定し、プロパティに格納する値を決める
         // instance of を使う
         $this->instance = $instance;
-        self::setTableName($instance);
-        self::setParentTableName($instance);
-        self::$thumbnail_query = $instance->get();
-        self::$parent_tableQuery = DB::table(self::getParentTableName())
-            ->orderBy('id', 'asc')
-            ->get();
+        $this->thumbnail_table_name = $instance->getTable();
+        $this->setParentTableName();
+        $this->thumbnail_query = $instance->get();
+        $this->setParentTableQuery();
     }
 
     /**
@@ -53,7 +51,7 @@ class ThumbnailImageFetcher
      */
     private function fetchThumbnailInDatabase($record, string $size): void
     {
-        $table = self::getTableName();
+        $table = $this->getTableName();
         $url = str_replace('_live', '', $record->{$size});
         $hash = $this->fetchRecordHash($record);
         if (!$hash) return;
@@ -79,7 +77,7 @@ class ThumbnailImageFetcher
      */
     private function fetchRecordHash($record): string
     {
-        $parent_table = self::getParentTableName();
+        $parent_table = $this->getParentTableName();
         $parent_id = $parent_table . '_id';
         if (DB::table($parent_table)->where('id', $record->{$parent_id})->exists()) {
             return DB::table($parent_table)
@@ -98,7 +96,7 @@ class ThumbnailImageFetcher
      */
     private function deleteInvalidRecord(string $table, int $id, string $hash): void
     {
-        $parent_table = self::getParentTableName();
+        $parent_table = $this->getParentTableName();
         if (DB::table($parent_table)->where('hash', '=', $hash)->exists()) {
             DB::table($parent_table)->where('hash', '=', $hash)->delete();
             Log::info('Delete id: ' . (string)$this->instance::where('id', '=', $id)->get()[0]->id . " from {$parent_table} table.");
@@ -109,45 +107,47 @@ class ThumbnailImageFetcher
         }
     }
 
-    public static function setTableName($instance): void
+    public function setParentTableName(): void
     {
-        self::$thumbnail_table_name = $instance->getTable();
+        $this->parent_table_name = str_replace('_thumbnail', '', $this->thumbnail_table_name);
+    }
+
+    public function setParentTableQuery(): void
+    {
+        $this->parent_table_query = DB::table($this->getParentTableName())
+            ->orderBy('id', 'asc')
+            ->get();
     }
 
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public function getTableName(): string
     {
-        return self::$thumbnail_table_name;
-    }
-
-    public static function setParentTableName($instance): void
-    {
-        self::$parent_tableName = str_replace('_thumbnail', '', $instance->getTable());
+        return $this->thumbnail_table_name;
     }
 
     /**
      * @return string
      */
-    public static function getParentTableName(): string
+    public function getParentTableName(): string
     {
-        return self::$parent_tableName;
+        return $this->parent_table_name;
     }
 
     /**
      * @return object
      */
-    public static function getThumbnailQuery(): object
+    public function getThumbnailQuery(): object
     {
-        return self::$thumbnail_query;
+        return $this->thumbnail_query;
     }
 
     /**
      * @return object
      */
-    public static function getParentTableQuery(): object
+    public function getParentTableQuery(): object
     {
-        return self::$parent_tableQuery;
+        return $this->parent_table_query;
     }
 }
