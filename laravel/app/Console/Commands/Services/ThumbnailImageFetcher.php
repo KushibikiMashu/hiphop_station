@@ -20,6 +20,8 @@ class ThumbnailImageFetcher
      */
     public function __construct($instance)
     {
+        // 三項演算子でvideoかchannelかを判定し、プロパティに格納する値を決める
+        // instance of を使う
         $this->instance = $instance;
         self::setTableName($instance);
         self::setParentTableName($instance);
@@ -79,9 +81,9 @@ class ThumbnailImageFetcher
     {
         $parent_table = self::getParentTableName();
         $parent_id = $parent_table . '_id';
-        if (DB::table($parent_table)->where('id', '=', $record->{$parent_id})->exists()) {
+        if (DB::table($parent_table)->where('id', $record->{$parent_id})->exists()) {
             return DB::table($parent_table)
-                ->where('id', '=', $record->{$parent_id})
+                ->where('id', $record->{$parent_id})
                 ->get()[0]->hash;
         }
         return '';

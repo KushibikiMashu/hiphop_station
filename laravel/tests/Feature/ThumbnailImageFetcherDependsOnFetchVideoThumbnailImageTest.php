@@ -36,7 +36,7 @@ class ThumbnailImageFetcherDependsOnFetchVideoThumbnailImageTest extends TestCas
     /**
      * @test
      */
-    public function video_thumbnailテーブルのクエリの同一性を担保する(): void
+    public function getThumbnailQuery__video_thumbnailテーブルのクエリの同一性を担保する(): void
     {
         $video_thumbnail = VideoThumbnail::get()[0];
         $this->assertSame($video_thumbnail->id, $this->instance::getThumbnailQuery()[0]->id);
@@ -48,7 +48,7 @@ class ThumbnailImageFetcherDependsOnFetchVideoThumbnailImageTest extends TestCas
     /**
      * @test
      */
-    public function videoテーブルのクエリの同一性を担保する(): void
+    public function getParentTableQuery__videoテーブルのクエリの同一性を担保する(): void
     {
         $video = Video::get()[0];
         $this->assertSame($video->id, $this->instance::getParentTableQuery()[0]->id);
@@ -62,7 +62,7 @@ class ThumbnailImageFetcherDependsOnFetchVideoThumbnailImageTest extends TestCas
     /**
      * @test
      */
-    public function deleteInvalidRecord_YouTubeで削除済みの動画をDBから削除する(): void
+    public function deleteInvalidRecord__video_thumbnailとそれに紐づくvideoのレコードをDBから削除する(): void
     {
         list($video, $video_thumbnail) = $this->createVideoAndVideoThumnailRecord();
         $this->assertDatabaseHas('video', ['id' => $video->id]);
@@ -72,16 +72,17 @@ class ThumbnailImageFetcherDependsOnFetchVideoThumbnailImageTest extends TestCas
         $this->assertDatabaseMissing('video', ['id' => $video->id]);
         $this->assertDatabaseMissing('video_thumbnail', ['id' => $video_thumbnail->id]);
     }
-//
-//    /**
-//     * @test
-//     */
-//    public function RDBで親テーブルのレコードを取得()
-//    {
-//        $video_Thumbnail = VideoThumbnail::find(1);
-//        $method = $this->callPrivateMethod($this->instance, 'fetchRecordHash');
-//        $method->invoke($this->instance, $video_Thumbnail);
-//    }
+
+    /**
+     * @test
+     */
+    public function fetchRecordHash__RDBで親テーブルのレコードを取得(): void
+    {
+        list($video, $video_thumbnail) = $this->createVideoAndVideoThumnailRecord();
+        $method = $this->callPrivateMethod($this->instance, 'fetchRecordHash');
+        $hash = $method->invoke($this->instance, $video_thumbnail);
+        $this->assertSame($video->hash, $hash);
+    }
 
     private function callPrivateMethod(ThumbnailImageFetcher $class, string $method): \ReflectionMethod
     {
@@ -91,12 +92,12 @@ class ThumbnailImageFetcherDependsOnFetchVideoThumbnailImageTest extends TestCas
         return $method;
     }
 
-    private function createVideoRecord()
+    private function createVideoRecord(): Video
     {
         return factory(Video::class)->create();
     }
 
-    private function createVideoThumbnailRecord()
+    private function createVideoThumbnailRecord(): VideoThumbnail
     {
         return factory(VideoThumbnail::class)->create();
     }
