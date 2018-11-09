@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\ChannelThumbnail;
-use App\Console\Commands\Services\ThumbnailImageFetcher;
+use App\Services\ThumbnailImageFetcher;
 use Illuminate\Console\Command;
 
 class FetchChannelThumbnailImage extends Command

@@ -9,6 +9,9 @@ use App\Video;
 use App\VideoThumbnail;
 use App\Console\Commands\FetchVideoThumbnailImage;
 use App\Services\ThumbnailImageFetcher;
+use App\Services\VideoThumbnailFetcher;
+use App\Repositories\VideoRepository;
+use App\Repositories\VideoThumbnailRepository;
 
 class ThumbnailImageFetcherDependsOnFetchVideoThumbnailImageTest extends TestCase
 {
@@ -60,6 +63,7 @@ class ThumbnailImageFetcherDependsOnFetchVideoThumbnailImageTest extends TestCas
 
     /**
      * @test
+     * @param VideoThumbnailFetcher $service
      */
     public function deleteInvalidRecord__video_thumbnailとそれに紐づくvideoのレコードをDBから削除する(): void
     {
@@ -67,7 +71,7 @@ class ThumbnailImageFetcherDependsOnFetchVideoThumbnailImageTest extends TestCas
         $this->assertDatabaseHas('video', ['id' => $video->id]);
         $this->assertDatabaseHas('video_thumbnail', ['id' => $video_thumbnail->id]);
         $method = $this->callPrivateMethod($this->instance, 'deleteInvalidRecord');
-        $method->invoke($this->instance, $video_thumbnail->id, $video->hash);
+        $method->invoke($this->instance, (new VideoThumbnailFetcher(new VideoRepository, new VideoThumbnailRepository)), $video_thumbnail->id, $video->hash);
         $this->assertDatabaseMissing('video', ['id' => $video->id]);
         $this->assertDatabaseMissing('video_thumbnail', ['id' => $video_thumbnail->id]);
     }

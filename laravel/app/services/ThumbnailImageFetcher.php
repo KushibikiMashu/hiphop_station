@@ -10,6 +10,7 @@ use App\Repositories\VideoRepository;
 use App\Repositories\ChannelRepository;
 use App\Repositories\VideoThumbnailRepository;
 use App\Repositories\ChannelThumbnailRepository;
+use App\Services\VideoThumbnailFetcher;
 
 class ThumbnailImageFetcher
 {
@@ -113,21 +114,25 @@ class ThumbnailImageFetcher
     /**
      * YouTubeから削除された動画のIDをDBから削除する
      *
+     * @param VideoThumbnailFetcher $service
      * @param int $id
      * @param string $hash
      */
-    private function deleteInvalidRecord(int $id, string $hash): void
+    private function deleteInvalidRecord(VideoThumbnailFetcher $service, int $id, string $hash): void
     {
-        $table = $this->getTableName();
-        $parent_table = $this->getParentTableName();
-        if ($this->belonging_instance->where('hash', $hash)->exists()) {
-            $this->belonging_instance->where('hash', $hash)->delete();
-            Log::info('Delete id: ' . (string)$this->instance::where('id', $id)->get()[0]->id . " from {$parent_table} table.");
-        }
-        if ($this->instance->where('id', $id)->exists()) {
-            $this->instance->where('id', $id)->delete();
-            Log::info('Delete id: ' . $id . " from {$table} table.");
-        }
+
+        $service->run($id, $hash);
+
+//        $table = $this->getTableName();
+//        $parent_table = $this->getParentTableName();
+////        if ($this->belonging_instance->where('hash', $hash)->exists()) {
+////            $this->belonging_instance->where('hash', $hash)->delete();
+////            Log::info('Delete id: ' . (string)$this->instance::where('id', $id)->get()[0]->id . " from {$parent_table} table.");
+////        }
+////        if ($this->instance->where('id', $id)->exists()) {
+////            $this->instance->where('id', $id)->delete();
+////            Log::info('Delete id: ' . $id . " from {$table} table.");
+////        }
     }
 
     public function setBelongingInstance(): void
