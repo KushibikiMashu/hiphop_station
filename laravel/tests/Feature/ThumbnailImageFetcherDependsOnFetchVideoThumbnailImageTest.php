@@ -8,8 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Video;
 use App\VideoThumbnail;
 use App\Console\Commands\FetchVideoThumbnailImage;
-
-use App\Console\Commands\Services\ThumbnailImageFetcher;
+use App\Services\ThumbnailImageFetcher;
 
 class ThumbnailImageFetcherDependsOnFetchVideoThumbnailImageTest extends TestCase
 {
