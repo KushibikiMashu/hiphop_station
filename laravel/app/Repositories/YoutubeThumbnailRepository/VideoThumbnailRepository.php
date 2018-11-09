@@ -7,11 +7,14 @@ use Illuminate\Support\Facades\Log;
 
 class VideoThumbnailRepository implements YoutubeThumbnailRepositoryInterface
 {
-
+    public function fetchAll(): \Generator
+    {
+        return VideoThumbnail::cursor();
+    }
 
     public function getTableName(): string
     {
-
+        return (new VideoThumbnail)->getTable();
     }
 
     public function deleteById(int $id): void

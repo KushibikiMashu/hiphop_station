@@ -36,7 +36,7 @@ class ThumbnailImageFetcher
         $this->setBelongingInstance();
         $this->parent_table_name = $this->belonging_instance->getTable();
         $this->parent_table_query = $this->belonging_instance->get();
-        $this->setRepositories();
+//        $this->setRepositories();
         // setterがいらない。getterもいらないと思う。このクラス外では呼ばない。呼ぶようになったらgetterを作る
 
         //        // 三項演算子でvideoかchannelかを判定し、プロパに格納する値を決める
@@ -47,18 +47,18 @@ class ThumbnailImageFetcher
     /**
      * XXX_thumbnailテーブルに格納されているアドレスの画像をダウンロードする
      */
-    public function downloadImages(): void
-    {
-        $sizes = ['std', 'medium', 'high'];
-        $query = $this->getThumbnailQuery();
-        // これだけで済む
-        // $query = $this->instance->get();
-        foreach ($query as $record) {
-            foreach ($sizes as $size) {
-                $this->fetchThumbnailInDatabase($record, $size);
-            }
-        }
-    }
+//    public function downloadImages(): void
+//    {
+//        $sizes = ['std', 'medium', 'high'];
+//        $query = $this->getThumbnailQuery();
+//        // これだけで済む
+//        // $query = $this->instance->get();
+//        foreach ((new VideoThumbnailRepository())->fetchAll() as $record) {
+//            foreach ($sizes as $size) {
+//                $this->fetchThumbnailInDatabase($record, $size);
+//            }
+//        }
+//    }
 
     /**
      * file_get_contentsで画像を取得する

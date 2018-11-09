@@ -7,8 +7,22 @@ use Illuminate\Support\Facades\Log;
 
 class VideoRepository implements YoutubeRepositoryInterface
 {
+    public function fetchAll(): \Generator
+    {
+        return Video::cursor();
+    }
+
     public function getTableName(): string
     {
+        return (new Video)->getTable();
+    }
+
+    /**
+     * RDBで親テーブルのレコードを取得
+     */
+    public function getHashFromVideoThumbnail($record): string
+    {
+        return Video::where('id', $record->video_id)->exists() ? Video::find($record->video_id)->hash : '';
     }
 
     public function deleteByHash(string $hash): void
