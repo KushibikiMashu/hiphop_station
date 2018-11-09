@@ -6,6 +6,10 @@ use App\VideoThumbnail;
 use Illuminate\Support\Facades\Log;
 use App\Video;
 use App\Channel;
+use App\Repositories\VideoRepository;
+use App\Repositories\ChannelRepository;
+use App\Repositories\VideoThumbnailRepository;
+use App\Repositories\ChannelThumbnailRepository;
 
 class ThumbnailImageFetcher
 {
@@ -16,6 +20,8 @@ class ThumbnailImageFetcher
     private $parent_table_name; // おそらく不要
     private $parent_table_query; // おそらく不要
     private $belonging_instance;
+    private $repository;
+    private $thumbnail_repository;
 
     /**
      * ThumbnailImageFetcher constructor.
@@ -29,6 +35,7 @@ class ThumbnailImageFetcher
         $this->setBelongingInstance();
         $this->parent_table_name = $this->belonging_instance->getTable();
         $this->parent_table_query = $this->belonging_instance->get();
+        $this->setRepositories();
         // setterがいらない。getterもいらないと思う。このクラス外では呼ばない。呼ぶようになったらgetterを作る
 
         //        // 三項演算子でvideoかchannelかを判定し、プロパに格納する値を決める
@@ -158,5 +165,10 @@ class ThumbnailImageFetcher
     public function getParentTableQuery(): object
     {
         return $this->parent_table_query;
+    }
+
+    public function setRepositories()
+    {
+        $this->repository =  new VideoRepository();
     }
 }

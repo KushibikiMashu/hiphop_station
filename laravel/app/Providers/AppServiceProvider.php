@@ -39,7 +39,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             \App\Repositories\YoutubeRepositoryInterface::Class,
             \App\Repositories\VideoRepository::class,
-             \App\Repositories\ChannelRepository::class
+            \App\Repositories\ChannelRepository::class
+        );
+
+        $this->app->bind(
+            \App\Repositories\YoutubeThumbnailRepositoryInterface::Class,
+            \App\Repositories\VideoThumbnailRepository::class,
+            \App\Repositories\ChannelThumbnailRepository::class
         );
     }
 }
