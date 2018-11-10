@@ -4,19 +4,21 @@ namespace App\Services;
 
 use App\Repositories\VideoRepository;
 use App\Repositories\VideoThumbnailRepository;
+use App\Repositories\DownloadJpgFileRepository;
 use Illuminate\Support\Facades\Log;
 
 class VideoThumbnailFetcher
 {
     private $video_repository;
     private $video_thumbnail_repository;
+    private $download_jpg_file_repository;
     private $sizes = ['std', 'medium', 'high'];
 
-
-    public function __construct(VideoRepository $video_repository, VideoThumbnailRepository $video_thumbnail_repository)
+    public function __construct(VideoRepository $video_repository, VideoThumbnailRepository $video_thumbnail_repository, DownloadJpgFileRepository $download_jpg_file_repository)
     {
         $this->video_repository = $video_repository;
         $this->video_thumbnail_repository = $video_thumbnail_repository;
+        $this->download_jpg_file_repository = $download_jpg_file_repository;
     }
 
     public function run(int $id, string $hash)
@@ -49,33 +51,12 @@ class VideoThumbnailFetcher
         $image_path = "image/{$table}/{$size}/{$hash}.jpg";
         if (file_exists(public_path($image_path))) return;
 
-        $result = $this->canDownloadJpgFileFromUrl($url, $image_path);
+        $result = $this->download_jpg_file_repository->canDownloadJpgFromUrl($url, $image_path);
         if (!$result) {
             Log::warning('Cannot download image file from: ' . $url);
-            $this->deleteInvalidRecords($record->id, $hash);
+            $this->video_repository->deleteByHash($hash);
+            $this->video_thumbnail_repository->deleteById($record->id);
+            // $hashを使って画像も消す
         }
     }
-
-    // 別のRepository作って、そこに実装してもいいと思う。OnlineImageRepositoryとか。外部からのデータ取得なので、オニオン型の一番外だから
-    private function canDownloadJpgFileFromUrl(string $url, string $image_path): bool
-    {
-        // レスポンスコードが400系・500系でもwarningを出さない
-        $context = stream_context_create(['http' => ['ignore_errors' => true]]);
-        $data = file_get_contents($url, false, $context);
-        if (strpos($http_response_header[0], '200') !== false) {
-            file_put_contents(public_path($image_path), $data);
-            return true;
-        }
-        return false;
-    }
-
-    private function deleteInvalidRecords(int $id, string $hash): void
-    {
-        $this->video_repository->deleteByHash($hash);
-        $this->video_thumbnail_repository->deleteById($id);
-        // $hashを使って画像も消す
-    }
-
-
-
 }
