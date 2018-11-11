@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Services\VideoThumbnailFetcherService;
+use App\Usecases\VideoThumbnailFetcherUsecase;
 
 class FetchVideoThumbnailImage extends Command
 {
@@ -32,10 +32,10 @@ class FetchVideoThumbnailImage extends Command
     /**
      * Execute the console command.
      *
-     * @param VideoThumbnailFetcherService $fetcher
+     * @param VideoThumbnailFetcherUsecase $usecase
      */
-    public function handle(VideoThumbnailFetcherService $fetcher)
+    public function handle(VideoThumbnailFetcherUsecase $usecase)
     {
-        $fetcher->run();
+        $usecase->run();
     }
 }
