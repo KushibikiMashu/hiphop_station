@@ -1,15 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: matthew
- * Date: 2018/11/11
- * Time: 9:25
- */
-
-namespace Tests\Unit;
-
-
-class VideoThumbnailRepositoryTest
-{
-
-}
+//
+//namespace Tests\Unit;
+//
+//use Tests\TestCase;
+//use Illuminate\Foundation\Testing\RefreshDatabase;
+//
+//
+//class VideoThumbnailRepositoryTest extends TestCase
+//{
+//
+//}

@@ -9,7 +9,7 @@ class VideoRepository implements YoutubeRepositoryInterface
 {
     public function fetchAll(): \Generator
     {
-        return yield Video::cursor();
+        return Video::cursor();
     }
 
     public function getTableName(): string
@@ -19,12 +19,18 @@ class VideoRepository implements YoutubeRepositoryInterface
 
     /**
      * RDBで親テーブルのレコードを取得
+     *
+     * @param $record
+     * @return string
      */
     public function getHashFromVideoThumbnail($record): string
     {
         return Video::where('id', $record->video_id)->exists() ? Video::find($record->video_id)->hash : '';
     }
 
+    /**
+     * @param string $hash
+     */
     public function deleteByHash(string $hash): void
     {
         $id = (string)Video::where('hash', $hash)->get()[0]->id;
