@@ -9,13 +9,13 @@ use App\Repositories\VideoThumbnailRepository;
 
 class VideoThumbnailRepositoryTest extends TestCase
 {
-    private $video_thumbnail_repository;
+    private $instance;
     private $table = 'video_thumbnail';
 
     public function setUp(): void
     {
         parent::setup();
-        $this->video_thumbnail_repository = new VideoThumbnailRepository;
+        $this->instance = new VideoThumbnailRepository;
     }
 
     /**
@@ -24,7 +24,8 @@ class VideoThumbnailRepositoryTest extends TestCase
     public function fetchAll__Videoテーブルのレコードを全て取得する(): void
     {
         $expected = $actual = [];
-        $generator = $this->video_thumbnail_repository->fetchAll();
+        list($video, $video_thumbnail) = $this->createVideoAndVideoThumnailRecord();
+        $generator = $this->instance->fetchAll();
         foreach (iterator_to_array($generator) as $record) {
             $actual[] = $record->getOriginal();
         }
@@ -32,6 +33,8 @@ class VideoThumbnailRepositoryTest extends TestCase
             $expected[] = $record->getOriginal();
         }
         $this->assertSame($expected, $actual);
+        $this->deleteRecordByTableAndId($video->getTable(), $video->id);
+        $this->deleteRecordByTableAndId($video_thumbnail->getTable(), $video_thumbnail->id);
     }
 
     /**
@@ -39,7 +42,7 @@ class VideoThumbnailRepositoryTest extends TestCase
      */
     public function getTable__テーブル名を取得する(): void
     {
-        $expected = $this->video_thumbnail_repository->getTableName();
+        $expected = $this->instance->getTableName();
         $this->assertSame($this->table, $expected);
     }
 
@@ -53,8 +56,8 @@ class VideoThumbnailRepositoryTest extends TestCase
         $id = $video_thumbnail->id;
         $data = ['id' => $id];
         $this->assertDatabaseHas($this->table, $data);
-        $this->video_thumbnail_repository->deleteById($id);
+        $this->instance->deleteById($id);
         $this->assertDatabaseMissing($this->table, $data);
-        $this->deleteVideoRecordById($video->getTable(), $video->id);
+        $this->deleteRecordByTableAndId($video->getTable(), $video->id);
     }
 }

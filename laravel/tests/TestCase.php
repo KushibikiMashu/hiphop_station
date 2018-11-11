@@ -11,6 +11,14 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
+    /**
+     * ReflectionClassでprivateメソッドを呼び出す
+     *
+     * @param $class
+     * @param string $method
+     * @return \ReflectionMethod
+     * @throws \ReflectionException
+     */
     protected function callPrivateMethod($class, string $method): \ReflectionMethod
     {
         $reflection = new \ReflectionClass($class);
@@ -19,11 +27,23 @@ abstract class TestCase extends BaseTestCase
         return $method;
     }
 
+    /**
+     * videoのテストデータを1件作成する
+     * $videoに返り値を代入する
+     *
+     * @return Video
+     */
     protected function createVideoRecord(): Video
     {
         return factory(Video::class)->create();
     }
 
+    /**
+     * video, video_thumbnailのテストデータを1件ずつ作成する
+     * list($video, $video_thumbnail)に返り値を代入する
+     *
+     * @return array
+     */
     protected function createVideoAndVideoThumnailRecord(): array
     {
         $video = factory(Video::class, 1)
@@ -39,7 +59,13 @@ abstract class TestCase extends BaseTestCase
         return [$video[0], $video_thumbnail[0]];
     }
 
-    protected function deleteVideoRecordById(string $table, int $id): void
+    /**
+     * テーブル名とidでレコードを削除する
+     *
+     * @param string $table
+     * @param int $id
+     */
+    protected function deleteRecordByTableAndId(string $table, int $id): void
     {
         DB::table($table)->where('id', $id)->delete();
     }

@@ -7,18 +7,28 @@ use Illuminate\Support\Facades\Log;
 
 class VideoRepository implements YoutubeRepositoryInterface
 {
+    /**
+     * videoテーブルの全レコードのジェネレータを取得する
+     *
+     * @return \Generator
+     */
     public function fetchAll(): \Generator
     {
         return Video::cursor();
     }
 
+    /**
+     * テーブル名を取得する
+     *
+     * @return string
+     */
     public function getTableName(): string
     {
         return (new Video)->getTable();
     }
 
     /**
-     * RDBで親テーブルのレコードを取得
+     * VideoThumbnailのレコードに紐づくvideoのhashを取得する
      *
      * @param $record
      * @return string
@@ -29,6 +39,8 @@ class VideoRepository implements YoutubeRepositoryInterface
     }
 
     /**
+     * hashでvideoのレコードを削除する
+     *
      * @param string $hash
      */
     public function deleteByHash(string $hash): void
