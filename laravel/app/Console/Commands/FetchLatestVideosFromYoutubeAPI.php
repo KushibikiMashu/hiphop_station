@@ -7,9 +7,9 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Services\CustomizedYoutubeAPI;
+use App\Services\CustomizedYoutubeApi;
 
-class FetchLatestVideosFromYoutubeAPI extends Command
+class FetchLatestVideosFromYoutubeApi extends Command
 {
     /**
      * genreをbattle, songに振り分けるための動画タイトルのキーワード

@@ -10,7 +10,7 @@ use App\Repositories\VideoRepository;
 use App\Repositories\ChannelRepository;
 use App\Repositories\VideoThumbnailRepository;
 use App\Repositories\ChannelThumbnailRepository;
-use App\Services\VideoThumbnailFetcher;
+use App\Services\VideoThumbnailFetcherService;;
 
 class ThumbnailImageFetcher
 {
@@ -114,11 +114,11 @@ class ThumbnailImageFetcher
     /**
      * YouTubeから削除された動画のIDをDBから削除する
      *
-     * @param VideoThumbnailFetcher $service
+     * @param VideoThumbnailFetcherService $service
      * @param int $id
      * @param string $hash
      */
-    private function deleteInvalidRecord(VideoThumbnailFetcher $service, int $id, string $hash): void
+    private function deleteInvalidRecord(VideoThumbnailFetcherService $service, int $id, string $hash): void
     {
 
         $service->run($id, $hash);

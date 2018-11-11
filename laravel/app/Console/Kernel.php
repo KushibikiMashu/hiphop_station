@@ -3,7 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\CreateJsonOfLatestVideoAndChannel;
-use App\Console\Commands\Services\ThumbnailImageFetcher;
+use App\Services\VideoThumbnailFetcherService;
 use App\ChannelThumbnail;
 use App\VideoThumbnail;
 use Illuminate\Console\Scheduling\Schedule;
@@ -22,7 +22,7 @@ class Kernel extends ConsoleKernel
         Commands\GenerateJson::class,
         Commands\FetchVideoThumbnailImage::class,
         Commands\FetchChannelThumbnailImage::class,
-        Commands\FetchLatestVideosFromYoutubeAPI::class,
+        Commands\FetchLatestVideosFromYoutubeApi::class,
         Commands\UpdateAddressOfStdVideoThumbnail::class,
         Commands\CreateJsonOfLatestVideoAndChannel::class,
         Commands\CreateResponseJsonFromYoutubeAPIForTest::class,

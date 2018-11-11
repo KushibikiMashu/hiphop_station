@@ -8,9 +8,9 @@
 //use App\Repositories\VideoRepository;
 //use App\Repositories\VideoThumbnailRepository;
 //use App\Repositories\DownloadJpgFileRepository;
-//use App\Services\VideoThumbnailFetcher;
+//use App\Services\VideoThumbnailFetcherService;
 //
-//class VideoThumbnailFetcherTest extends TestCase
+//class VideoThumbnailFetcherServiceTest extends TestCase
 //{
 //    private $instance;
 //
@@ -20,7 +20,7 @@
 //        $video_repository = new VideoRepository;
 //        $video_thumbnail_repository = new VideoThumbnailRepository;
 //        $download_jpg_file_repository = new DownloadJpgFileRepository;
-//        $this->instance = new VideoThumbnailFetcher($video_repository, $video_thumbnail_repository, $download_jpg_file_repository);
+//        $this->instance = new VideoThumbnailFetcherService($video_repository, $video_thumbnail_repository, $download_jpg_file_repository);
 //    }
 //
 ////    /**
