@@ -9,7 +9,7 @@ class VideoThumbnailRepository implements YoutubeThumbnailRepositoryInterface
 {
     public function fetchAll(): \Generator
     {
-        return yield VideoThumbnail::cursor();
+        return VideoThumbnail::cursor();
     }
 
     public function getTableName(): string
@@ -22,6 +22,8 @@ class VideoThumbnailRepository implements YoutubeThumbnailRepositoryInterface
         if (VideoThumbnail::where('id', $id)->exists()) {
             VideoThumbnail::where('id', $id)->delete();
             Log::info("Delete id: {$id} from video_thumbnail table\.");
+        } else {
+            Log::info("Cannot delete id {$id} from video_thumbnail table\.");
         }
     }
 }

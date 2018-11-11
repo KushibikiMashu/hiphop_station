@@ -24,11 +24,6 @@ abstract class TestCase extends BaseTestCase
         return factory(Video::class)->create();
     }
 
-    protected function createVideoThumbnailRecord(): VideoThumbnail
-    {
-        return factory(VideoThumbnail::class)->create();
-    }
-
     protected function createVideoAndVideoThumnailRecord(): array
     {
         $video = factory(Video::class, 1)
@@ -37,7 +32,7 @@ abstract class TestCase extends BaseTestCase
                 factory(VideoThumbnail::class, 1)
                     ->make()
                     ->each(function ($video_thumbnail) use ($video) {
-                        (new VideoThumbnail())->save($video_thumbnail);
+                        $video->video_thumbnail()->save($video_thumbnail);
                     });
             });
         $video_thumbnail = VideoThumbnail::where('video_id', $video[0]->id)->get();

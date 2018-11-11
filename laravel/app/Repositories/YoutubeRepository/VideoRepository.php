@@ -37,6 +37,8 @@ class VideoRepository implements YoutubeRepositoryInterface
         if (Video::where('id', $id)->exists()) {
             Video::where('id', $id)->delete();
             Log::info("Delete id: {$id} from video table\.");
+        } else {
+            Log::info("Cannot delete id {$id} from video table\.");
         }
     }
 }

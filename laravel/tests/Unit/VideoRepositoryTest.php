@@ -10,6 +10,7 @@ use App\Repositories\VideoRepository;
 class VideoRepositoryTest extends TestCase
 {
     private $video_repository;
+    private $table = 'video';
 
     public function setUp(): void
     {
@@ -39,7 +40,7 @@ class VideoRepositoryTest extends TestCase
     public function getTable__テーブル名を取得する(): void
     {
         $expected = $this->video_repository->getTableName();
-        $this->assertSame('video', $expected);
+        $this->assertSame($this->table, $expected);
     }
 
     /**
@@ -48,11 +49,11 @@ class VideoRepositoryTest extends TestCase
     public function getHashFromVideoThumbnail__hashでレコードを削除する(): void
     {
         $record = $this->createVideoRecord();
-        $table = $record->getTable();
+        $this->table = $record->getTable();
         $hash = $record->hash;
         $data = ['hash' => $hash];
-        $this->assertDatabaseHas($table, $data);
+        $this->assertDatabaseHas($this->table, $data);
         $this->video_repository->deleteByHash($hash);
-        $this->assertDatabaseMissing($table, $data);
+        $this->assertDatabaseMissing($this->table, $data);
     }
 }
