@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Console\Commands\Services\CustomizedYoutubeAPI;
+use App\Services\CustomizedYoutubeAPI;
 
 class FetchLatestVideosFromYoutubeAPI extends Command
 {
