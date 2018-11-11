@@ -9,7 +9,7 @@ class VideoRepository implements YoutubeRepositoryInterface
 {
     public function fetchAll(): \Generator
     {
-        return Video::cursor();
+        return yield Video::cursor();
     }
 
     public function getTableName(): string

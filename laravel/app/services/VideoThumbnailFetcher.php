@@ -21,10 +21,13 @@ class VideoThumbnailFetcher
         $this->download_jpg_file_repository = $download_jpg_file_repository;
     }
 
-    public function run(int $id, string $hash)
+    /**
+     *
+     */
+    public function run()
     {
         // runで全て終えるようにする
-        $this->deleteInvalidRecords($id, $hash);
+        $this->downloadImages();
     }
 
     /**
@@ -42,17 +45,19 @@ class VideoThumbnailFetcher
     /**
      * file_get_contentsで画像を取得する
      *
+     * @param object $record
+     * @param string $size
      */
     private function fetchThumbnailInDatabase($record, string $size): void
     {
         $table = $this->video_thumbnail_repository->getTableName();
         $url = str_replace('_live', '', $record->{$size});
         if (!$hash = $this->video_repository->getHashFromVideoThumbnail($record)) return;
-        $image_path = "image/{$table}/{$size}/{$hash}.jpg";
-        if (file_exists(public_path($image_path))) return;
+        $file_path = "image/{$table}/{$size}/{$hash}.jpg";
+        if (file_exists(public_path($file_path))) return;
 
-        $result = $this->download_jpg_file_repository->canDownloadJpgFromUrl($url, $image_path);
-        if (!$result) {
+        $result = $this->download_jpg_file_repository->couldDownloadJpgFromUrl($url, $file_path);
+        if ($result === false) {
             Log::warning('Cannot download image file from: ' . $url);
             $this->video_repository->deleteByHash($hash);
             $this->video_thumbnail_repository->deleteById($record->id);

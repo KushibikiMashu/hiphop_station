@@ -9,7 +9,7 @@ class VideoThumbnailRepository implements YoutubeThumbnailRepositoryInterface
 {
     public function fetchAll(): \Generator
     {
-        return VideoThumbnail::cursor();
+        return yield VideoThumbnail::cursor();
     }
 
     public function getTableName(): string
