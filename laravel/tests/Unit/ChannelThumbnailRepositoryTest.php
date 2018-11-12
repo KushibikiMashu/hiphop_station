@@ -35,6 +35,7 @@ class ChannelThumbnailRepositoryTest extends TestCase
         self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
         self::deleteRecordByTableAndId($channel_thumbnail->getTable(), $channel_thumbnail->id);
     }
+
     /**
      * @test
      */
@@ -42,5 +43,20 @@ class ChannelThumbnailRepositoryTest extends TestCase
     {
         $expected = $this->instance->getTableName();
         $this->assertSame($this->table, $expected);
+    }
+
+    /**
+     * @test
+     */
+    public function deleteById__idでレコードを削除する(): void
+    {
+        [$channel, $channel_thumbnail] = self::createChannelAndChannelThumbnailRecord();
+        $this->table = $channel_thumbnail->getTable();
+        $id = $channel_thumbnail->id;
+        $data = ['id' => $id];
+        $this->assertDatabaseHas($this->table, $data);
+        $this->instance->deleteById($id);
+        $this->assertDatabaseMissing($this->table, $data);
+        self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
     }
 }

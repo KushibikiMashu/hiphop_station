@@ -27,5 +27,18 @@ class ChannelThumbnailRepository implements YoutubeThumbnailRepositoryInterface
         return (new ChannelThumbnail)->getTable();
     }
 
-
+    /**
+     * idでレコードを削除する
+     *
+     * @param int $id
+     */
+    public function deleteById(int $id): void
+    {
+        if (ChannelThumbnail::where('id', $id)->exists()) {
+            ChannelThumbnail::where('id', $id)->delete();
+            Log::info("Delete id: {$id} from channel_thumbnail table\.");
+        } else {
+            Log::info("Cannot delete id {$id} from channel_thumbnail table\.");
+        }
+    }
 }
