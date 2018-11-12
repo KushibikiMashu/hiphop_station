@@ -27,6 +27,7 @@
             "database/seeds",
             "database/factories",
             "app/Repositories",
+            "app/Services",
             "app/Usecases"
         ],
         "psr-4": {
