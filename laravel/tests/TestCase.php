@@ -4,7 +4,9 @@ namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use App\Video;
+use App\Channel;
 use App\VideoThumbnail;
+use App\ChannelThumbnail;
 use Illuminate\Support\Facades\DB;
 
 abstract class TestCase extends BaseTestCase
@@ -39,12 +41,23 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
+     * channelのテストデータを1件作成する
+     * $channelに返り値を代入する
+     *
+     * @return Channel
+     */
+    protected static function createChannelRecord(): Channel
+    {
+        return factory(Channel::class)->create();
+    }
+
+    /**
      * video, video_thumbnailのテストデータを1件ずつ作成する
-     * list($video, $video_thumbnail)に返り値を代入する
+     * [$video, $video_thumbnail]に返り値を代入する
      *
      * @return array
      */
-    protected static function createVideoAndVideoThumnailRecord(): array
+    protected static function createVideoAndVideoThumbnailRecord(): array
     {
         $video = factory(Video::class, 1)
             ->create()
@@ -57,6 +70,27 @@ abstract class TestCase extends BaseTestCase
             });
         $video_thumbnail = VideoThumbnail::where('video_id', $video[0]->id)->get();
         return [$video[0], $video_thumbnail[0]];
+    }
+
+    /**
+     * channel, channel_thumbnailのテストデータを1件ずつ作成する
+     * [$channel, $channel_thumbnail]に返り値を代入する
+     *
+     * @return array
+     */
+    protected static function createChannelAndChannelThumbnailRecord(): array
+    {
+        $channel = factory(Channel::class, 1)
+            ->create()
+            ->each(function ($channel) {
+                factory(ChannelThumbnail::class, 1)
+                    ->make()
+                    ->each(function ($channel_thumbnail) use ($channel) {
+                        $channel->channel_thumbnail()->save($channel_thumbnail);
+                    });
+            });
+        $channel_thumbnail = ChannelThumbnail::where('channel_id', $channel[0]->id)->get();
+        return [$channel[0], $channel_thumbnail[0]];
     }
 
     /**

@@ -49,7 +49,7 @@ class VideoRepositoryTest extends TestCase
      */
     public function getHashFromVideoThumbnail__idを受け取り、データが存在する場合はhashを返す(): void
     {
-        [$video, $video_thumbnail] = self::createVideoAndVideoThumnailRecord();
+        [$video, $video_thumbnail] = self::createVideoAndVideoThumbnailRecord();
         $actual = $this->instance->getHashFromVideoThumbnail($video_thumbnail);
         $this->assertSame($video->hash, $actual);
         self::deleteRecordByTableAndId($video->getTable(), $video->id);
@@ -61,7 +61,7 @@ class VideoRepositoryTest extends TestCase
      */
     public function getHashFromVideoThumbnail__idを受け取り、データが存在しない場合は空文字を返す(): void
     {
-        [$video, $video_thumbnail] = self::createVideoAndVideoThumnailRecord();
+        [$video, $video_thumbnail] = self::createVideoAndVideoThumbnailRecord();
         self::deleteRecordByTableAndId($video->getTable(), $video->id);
         $actual = $this->instance->getHashFromVideoThumbnail($video_thumbnail);
         $this->assertSame('', $actual);

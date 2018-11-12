@@ -24,7 +24,7 @@ class VideoThumbnailRepositoryTest extends TestCase
     public function fetchAll__Videoテーブルのレコードを全て取得する(): void
     {
         $expected = $actual = [];
-        list($video, $video_thumbnail) = self::createVideoAndVideoThumnailRecord();
+        list($video, $video_thumbnail) = self::createVideoAndVideoThumbnailRecord();
         $generator = $this->instance->fetchAll();
         foreach (iterator_to_array($generator) as $record) {
             $actual[] = $record->getOriginal();
@@ -51,7 +51,7 @@ class VideoThumbnailRepositoryTest extends TestCase
      */
     public function deleteById__idでレコードを削除する(): void
     {
-        [$video, $video_thumbnail] = self::createVideoAndVideoThumnailRecord();
+        [$video, $video_thumbnail] = self::createVideoAndVideoThumbnailRecord();
         $this->table = $video_thumbnail->getTable();
         $id = $video_thumbnail->id;
         $data = ['id' => $id];
