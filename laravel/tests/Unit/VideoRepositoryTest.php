@@ -3,7 +3,6 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Video;
 use App\Repositories\VideoRepository;
 
@@ -24,7 +23,7 @@ class VideoRepositoryTest extends TestCase
     public function fetchAll__Videoテーブルのレコードを全て取得する(): void
     {
         $expected = $actual = [];
-        $video = $this->createVideoRecord();
+        $video = self::createVideoRecord();
         $generator = $this->instance->fetchAll();
         foreach (iterator_to_array($generator) as $record) {
             $actual[] = $record->getOriginal();
@@ -33,7 +32,7 @@ class VideoRepositoryTest extends TestCase
             $expected[] = $record->getOriginal();
         }
         $this->assertSame($expected, $actual);
-        $this->deleteRecordByTableAndId($video->getTable(), $video->id);
+        self::deleteRecordByTableAndId($video->getTable(), $video->id);
     }
 
     /**
@@ -50,11 +49,11 @@ class VideoRepositoryTest extends TestCase
      */
     public function getHashFromVideoThumbnail__idを受け取り、データが存在する場合はhashを返す(): void
     {
-        list($video, $video_thumbnail) = $this->createVideoAndVideoThumnailRecord();
+        [$video, $video_thumbnail] = self::createVideoAndVideoThumnailRecord();
         $actual = $this->instance->getHashFromVideoThumbnail($video_thumbnail);
         $this->assertSame($video->hash, $actual);
-        $this->deleteRecordByTableAndId($video->getTable(), $video->id);
-        $this->deleteRecordByTableAndId($video_thumbnail->getTable(), $video_thumbnail->id);
+        self::deleteRecordByTableAndId($video->getTable(), $video->id);
+        self::deleteRecordByTableAndId($video_thumbnail->getTable(), $video_thumbnail->id);
     }
 
     /**
@@ -62,11 +61,11 @@ class VideoRepositoryTest extends TestCase
      */
     public function getHashFromVideoThumbnail__idを受け取り、データが存在しない場合は空文字を返す(): void
     {
-        list($video, $video_thumbnail) = $this->createVideoAndVideoThumnailRecord();
-        $this->deleteRecordByTableAndId($video->getTable(), $video->id);
+        [$video, $video_thumbnail] = self::createVideoAndVideoThumnailRecord();
+        self::deleteRecordByTableAndId($video->getTable(), $video->id);
         $actual = $this->instance->getHashFromVideoThumbnail($video_thumbnail);
         $this->assertSame('', $actual);
-        $this->deleteRecordByTableAndId($video_thumbnail->getTable(), $video_thumbnail->id);
+        self::deleteRecordByTableAndId($video_thumbnail->getTable(), $video_thumbnail->id);
     }
 
     /**
@@ -74,7 +73,7 @@ class VideoRepositoryTest extends TestCase
      */
     public function deleteByHash__hashでレコードを削除する(): void
     {
-        $record = $this->createVideoRecord();
+        $record = self::createVideoRecord();
         $this->table = $record->getTable();
         $hash = $record->hash;
         $data = ['hash' => $hash];

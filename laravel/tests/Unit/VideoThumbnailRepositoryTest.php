@@ -24,7 +24,7 @@ class VideoThumbnailRepositoryTest extends TestCase
     public function fetchAll__Videoテーブルのレコードを全て取得する(): void
     {
         $expected = $actual = [];
-        list($video, $video_thumbnail) = $this->createVideoAndVideoThumnailRecord();
+        list($video, $video_thumbnail) = self::createVideoAndVideoThumnailRecord();
         $generator = $this->instance->fetchAll();
         foreach (iterator_to_array($generator) as $record) {
             $actual[] = $record->getOriginal();
@@ -33,8 +33,8 @@ class VideoThumbnailRepositoryTest extends TestCase
             $expected[] = $record->getOriginal();
         }
         $this->assertSame($expected, $actual);
-        $this->deleteRecordByTableAndId($video->getTable(), $video->id);
-        $this->deleteRecordByTableAndId($video_thumbnail->getTable(), $video_thumbnail->id);
+        self::deleteRecordByTableAndId($video->getTable(), $video->id);
+        self::deleteRecordByTableAndId($video_thumbnail->getTable(), $video_thumbnail->id);
     }
 
     /**
@@ -51,13 +51,13 @@ class VideoThumbnailRepositoryTest extends TestCase
      */
     public function deleteById__idでレコードを削除する(): void
     {
-        list($video, $video_thumbnail) = $this->createVideoAndVideoThumnailRecord();
+        [$video, $video_thumbnail] = self::createVideoAndVideoThumnailRecord();
         $this->table = $video_thumbnail->getTable();
         $id = $video_thumbnail->id;
         $data = ['id' => $id];
         $this->assertDatabaseHas($this->table, $data);
         $this->instance->deleteById($id);
         $this->assertDatabaseMissing($this->table, $data);
-        $this->deleteRecordByTableAndId($video->getTable(), $video->id);
+        self::deleteRecordByTableAndId($video->getTable(), $video->id);
     }
 }

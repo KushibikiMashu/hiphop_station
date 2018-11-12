@@ -19,7 +19,7 @@ abstract class TestCase extends BaseTestCase
      * @return \ReflectionMethod
      * @throws \ReflectionException
      */
-    protected function callPrivateMethod($class, string $method): \ReflectionMethod
+    protected static function callPrivateMethod($class, string $method): \ReflectionMethod
     {
         $reflection = new \ReflectionClass($class);
         $method = $reflection->getMethod($method);
@@ -33,7 +33,7 @@ abstract class TestCase extends BaseTestCase
      *
      * @return Video
      */
-    protected function createVideoRecord(): Video
+    protected static function createVideoRecord(): Video
     {
         return factory(Video::class)->create();
     }
@@ -44,7 +44,7 @@ abstract class TestCase extends BaseTestCase
      *
      * @return array
      */
-    protected function createVideoAndVideoThumnailRecord(): array
+    protected static function createVideoAndVideoThumnailRecord(): array
     {
         $video = factory(Video::class, 1)
             ->create()
@@ -65,7 +65,7 @@ abstract class TestCase extends BaseTestCase
      * @param string $table
      * @param int $id
      */
-    protected function deleteRecordByTableAndId(string $table, int $id): void
+    protected static function deleteRecordByTableAndId(string $table, int $id): void
     {
         DB::table($table)->where('id', $id)->delete();
     }
