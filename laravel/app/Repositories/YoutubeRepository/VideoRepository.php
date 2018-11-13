@@ -18,6 +18,16 @@ class VideoRepository implements YoutubeRepositoryInterface
     }
 
     /**
+     * videoテーブルの全レコードのジェネレータを降順の配列で取得する
+     *
+     * @return array
+     */
+    public function fetchAllOrderByPublishedAt(): array
+    {
+        return Video::orderBy('published_at', 'desc')->get()->toArray();
+    }
+
+    /**
      * テーブル名を取得する
      *
      * @return string

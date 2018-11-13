@@ -18,6 +18,16 @@ class ChannelRepository implements YoutubeRepositoryInterface
     }
 
     /**
+     * channelテーブルの全レコードを配列で取得する
+     *
+     * @return array
+     */
+    public function fetchAllAsArray(): array
+    {
+        return Channel::all()->toArray();
+    }
+
+    /**
      * テーブル名を取得する
      *
      * @return string

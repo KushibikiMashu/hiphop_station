@@ -38,6 +38,20 @@ class VideoRepositoryTest extends TestCase
     /**
      * @test
      */
+    public function fetchAllOrderByPublishedAt__Videoテーブルのレコードを全て取得する(): void
+    {
+        $expected = $actual = [];
+        $video = self::createVideoRecord();
+        $actual = $this->instance->fetchAllOrderByPublishedAt();
+        foreach (Video::orderBy('published_at', 'desc')->get() as $record) {
+            $expected[] = $record->getOriginal();
+        }
+        $this->assertSame($expected, $actual);
+        self::deleteRecordByTableAndId($video->getTable(), $video->id);
+    }
+    /**
+     * @test
+     */
     public function getTable__テーブル名を取得する(): void
     {
         $expected = $this->instance->getTableName();

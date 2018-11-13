@@ -39,6 +39,21 @@ class ChannelRepositoryTest extends TestCase
     /**
      * @test
      */
+    public function fetchAllAsArray__Channelテーブルのレコードを配列で全て取得する(): void
+    {
+        $expected = $actual = [];
+        $channel = self::createChannelRecord();
+        $actual = $this->instance->fetchAllAsArray();
+        foreach (Channel::get() as $record) {
+            $expected[] = $record->getOriginal();
+        }
+        $this->assertSame($expected, $actual);
+        self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
+    }
+
+    /**
+     * @test
+     */
     public function getTable__テーブル名を取得する(): void
     {
         $expected = $this->instance->getTableName();

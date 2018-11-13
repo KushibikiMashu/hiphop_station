@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Channel;
 use App\Video;
-use App\VideoThumbnail;
 use Illuminate\Console\Command;
 
 class CreateJsonOfLatestVideoAndChannel extends Command
@@ -43,6 +42,7 @@ class CreateJsonOfLatestVideoAndChannel extends Command
         parent::__construct();
         $this->channel_query = Channel::all();
         $this->video_query_orderby_published_at = Video::orderBy('published_at', 'desc')->get();
+        // $this->>usecase = $usecase;
     }
 
     /**
@@ -60,62 +60,64 @@ class CreateJsonOfLatestVideoAndChannel extends Command
         foreach ($queries as $filename => $query) {
             $this->create_json($query, $filename);
         }
-    }
 
-    /**
-     * JSONを作成する
-     *
-     * @param array $array
-     * @param string $filename
-     * @return void
-     */
-    private function create_json(array $array, string $filename)
-    {
-        $json = json_encode($array, JSON_UNESCAPED_UNICODE);
-        $file = dirname(__FILE__) . "/../../../public/json/{$filename}.json";
-        file_put_contents($file, $json);
+        // $this->usecase->run();
     }
-
-    /**
-     * 連想配列からkeyがcreated_at,update_atであるキー/値を削除する
-     *
-     * @param array $query
-     * @param array $keys
-     * @return array
-     */
-    private function unset_keys(array $query, array $keys): array
-    {
-        $new_query = [];
-        foreach ($query as $record) {
-            foreach ($keys as $key) {
-                unset($record[$key]);
-            }
-            $new_query[] = $record;
-        }
-        return $new_query;
-    }
-
-    /**
-     * 動画に紐づくchannel情報とサムネイルのURLを追加する
-     *
-     * @param $video_query
-     * @param array $channels
-     * @return array
-     */
-    private function add_extra_data($video_query, array $channels): array
-    {
-        $new_query = [];
-        $sizes = ['std', 'medium', 'high'];
-        foreach ($video_query as $record) {
-            $record['channel'] = $channels[$record['channel_id'] - 1];
-            $record['thumbnail'] = 'https://i.ytimg.com/vi/' . $record['hash'] . '/hqdefault.jpg';
-            $record['thumbnail'] = [
-                'std'    => "/image/video_thumbnail/$sizes[0]/{$record['hash']}.jpg",
-                'medium' => "/image/video_thumbnail/$sizes[1]/{$record['hash']}.jpg",
-                'high'   => "/image/video_thumbnail/$sizes[2]/{$record['hash']}.jpg"
-            ];
-            $new_query[] = $record;
-        }
-        return $new_query;
-    }
+//
+//    /**
+//     * JSONを作成する
+//     *
+//     * @param array $array
+//     * @param string $filename
+//     * @return void
+//     */
+//    private function create_json(array $array, string $filename)
+//    {
+//        $json = json_encode($array, JSON_UNESCAPED_UNICODE);
+//        $file = dirname(__FILE__) . "/../../../public/json/{$filename}.json";
+//        file_put_contents($file, $json);
+//    }
+//
+//    /**
+//     * 連想配列からkeyがcreated_at,update_atであるキー/値を削除する
+//     *
+//     * @param array $query
+//     * @param array $keys
+//     * @return array
+//     */
+//    private function unset_keys(array $query, array $keys): array
+//    {
+//        $new_query = [];
+//        foreach ($query as $record) {
+//            foreach ($keys as $key) {
+//                unset($record[$key]);
+//            }
+//            $new_query[] = $record;
+//        }
+//        return $new_query;
+//    }
+//
+//    /**
+//     * 動画に紐づくchannel情報とサムネイルのURLを追加する
+//     *
+//     * @param $video_query
+//     * @param array $channels
+//     * @return array
+//     */
+//    private function add_extra_data($video_query, array $channels): array
+//    {
+//        $new_query = [];
+//        $sizes = ['std', 'medium', 'high'];
+//        foreach ($video_query as $record) {
+//            $record['channel'] = $channels[$record['channel_id'] - 1];
+//            $record['thumbnail'] = 'https://i.ytimg.com/vi/' . $record['hash'] . '/hqdefault.jpg';
+//            $record['thumbnail'] = [
+//                'std'    => "/image/video_thumbnail/$sizes[0]/{$record['hash']}.jpg",
+//                'medium' => "/image/video_thumbnail/$sizes[1]/{$record['hash']}.jpg",
+//                'high'   => "/image/video_thumbnail/$sizes[2]/{$record['hash']}.jpg"
+//            ];
+//            $new_query[] = $record;
+//        }
+//        return $new_query;
+//    }
 }
