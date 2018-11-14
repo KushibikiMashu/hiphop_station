@@ -20,18 +20,15 @@ class CreateLatestJsonService
         $this->channel_repository = $channel_repository;
     }
 
-    public function returnAssocArrays() :array
+    public function getArrays() :array
     {
         // 返却される値を使う
         // その他のデータを付け加える
         // JSONを作成する
-        [$videos, $channels] = $this->returnVideoAndChannelRecordArray();
-        $main = $this->addExtraData($videos, $channels);
+        [$videos, $channels] = $this->getVideoAndChannelRecordArray();
 
+        $main = $this->addExtraData($videos, $channels);
         return [$channels, $main];
-//        foreach (['channels' => $channels, 'main' => $main] as $filename => $query) {
-//            $this->createJson($query, $filename);
-//        }
     }
 
     /**
@@ -60,22 +57,6 @@ class CreateLatestJsonService
     }
 
     /**
-     * JSONを作成する
-     *
-     * @param array $array
-     * @param string $filename
-     * @return void
-     */
-    private function createJson(array $array, string $filename): void
-    {
-        // json作成はCreateJsonOfLatestVideoAndChannelクラスで実行する方が良さそう
-        $json = json_encode($array, JSON_UNESCAPED_UNICODE);
-        // パスはpublic_pathで書き換える
-        $file = dirname(__FILE__) . "/../../../public/json/{$filename}.json";
-        file_put_contents($file, $json);
-    }
-
-    /**
      * video, channelの全レコードから、JSONに不要なレコードを削除する
      * →クエリビルダで作成可能では？（引数を必要なカラム名の配列とする関数をリポジトリに作る）
      * そうするとunsetKeys関数が不要になり、見通しが良くなる。
@@ -84,7 +65,7 @@ class CreateLatestJsonService
      *
      * @return array
      */
-    public function returnVideoAndChannelRecordArray(): array
+    public function getVideoAndChannelRecordArray(): array
     {
         $videos = $this->unsetKeys($this->video_repository->fetchAllOrderByPublishedAt(), self::$uselessColumns['video']);
         $channels = $this->unsetKeys($this->channel_repository->fetchAllAsArray(), self::$uselessColumns['channel']);

@@ -27,6 +27,18 @@ class VideoRepository implements YoutubeRepositoryInterface
         return Video::orderBy('published_at', 'desc')->get()->toArray();
     }
 
+    public function fetchColumns(array $columns)
+    {
+        $query = Video::select($columns[0]);
+        $count = count($columns);
+        if ($count === 1 ) return $query->get();
+        for ($i = 1; $i < count($columns); $i++) {
+            $query->addSelect($columns[$i]);
+        }
+        $video = $query->orderBy('published_at', 'desc')->get()->toArray();
+        return $video;
+    }
+
     /**
      * テーブル名を取得する
      *
