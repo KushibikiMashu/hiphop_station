@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Channel;
 use App\Video;
+use App\Services\CreateLatestJsonService;
 use Illuminate\Console\Command;
 
 class CreateJsonOfLatestVideoAndChannel extends Command
@@ -49,17 +50,33 @@ class CreateJsonOfLatestVideoAndChannel extends Command
      * (方針)オブジェクト指向。疎結合。関数を短く記述する
      * 再利用できるモジュール。モジュールは関数型のように。
      * 参照透過性。副作用なし。
+     *
+     * @param CreateLatestJsonService $service
      */
-    public function handle()
+    public function handle(CreateLatestJsonService $service)
     {
-        $channels = $this->unset_keys($this->channel_query->toArray(), ['id', 'video_count', 'published_at', 'created_at', 'updated_at']);
-        $video_query = $this->unset_keys($this->video_query_orderby_published_at->toArray(), ['created_at', 'updated_at']);
-        $main = $this->add_extra_data($video_query, $channels);
+        $service->returnAssocArrays();
 
-        $queries = ['channels' => $channels, 'main' => $main];
-        foreach ($queries as $filename => $query) {
-            $this->create_json($query, $filename);
-        }
+        // 配列を受け取り、json作成
+//        [$channels, $main] = $service->returnAssocArrays();
+//        $json = [
+//            'channels' => $channels,
+//            'main' => $main,
+//        ];
+//        foreach ($json as $filename => $array) {
+//            $this->createJson($array, $filename);
+//        }
+
+
+
+//        $channels = $this->unset_keys($this->channel_query->toArray(), ['id', 'video_count', 'published_at', 'created_at', 'updated_at']);
+//        $video_query = $this->unset_keys($this->video_query_orderby_published_at->toArray(), ['created_at', 'updated_at']);
+//        $main = $this->add_extra_data($video_query, $channels);
+//
+//        $queries = ['channels' => $channels, 'main' => $main];
+//        foreach ($queries as $filename => $query) {
+//            $this->create_json($query, $filename);
+//        }
 
         // $this->usecase->run();
     }

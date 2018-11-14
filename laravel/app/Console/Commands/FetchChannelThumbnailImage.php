@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Usecases\ChannelThumbnailFetcherUsecase;
+use App\Services\ChannelThumbnailFetcherService;
 use Illuminate\Console\Command;
 
 class FetchChannelThumbnailImage extends Command
@@ -32,10 +32,10 @@ class FetchChannelThumbnailImage extends Command
     /**
      * Execute the console command.
      *
-     * @param ChannelThumbnailFetcherUsecase $usecase
+     * @param ChannelThumbnailFetcherService $service
      */
-    public function handle(ChannelThumbnailFetcherUsecase $usecase)
+    public function handle(ChannelThumbnailFetcherService $service)
     {
-        $usecase->run();
+        $service->run();
     }
 }

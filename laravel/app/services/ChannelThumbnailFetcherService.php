@@ -26,9 +26,17 @@ class ChannelThumbnailFetcherService
     }
 
     /**
+     * 外部からこのクラスを利用するための関数
+     */
+    public function run(): void
+    {
+        $this->downloadImages();
+    }
+
+    /**
      * channel_thumbnailテーブルに格納されているアドレスの画像をダウンロードする
      */
-    public function downloadImages(): void
+    private function downloadImages(): void
     {
         foreach ($this->channel_thumbnail_repository->fetchAll() as $record) {
             foreach ($this->sizes as $size) {
