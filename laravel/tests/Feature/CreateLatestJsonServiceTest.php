@@ -27,8 +27,8 @@ class CreateLatestJsonServiceTest extends TestCase
         $i = new VideoRepository;
 
         [$videos, $channels] = $this->instance->getVideoAndChannelRecordArray();
-        dd($videos[0]===$i->fetchColumns(['channel_id', 'title', 'hash', 'genre'])[0]);
-        $this->assetTrue($videos[0], $i->fetchColumns(['channel_id', 'title', 'hash', 'genre'])[0]);
+        $actual = $i->fetchColumnsOrderByPublishedAt('channel_id', 'title', 'hash', 'genre')->toArray();
+        $this->assertSame($actual, $videos);
 
     }
 }

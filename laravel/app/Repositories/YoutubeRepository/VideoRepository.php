@@ -27,16 +27,17 @@ class VideoRepository implements YoutubeRepositoryInterface
         return Video::orderBy('published_at', 'desc')->get()->toArray();
     }
 
-    public function fetchColumns(array $columns)
+    public function fetchColumnsOrderByPublishedAt(...$columns)
     {
-        $query = Video::select($columns[0]);
-        $count = count($columns);
-        if ($count === 1 ) return $query->get();
-        for ($i = 1; $i < count($columns); $i++) {
-            $query->addSelect($columns[$i]);
+        if (empty($columns) || count($columns) === 1) {
+            return null;
         }
-        $video = $query->orderBy('published_at', 'desc')->get()->toArray();
-        return $video;
+        $query = Video::select($columns[0]);
+        $select_columns = array_slice($columns, 1);
+        for ($i = 0; $i < count($select_columns); $i++) {
+            $query->addSelect($select_columns[$i]);
+        }
+        return $query->orderBy('published_at', 'desc')->get();
     }
 
     /**
