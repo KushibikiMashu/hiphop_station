@@ -38,7 +38,8 @@ class VideoThumbnailFetcherService
      */
     private function downloadImages(): void
     {
-        foreach ($this->video_thumbnail_repository->fetchAll() as $record) {
+        $generator = $this->video_thumbnail_repository->fetchAll();
+        foreach ($generator as $record) {
             foreach ($this->sizes as $size) {
                 $this->fetchThumbnailInDatabase($record, $size);
             }

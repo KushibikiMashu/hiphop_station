@@ -38,7 +38,8 @@ class ChannelThumbnailFetcherService
      */
     private function downloadImages(): void
     {
-        foreach ($this->channel_thumbnail_repository->fetchAll() as $record) {
+        $generator = $this->channel_thumbnail_repository->fetchAll();
+        foreach ($generator as $record) {
             foreach ($this->sizes as $size) {
                 $this->fetchThumbnailInDatabase($record, $size);
             }
