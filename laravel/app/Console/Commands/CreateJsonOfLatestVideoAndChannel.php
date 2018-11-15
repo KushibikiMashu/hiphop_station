@@ -37,24 +37,25 @@ class CreateJsonOfLatestVideoAndChannel extends Command
      * 参照透過性。副作用なし。
      *
      * @param CreateLatestJsonService $service
+     * @return void
      */
-    public function handle(CreateLatestJsonService $service)
+    public function handle(CreateLatestJsonService $service): void
     {
         [$channels, $main] = $service->getArrays();
         $json = ['channels' => $channels, 'main' => $main];
         foreach ($json as $filename => $array) {
-            $this->createJson($array, $filename);
+            $this->createJson($filename, $array);
         }
     }
 
     /**
      * JSONを作成する
      *
-     * @param array $array
      * @param string $filename
+     * @param array $array
      * @return void
      */
-    private function createJson(array $array, string $filename)
+    private function createJson(string $filename, array $array): void
     {
         $json = json_encode($array, JSON_UNESCAPED_UNICODE);
         $file = public_path( "json/{$filename}.json");
