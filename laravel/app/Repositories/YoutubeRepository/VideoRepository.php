@@ -43,7 +43,7 @@ class VideoRepository implements YoutubeRepositoryInterface
     public function fetchColumnsOrderByPublishedAt(...$columns): array
     {
         if (empty($columns) || count($columns) === 1) {
-            return null;
+            return [];
         }
         $query = $this->video->select($columns[0]);
         $select_columns = array_slice($columns, 1);

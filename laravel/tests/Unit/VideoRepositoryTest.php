@@ -49,6 +49,38 @@ class VideoRepositoryTest extends TestCase
         $this->assertSame($expected, $actual);
         self::deleteRecordByTableAndId($video->getTable(), $video->id);
     }
+
+    /**
+     * @test
+     */
+    public function fetchColumnsOrderByPublishedAt__カラムの指定が0個なのでnullを返す()
+    {
+        $actual = $this->instance->fetchColumnsOrderByPublishedAt([]);
+        $this->assertSame([], $actual);
+    }
+
+    /**
+     * @test
+     */
+    public function fetchColumnsOrderByPublishedAt__カラムの指定が1個なのでnullを返す()
+    {
+        $actual = $this->instance->fetchColumnsOrderByPublishedAt('id');
+        $this->assertSame([], $actual);
+    }
+
+    /**
+     * @test
+     */
+    public function fetchColumnsOrderByPublishedAt__カラムを指定してpublished_atで降順にし、配列で返す()
+    {
+        $video = self::createVideoRecord();
+        $expected = Video::orderBy('published_at', 'desc')->get()->toArray();
+        $actual = $this->instance->fetchColumnsOrderByPublishedAt('id', 'channel_id', 'title', 'hash', 'genre', 'published_at', 'created_at', 'updated_at');
+        $this->assertInternalType('array', $actual);
+        $this->assertSame($expected, $actual);
+        self::deleteRecordByTableAndId($video->getTable(), $video->id);
+    }
+
     /**
      * @test
      */
