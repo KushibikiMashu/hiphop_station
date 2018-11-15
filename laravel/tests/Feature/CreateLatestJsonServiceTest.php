@@ -24,11 +24,15 @@ class CreateLatestJsonServiceTest extends TestCase
      */
     public function getVideoAndChannelRecordArray__videoとchannel()
     {
-        $i = new VideoRepository;
+        $v = new VideoRepository;
+        $c = new ChannelRepository;
 
         [$videos, $channels] = $this->instance->getVideoAndChannelRecordArray();
-        $actual = $i->fetchColumnsOrderByPublishedAt('channel_id', 'title', 'hash', 'genre')->toArray();
-        $this->assertSame($actual, $videos);
+        $video_actual = $v->fetchColumnsOrderByPublishedAt('id', 'channel_id', 'title', 'hash', 'genre', 'published_at');
+        $channel_actual = $c->fetchColumnsOrderById('id', 'title', 'hash');
+        $this->assertSame($video_actual, $videos);
+        $this->assertSame($channel_actual, $channels);
 
     }
 }
+

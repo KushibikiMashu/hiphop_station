@@ -7,6 +7,13 @@ use Illuminate\Support\Facades\Log;
 
 class ChannelRepository implements YoutubeRepositoryInterface
 {
+    private $channel;
+
+    public function __construct()
+    {
+        $this->channel = new Channel;
+    }
+
     /**
      * channelテーブルの全レコードのジェネレータを取得する
      *
@@ -14,7 +21,7 @@ class ChannelRepository implements YoutubeRepositoryInterface
      */
     public function fetchAll(): \Generator
     {
-        return Channel::cursor();
+        return $this->channel->cursor();
     }
 
     /**
@@ -24,7 +31,36 @@ class ChannelRepository implements YoutubeRepositoryInterface
      */
     public function fetchAllAsArray(): array
     {
-        return Channel::all()->toArray();
+        return $this->channel->all()->toArray();
+    }
+
+    /**
+     * channelテーブルの全レコードを降順の配列で取得する
+     *
+     * @return array
+     */
+    public function fetchAllOrderByPublishedAt(): array
+    {
+        return $this->channel->orderBy('published_at', 'desc')->get()->toArray();
+    }
+
+    /**
+     * 引数に書かれているカラムをchannelテーブルから降順の配列で取得する
+     *
+     * @param mixed ...$columns
+     * @return array
+     */
+    public function fetchColumnsOrderById(...$columns): array
+    {
+        if (empty($columns) || count($columns) === 1) {
+            return null;
+        }
+        $query = $this->channel->select($columns[0]);
+        $select_columns = array_slice($columns, 1);
+        for ($i = 0; $i < count($select_columns); $i++) {
+            $query->addSelect($select_columns[$i]);
+        }
+        return $query->orderBy('id', 'asc')->get()->toArray();
     }
 
     /**
@@ -34,7 +70,7 @@ class ChannelRepository implements YoutubeRepositoryInterface
      */
     public function getTableName(): string
     {
-        return (new Channel)->getTable();
+        return $this->channel->getTable();
     }
 
     /**
@@ -45,7 +81,7 @@ class ChannelRepository implements YoutubeRepositoryInterface
      */
     public function getHashFromChannelThumbnail($record): string
     {
-        return Channel::where('id', $record->channel_id)->exists() ? Channel::find($record->channel_id)->hash : '';
+        return $this->channel->where('id', $record->channel_id)->exists() ? $this->channel->find($record->channel_id)->hash : '';
     }
 
     /**
@@ -55,9 +91,9 @@ class ChannelRepository implements YoutubeRepositoryInterface
      */
     public function deleteByHash(string $hash): void
     {
-        $id = (string)Channel::where('hash', $hash)->get()[0]->id;
-        if (Channel::where('id', $id)->exists()) {
-            Channel::where('id', $id)->delete();
+        $id = (string)$this->channel->where('hash', $hash)->get()[0]->id;
+        if ($this->channel->where('id', $id)->exists()) {
+            $this->channel->where('id', $id)->delete();
             Log::info("Delete id: {$id} from channel table\.");
         } else {
             Log::info("Cannot delete id {$id} from channel table\.");

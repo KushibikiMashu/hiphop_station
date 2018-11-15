@@ -10,8 +10,8 @@ class CreateLatestJsonService
     private $video_repository;
     private $channel_repository;
     private static $uselessColumns = [
-        'video' => ['id', 'video_count', 'published_at', 'created_at', 'updated_at'],
-        'channel' => ['created_at', 'updated_at'],
+        'channel' => ['video_count', 'published_at', 'created_at', 'updated_at'],
+        'video' => ['created_at', 'updated_at'],
     ];
 
     public function __construct(VideoRepository $video_repository, ChannelRepository $channel_repository)
@@ -22,11 +22,8 @@ class CreateLatestJsonService
 
     public function getArrays() :array
     {
-        // 返却される値を使う
-        // その他のデータを付け加える
-        // JSONを作成する
-        [$videos, $channels] = $this->getVideoAndChannelRecordArray();
-
+        $videos = $this->video_repository->fetchColumnsOrderByPublishedAt('id', 'channel_id', 'title', 'hash', 'genre', 'published_at');
+        $channels = $this->channel_repository->fetchColumnsOrderById('id', 'title', 'hash');
         $main = $this->addExtraData($videos, $channels);
         return [$channels, $main];
     }

@@ -7,6 +7,13 @@ use Illuminate\Support\Facades\Log;
 
 class VideoRepository implements YoutubeRepositoryInterface
 {
+    private $video;
+
+    public function __construct()
+    {
+        $this->video = new Video;
+    }
+
     /**
      * videoテーブルの全レコードのジェネレータを取得する
      *
@@ -14,30 +21,36 @@ class VideoRepository implements YoutubeRepositoryInterface
      */
     public function fetchAll(): \Generator
     {
-        return Video::cursor();
+        return $this->video->cursor();
     }
 
     /**
-     * videoテーブルの全レコードのジェネレータを降順の配列で取得する
+     * videoテーブルの全レコードを降順の配列で取得する
      *
      * @return array
      */
     public function fetchAllOrderByPublishedAt(): array
     {
-        return Video::orderBy('published_at', 'desc')->get()->toArray();
+        return $this->video->orderBy('published_at', 'desc')->get()->toArray();
     }
 
-    public function fetchColumnsOrderByPublishedAt(...$columns)
+    /**
+     * 引数に書かれているカラムをvideoテーブルから降順の配列で取得する
+     *
+     * @param mixed ...$columns
+     * @return array
+     */
+    public function fetchColumnsOrderByPublishedAt(...$columns): array
     {
         if (empty($columns) || count($columns) === 1) {
             return null;
         }
-        $query = Video::select($columns[0]);
+        $query = $this->video->select($columns[0]);
         $select_columns = array_slice($columns, 1);
         for ($i = 0; $i < count($select_columns); $i++) {
             $query->addSelect($select_columns[$i]);
         }
-        return $query->orderBy('published_at', 'desc')->get();
+        return $query->orderBy('published_at', 'desc')->get()->toArray();
     }
 
     /**
@@ -47,7 +60,7 @@ class VideoRepository implements YoutubeRepositoryInterface
      */
     public function getTableName(): string
     {
-        return (new Video)->getTable();
+        return $this->video->getTable();
     }
 
     /**
@@ -58,7 +71,7 @@ class VideoRepository implements YoutubeRepositoryInterface
      */
     public function getHashFromVideoThumbnail($record): string
     {
-        return Video::where('id', $record->video_id)->exists() ? Video::find($record->video_id)->hash : '';
+        return $this->video->where('id', $record->video_id)->exists() ? $this->video->find($record->video_id)->hash : '';
     }
 
     /**
@@ -68,9 +81,9 @@ class VideoRepository implements YoutubeRepositoryInterface
      */
     public function deleteByHash(string $hash): void
     {
-        $id = (string)Video::where('hash', $hash)->get()[0]->id;
-        if (Video::where('id', $id)->exists()) {
-            Video::where('id', $id)->delete();
+        $id = (string)$this->video->where('hash', $hash)->get()[0]->id;
+        if ($this->video->where('id', $id)->exists()) {
+            $this->video->where('id', $id)->delete();
             Log::info("Delete id: {$id} from video table\.");
         } else {
             Log::info("Cannot delete id {$id} from video table\.");
