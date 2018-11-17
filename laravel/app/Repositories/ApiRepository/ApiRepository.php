@@ -27,21 +27,17 @@ class ApiRepository implements ApiRepositoryInterface
         $now = Carbon::now();
         $after = $this->video_repo->fetchLatestPublishedVideoRecord()->published_at;
         $before = substr($now->format(\DateTime::ATOM), 0, 19) . '.000Z';
-        $channel_data = $res = [];
+        $videos = $res = [];
 
         foreach ($this->channel_repo->fetchAll() as $query) {
             $res = $this->youtube->listChannelVideos($query->hash, 50, $after, $before);
-            if (!$res) {
+            // 新しいvideoがない場合(false)か、基準になる日付の動画は配列$videosに追加しない
+            if ($res === false || (count($res) === 1 && $res[0]->snippet->publishedAt === $after)) {
                 continue;
             }
-            $channel_data[] = $res;
+            $videos[] = $res;
         }
-
-//        $json = json_encode($channel_data, JSON_UNESCAPED_UNICODE);
-//        $file = base_path( "tests/json/channel_some_data.json");
-//        file_put_contents($file, $json);
-
-        return $channel_data;
+        return $videos;
     }
 
 }

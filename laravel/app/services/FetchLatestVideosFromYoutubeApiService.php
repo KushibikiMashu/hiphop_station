@@ -23,8 +23,8 @@ class FetchLatestVideosFromYoutubeApiService
      * genreをbattle, songに振り分けるための動画タイトルのキーワード
      */
     const words = [
-        '2' => ['KOK', 'KING OF KINGS', 'SCHOOL OF RAP'],
-        '23' => ['SPOTLIGHT', 'ENTER'],
+        '2'    => ['KOK', 'KING OF KINGS', 'SCHOOL OF RAP'],
+        '23'   => ['SPOTLIGHT', 'ENTER'],
         'song' => ['【MV】', 'Music Video', 'MusicVideo'],
     ];
 
@@ -47,24 +47,13 @@ class FetchLatestVideosFromYoutubeApiService
         // videoRepositoryでデータをインサートする
         // データは最終的にDBに格納される。このため、run()はreturn void
 
-        date_default_timezone_set("Asia/Tokyo");
         $now = Carbon::now();
 
-        $this->api_repo->getNewVideosOfRegisteredChannel();
+        // 新着動画がない場合は処理を終える
+        $videos = $this->api_repo->getNewVideosOfRegisteredChannel();
+        if (empty($videos)) return;
 
 //        try {
-//            // Youtube APIで新着動画を取得する
-//            $after = $this->video_repo->fetchLatestPublishedVideoRecord()->published_at;
-//            $before = substr($now->format(DateTime::ATOM), 0, 19) . '.000Z';
-//            $channel_data = $res = [];
-//
-//            foreach ($this->channel_repo->fetchAll() as $query) {
-//                $res = $youtube->listChannelVideos($query->hash, 30, $after, $before);
-//                if (!$res) {
-//                    continue;
-//                }
-//                $channel_data[] = $res;
-//            }
 //
 //            // keyはvideoのhash、valueは添字
 //            $flipped_video_hash = $this->video_query->pluck('hash')->flip();
