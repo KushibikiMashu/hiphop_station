@@ -23,15 +23,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerServices();
+//        $this->registerServices();
         $this->registerRepositories();
     }
 
     protected function registerServices()
     {
-        $this->app->singleton(\App\Services\ThumbnailImageFetcher::class, function ($app) {
-            return new \App\Services\ThumbnailImageFetcher($app);
-        });
     }
 
     protected function registerRepositories()
@@ -46,6 +43,16 @@ class AppServiceProvider extends ServiceProvider
             \App\Repositories\YoutubeThumbnailRepositoryInterface::Class,
             \App\Repositories\VideoThumbnailRepository::class,
             \App\Repositories\ChannelThumbnailRepository::class
+        );
+
+        $this->app->bind(
+            \App\Repositories\ApiRepositoryInterface::Class,
+            \App\Repositories\ApiRepository::class
+        );
+
+        $this->app->bind(
+            \App\Repositories\DownloadFileRepositoryInterface::Class,
+            \App\Repositories\DownloadJpgFileRepository::class
         );
     }
 }

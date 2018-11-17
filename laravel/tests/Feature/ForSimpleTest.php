@@ -20,14 +20,4 @@ class ForSimpleTest extends TestCase
         $this->instance = new VideoRepository;
     }
 
-    /**
-     * @test
-     *
-     */
-    public function fetchLatestPublishedVideoRecord__最新のpublished_atのレコードを取得する(): void
-    {
-        $actual = $this->instance->fetchLatestPublishedVideoRecord()['published_at'];
-        $expected = (new FetchLatestVideosFromYoutubeApi)->fetch_max_published_datetime();
-        $this->assertSame($expected, $actual);
-    }
 }
