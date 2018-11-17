@@ -119,12 +119,24 @@ class VideoRepositoryTest extends TestCase
      */
     public function deleteByHash__hashでレコードを削除する(): void
     {
-        $record = self::createVideoRecord();
-        $this->table = $record->getTable();
-        $hash = $record->hash;
+        $video = self::createVideoRecord();
+        $this->table = $video->getTable();
+        $hash = $video->hash;
         $data = ['hash' => $hash];
         $this->assertDatabaseHas($this->table, $data);
         $this->instance->deleteByHash($hash);
         $this->assertDatabaseMissing($this->table, $data);
+    }
+
+    /**
+     * @test
+     */
+    public function fetchLatestPublishedVideoRecord__最新のpublished_atのレコードを取得する(): void
+    {
+        $video = self::createVideoRecord();
+        $actual = $this->instance->fetchLatestPublishedVideoRecord()->published_at;
+        $expected = $video->published_at;
+        $this->assertSame($expected, $actual);
+        self::deleteRecordByTableAndId($video->getTable(), $video->id);
     }
 }

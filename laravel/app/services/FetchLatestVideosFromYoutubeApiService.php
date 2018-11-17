@@ -48,7 +48,7 @@ class FetchLatestVideosFromYoutubeApiService
 
         try {
             // Youtube APIで新着動画を取得する
-            $after = $this->video_repo->fetchLatestPublishedVideoRecord()['published_at'];
+            $after = $this->video_repo->fetchLatestPublishedVideoRecord()->published_at;
             $before = substr($now->format(DateTime::ATOM), 0, 19) . '.000Z';
             $channel_data = $res = [];
 

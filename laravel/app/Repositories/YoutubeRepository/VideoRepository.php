@@ -93,15 +93,15 @@ class VideoRepository implements YoutubeRepositoryInterface
     /**
      * 最新のpublished_atのレコードを取得する
      *
-     * @return array
+     * @return Video
      */
-    public function fetchLatestPublishedVideoRecord(): array
+    public function fetchLatestPublishedVideoRecord(): Video
     {
         $query = $this->video->select('id', 'published_at')->get()->toArray();
         foreach ($query as $key => $value) {
             $query[$key]['published_at'] = strtotime($value['published_at']);
         }
         array_multisort(array_column($query, 'published_at'), SORT_DESC, $query);
-        return $this->video->find(array_shift($query)['id'])->toArray();
+        return $this->video->find(array_shift($query)['id']);
     }
 }
