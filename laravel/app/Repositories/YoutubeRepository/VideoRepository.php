@@ -35,7 +35,7 @@ class VideoRepository implements YoutubeRepositoryInterface
     }
 
     /**
-     * 引数に書かれているカラムをvideoテーブルから降順の配列で取得する
+     * 引数に書かれているカラムをvideoテーブルからアップロード日の降順の配列で取得する
      *
      * @param mixed ...$columns
      * @return array
@@ -88,5 +88,20 @@ class VideoRepository implements YoutubeRepositoryInterface
         } else {
             Log::info("Cannot delete id {$id} from video table\.");
         }
+    }
+
+    /**
+     * 最新のpublished_atのレコードを取得する
+     *
+     * @return array
+     */
+    public function fetchLatestPublishedVideoRecord(): array
+    {
+        $query = $this->video->select('id', 'published_at')->get()->toArray();
+        foreach ($query as $key => $value) {
+            $query[$key]['published_at'] = strtotime($value['published_at']);
+        }
+        array_multisort(array_column($query, 'published_at'), SORT_DESC, $query);
+        return $this->video->find(array_shift($query)['id'])->toArray();
     }
 }
