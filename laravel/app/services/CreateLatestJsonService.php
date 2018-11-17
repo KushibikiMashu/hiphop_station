@@ -7,19 +7,19 @@ use App\Repositories\ChannelRepository;
 
 class CreateLatestJsonService
 {
-    private $video_repository;
-    private $channel_repository;
+    private $video_repo;
+    private $channel_repo;
 
-    public function __construct(VideoRepository $video_repository, ChannelRepository $channel_repository)
+    public function __construct(VideoRepository $video_repo, ChannelRepository $channel_repo)
     {
-        $this->video_repository = $video_repository;
-        $this->channel_repository = $channel_repository;
+        $this->video_repo = $video_repo;
+        $this->channel_repo = $channel_repo;
     }
 
     public function getArrays() :array
     {
-        $videos = $this->video_repository->fetchColumnsOrderByPublishedAt('id', 'channel_id', 'title', 'hash', 'genre', 'published_at');
-        $channels = $this->channel_repository->fetchColumnsOrderById('title', 'hash');
+        $videos = $this->video_repo->fetchColumnsOrderByPublishedAt('id', 'channel_id', 'title', 'hash', 'genre', 'published_at');
+        $channels = $this->channel_repo->fetchColumnsOrderById('title', 'hash');
         $main = $this->addExtraData($videos, $channels);
         return [$channels, $main];
     }

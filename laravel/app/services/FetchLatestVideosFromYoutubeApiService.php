@@ -1,69 +1,68 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Services;
 
+use App\Repositories\ChannelRepository;
+use App\Repositories\ChannelThumbnailRepository;
+use App\Repositories\VideoRepository;
+use App\Repositories\VideoThumbnailRepository;
 use DateTime;
-use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Services\CustomizedYoutubeApi;
-use App\Services\FetchLatestVideosFromYoutubeApiService;
 
-class FetchLatestVideosFromYoutubeApi extends Command
+class FetchLatestVideosFromYoutubeApiService
 {
-    /**
-     * genreをbattle, songに振り分けるための動画タイトルのキーワード
-     */
-    const words = [
-        '2' => ['KOK', 'KING OF KINGS', 'SCHOOL OF RAP'],
-        '23' => ['SPOTLIGHT', 'ENTER'],
-        'song' => ['【MV】', 'Music Video', 'MusicVideo'],
-    ];
+    private $video_repo;
+    private $video_thumbnail_repo;
 
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'fetch:video';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Fetch latest videos';
-
-    // channelテーブルの全レコード
-    private $channel_query;
-    // videoテーブルの全レコード
-    private $video_query;
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function __construct(
+        VideoRepository $video_repo,
+        VideoThumbnailRepository $video_thumbnail_repo
+    )
     {
-        parent::__construct();
-        $this->video_query = DB::table(config('const.TABLE.VIDEO'))->get();
-        $this->channel_query = DB::table(config('const.TABLE.CHANNEL'))->get();
+        $this->video_repo = $video_repo;
+        $this->video_thumbnail_repo = $video_thumbnail_repo;
     }
 
-    /**
-     * YoutubeAPIから最新の動画を取得する
-     * (設計方針：一つの関数に一つの関心事。オブジェクト指向)
-     *
-     * @param FetchLatestVideosFromYoutubeApiService $service
-     */
-    public function handle(FetchLatestVideosFromYoutubeApiService $service)
+    public function run(): void
     {
-        $service->run();
+        // serviceクラスでデータを加工する
+        // youtubeのAPIはyoutubeRepositoryで叩く
+        // videoRepositoryでデータをインサートする
+        // データは最終的にDBに格納される。このため、run()はreturn void
+
     }
 
-
+//    // channelテーブルの全レコード
+//    private $channel_query;
+//    // videoテーブルの全レコード
+//    private $video_query;
+//
+//    /**
+//     * Create a new command instance.
+//     *
+//     * @return void
+//     */
+//    public function __construct()
+//    {
+//        parent::__construct();
+//        $this->video_query = DB::table(config('const.TABLE.VIDEO'))->get();
+//        $this->channel_query = DB::table(config('const.TABLE.CHANNEL'))->get();
+//    }
+//
+//    /**
+//     * YoutubeAPIから最新の動画を取得する
+//     * (設計方針：一つの関数に一つの関心事。オブジェクト指向)
+//     *
+//     * @param CustomizedYoutubeAPI $youtube
+//     * @return void
+//     */
+//    public function handle(CustomizedYoutubeAPI $youtube)
+//    {
+//
+//
 //
 //        date_default_timezone_set("Asia/Tokyo");
 //        $now = Carbon::now();
@@ -287,4 +286,5 @@ class FetchLatestVideosFromYoutubeApi extends Command
 //        }
 //        return false;
 //    }
+
 }

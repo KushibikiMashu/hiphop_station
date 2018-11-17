@@ -10,19 +10,19 @@ use Illuminate\Support\Facades\Log;
 class VideoThumbnailFetcherService
 {
     private $sizes = ['std', 'medium', 'high'];
-    private $video_repository;
-    private $video_thumbnail_repository;
-    private $download_jpg_file_repository;
+    private $video_repo;
+    private $video_thumbnail_repo;
+    private $download_jpg_file_repo;
 
     public function __construct(
-        VideoRepository $video_repository,
-        VideoThumbnailRepository $video_thumbnail_repository,
-        DownloadJpgFileRepository $download_jpg_file_repository
+        VideoRepository $video_repo,
+        VideoThumbnailRepository $video_thumbnail_repo,
+        DownloadJpgFileRepository $download_jpg_file_repo
     )
     {
-        $this->video_repository = $video_repository;
-        $this->video_thumbnail_repository = $video_thumbnail_repository;
-        $this->download_jpg_file_repository = $download_jpg_file_repository;
+        $this->video_repo = $video_repo;
+        $this->video_thumbnail_repo = $video_thumbnail_repo;
+        $this->download_jpg_file_repo = $download_jpg_file_repo;
     }
 
     /**
@@ -38,7 +38,7 @@ class VideoThumbnailFetcherService
      */
     private function downloadImages(): void
     {
-        $generator = $this->video_thumbnail_repository->fetchAll();
+        $generator = $this->video_thumbnail_repo->fetchAll();
         foreach ($generator as $record) {
             foreach ($this->sizes as $size) {
                 $this->fetchThumbnailInDatabase($record, $size);
@@ -54,17 +54,17 @@ class VideoThumbnailFetcherService
      */
     private function fetchThumbnailInDatabase($record, string $size): void
     {
-        $table = $this->video_thumbnail_repository->getTableName();
+        $table = $this->video_thumbnail_repo->getTableName();
         $url = str_replace('_live', '', $record->{$size});
-        if (!$hash = $this->video_repository->getHashFromVideoThumbnail($record)) return;
+        if (!$hash = $this->video_repo->getHashFromVideoThumbnail($record)) return;
         $file_path = "image/{$table}/{$size}/{$hash}.jpg";
         if (file_exists(public_path($file_path))) return;
 
-        $result = $this->download_jpg_file_repository->couldDownloadJpgFromUrl($url, $file_path);
+        $result = $this->download_jpg_file_repo->couldDownloadJpgFromUrl($url, $file_path);
         if ($result === false) {
             Log::warning('Cannot download image file from: ' . $url);
-            $this->video_repository->deleteByHash($hash);
-            $this->video_thumbnail_repository->deleteById($record->id);
+            $this->video_repo->deleteByHash($hash);
+            $this->video_thumbnail_repo->deleteById($record->id);
             // $hashを使って画像も消す
         }
     }
