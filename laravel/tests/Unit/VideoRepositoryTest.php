@@ -38,6 +38,22 @@ class VideoRepositoryTest extends TestCase
     /**
      * @test
      */
+    public function fetchAnyColumn__任意のカラムを１つ取得する(): void
+    {
+        $video = self::createVideoRecord();
+        $expected = [];
+        foreach (Video::pluck('id') as $id) {
+            $expected[]['id'] = $id;
+        }
+        $actual = $this->instance->fetchAnyColumn('id');
+        $this->assertInternalType('array', $actual);
+        $this->assertSame($expected, $actual);
+        self::deleteRecordByTableAndId($video->getTable(), $video->id);
+    }
+
+    /**
+     * @test
+     */
     public function fetchAllOrderByPublishedAt__Videoテーブルのレコードを全て取得する(): void
     {
         $expected = $actual = [];
@@ -134,9 +150,59 @@ class VideoRepositoryTest extends TestCase
     public function fetchLatestPublishedAtVideoRecord__最新のpublished_atのレコードを取得する(): void
     {
         $video = self::createVideoRecord();
-        $actual = $this->instance->fetchLatestPublishedAtVideoRecord()->published_at;
         $expected = $video->published_at;
+        $actual = $this->instance->fetchLatestPublishedAtVideoRecord()->published_at;
+        $this->assertSame($expected, $actual);
+        self::deleteRecordByTableAndId($video->getTable(), $video->id);
+    }
+
+    /**
+     * @test
+     */
+    public function fetchPluckedColumn__カラムの値だけを抽出する(): void
+    {
+        $video = self::createVideoRecord();
+        $query = Video::select('id')->get()->toArray();
+        $expected = [];
+        foreach ($query as $ids) {
+            $expected[] = $ids['id'];
+        }
+        $actual = $this->instance->fetchPluckedColumn('id')->toArray();
+        $this->assertSame($expected, $actual);
+        self::deleteRecordByTableAndId($video->getTable(), $video->id);
+    }
+
+    /**
+     * @test
+     */
+    public function saveRecord__レコードを登録する(): void
+    {
+        $channel = self::createChannelRecord();
+        $record = [
+            'channel_id'   => $channel->id,
+            'title'        => 'test',
+            'hash'         => str_random(11),
+            'genre'        => 'song',
+            'published_at' => '2018-11-18 13:12:57'
+        ];
+        $video = $this->instance->saveRecord($record);
+        $expected = $channel->id;
+        $actual = $video->channel_id;
+        $this->assertSame($expected, $actual);
+        self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
+        self::deleteRecordByTableAndId($video->getTable(), $video->id);
+    }
+
+    /**
+     * @test
+     */
+    public function fetchVideoIdByHash__channelのhashからidを取得する(): void
+    {
+        $video = self::createVideoRecord();
+        $expected = Video::where('hash', $video->hash)->get()[0]->id;
+        $actual = $this->instance->fetchVideoIdByHash($video->hash);
         $this->assertSame($expected, $actual);
         self::deleteRecordByTableAndId($video->getTable(), $video->id);
     }
 }
+

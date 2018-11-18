@@ -111,4 +111,15 @@ class ChannelRepository implements YoutubeRepositoryInterface
         }
     }
 
+    /**
+     * channelのhashからidを取得する
+     *
+     * @param string $hash
+     * @return int
+     */
+    public function fetchChannelIdByHash(string $hash): int
+    {
+        return $this->channel->where('hash', $hash)->first()->id;
+    }
+
 }

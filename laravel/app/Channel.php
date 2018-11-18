@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Channel extends Model
 {
     protected $table = 'channel';
+    protected $guarded = ['id'];
     public $timestamps = true;
 
     public function channel_thumbnail()

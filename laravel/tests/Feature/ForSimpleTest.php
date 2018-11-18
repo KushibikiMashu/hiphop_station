@@ -7,7 +7,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Repositories\VideoRepository;
 use App\Console\Commands\FetchLatestVideosFromYoutubeApi;
-
+use Illuminate\Support\Facades\DB;
+use App\Video;
 
 class ForSimpleTest extends TestCase
 {
@@ -25,6 +26,13 @@ class ForSimpleTest extends TestCase
      */
     public function simpleTest()
     {
+        $query = Video::select('id')->get()->toArray();
+        $expected = [];
+        foreach ($query as $ids) {
+            $expected[] = $ids['id'];
+        }
+        $actual = $this->instance->fetchPluckedColumn('id')->toArray();
+        $this->assertSame($expected, $actual);
         $this->assertTrue(True);
     }
 

@@ -60,4 +60,24 @@ class VideoThumbnailRepositoryTest extends TestCase
         $this->assertDatabaseMissing($this->table, $data);
         self::deleteRecordByTableAndId($video->getTable(), $video->id);
     }
+
+    /**
+     * @test
+     */
+    public function saveRecord__レコードを登録する(): void
+    {
+        $video = self::createVideoRecord();
+        $records = [
+            'video_id' => $video->id,
+            'std'      => $video->hash,
+            'medium'   => $video->hash,
+            'high'     => $video->hash,
+        ];
+        $video_thumbnail = $this->instance->saveRecord($records);
+        $expected = $video->id;
+        $actual = $video_thumbnail->video_id;
+        $this->assertSame($expected, $actual);
+        self::deleteRecordByTableAndId($video->getTable(), $video->id);
+        self::deleteRecordByTableAndId($video_thumbnail->getTable(), $video_thumbnail->id);
+    }
 }

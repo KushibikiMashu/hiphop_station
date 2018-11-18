@@ -127,4 +127,16 @@ class ChannelRepositoryTest extends TestCase
         $this->instance->deleteByHash($hash);
         $this->assertDatabaseMissing($this->table, $data);
     }
+
+    /**
+     * @test
+     */
+    public function fetchChannelIdByHash__channelのhashからidを取得する(): void
+    {
+        $channel = self::createChannelRecord();
+        $expected = Channel::where('hash', $channel->hash)->get()[0]->id;
+        $actual = $this->instance->fetchChannelIdByHash($channel->hash);
+        $this->assertSame($expected, $actual);
+        self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
+    }
 }

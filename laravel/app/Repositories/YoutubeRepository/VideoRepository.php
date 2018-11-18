@@ -25,6 +25,17 @@ class VideoRepository implements YoutubeRepositoryInterface
     }
 
     /**
+     * 引数のカラムを配列で取得する
+     *
+     * @param $column
+     * @return array
+     */
+    public function fetchAnyColumn(string $column): array
+    {
+        return $this->video->select($column)->get()->toArray();
+    }
+
+    /**
      * videoテーブルの全レコードを降順の配列で取得する
      *
      * @return array
@@ -103,5 +114,38 @@ class VideoRepository implements YoutubeRepositoryInterface
         }
         array_multisort(array_column($query, 'published_at'), SORT_DESC, $query);
         return $this->video->find(array_shift($query)['id']);
+    }
+
+    /**
+     * 一つのカラムの値を全て取得する
+     *
+     * @param string $column
+     * @return \Illuminate\Support\Collection
+     */
+    public function fetchPluckedColumn($column): \Illuminate\Support\Collection
+    {
+        return $this->video->pluck($column);
+    }
+
+    /**
+     * videoをDBに登録する
+     *
+     * @param array $record
+     * @return Video
+     */
+    public function saveRecord(array $record): Video
+    {
+        return $this->video->create($record);
+    }
+
+    /**
+     * videoのhashからidを取得する
+     *
+     * @param string $hash
+     * @return int
+     */
+    public function fetchVideoIdByHash(string $hash): int
+    {
+        return $this->video->where('hash', $hash)->first()->id;
     }
 }

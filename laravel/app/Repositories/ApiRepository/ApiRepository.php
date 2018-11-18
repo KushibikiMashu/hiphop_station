@@ -42,5 +42,4 @@ class ApiRepository implements ApiRepositoryInterface
         }
         return $videos;
     }
-
 }
