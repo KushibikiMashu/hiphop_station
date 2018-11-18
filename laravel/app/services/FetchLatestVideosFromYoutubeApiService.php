@@ -54,7 +54,7 @@ class FetchLatestVideosFromYoutubeApiService
         }
 
         $this->saveVideosAndThumbnails($responses);
-        $this->downloadVideoThumbnails(count($responses[0]));
+        $this->downloadVideoThumbnails(count(array_collapse($responses)));
         return $responses;
     }
 

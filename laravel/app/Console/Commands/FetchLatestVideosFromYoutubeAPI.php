@@ -67,7 +67,7 @@ class FetchLatestVideosFromYoutubeApi extends Command
     private function outputVideoLogs(Carbon $now, array $responses): void
     {
         // 動画が全て重複していれば処理を終える
-        $this->info("[{$now}] The number of fetched video: " . (string)count($responses[0]));
+        $this->info("[{$now}] The number of fetched video: " . (string)count(array_collapse($responses)));
         $this->info("[{$now}] The title of latest video is " . $responses[0][0]->snippet->title);
         Log::info('The number of fetched video: ' . (string)count($responses));
         Log::info('The title of latest video is ' . $responses[0][0]->snippet->title);
