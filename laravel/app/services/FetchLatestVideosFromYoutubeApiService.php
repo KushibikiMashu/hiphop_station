@@ -30,7 +30,8 @@ class FetchLatestVideosFromYoutubeApiService
         'song' => ['【MV】', 'Music Video', 'MusicVideo'],
     ];
 
-    public function __construct(
+    public function __construct
+    (
         VideoRepository $video_repo,
         VideoThumbnailRepository $video_thumbnail_repo,
         ChannelRepository $channel_repo,

@@ -55,7 +55,7 @@ class ChannelRepositoryTest extends TestCase
     /**
      * @test
      */
-    public function fetchAnyColumn__任意のカラムを１つ取得する (): void
+    public function fetchAnyColumn__任意のカラムを１つ取得する(): void
     {
         $channel = self::createChannelRecord();
         $expected = [];
@@ -71,7 +71,7 @@ class ChannelRepositoryTest extends TestCase
     /**
      * @test
      */
-    public function fetchAnyColumns__任意のカラムを複数取得する  (): void
+    public function fetchAnyColumns__任意のカラムを複数取得する(): void
     {
         $channel = self::createChannelRecord();
         $expected = Channel::orderBy('id', 'asc')->get()->toArray();
@@ -137,6 +137,17 @@ class ChannelRepositoryTest extends TestCase
         $expected = Channel::where('hash', $channel->hash)->get()[0]->id;
         $actual = $this->instance->fetchChannelIdByHash($channel->hash);
         $this->assertSame($expected, $actual);
+        self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
+    }
+
+    /**
+     * @test
+     */
+    public function channel_exists__カラム名と値からchannelが登録済みであるかを確認する(): void
+    {
+        $channel = self::createChannelRecord();
+        $actual = $this->instance->channel_exists('id', $channel->id);
+        $this->assertTrue($actual);
         self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
     }
 }

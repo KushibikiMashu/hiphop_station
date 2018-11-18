@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Channel;
 use Illuminate\Support\Facades\Log;
+use phpDocumentor\Reflection\Types\Mixed_;
 
 class ChannelRepository implements YoutubeRepositoryInterface
 {
@@ -120,6 +121,18 @@ class ChannelRepository implements YoutubeRepositoryInterface
     public function fetchChannelIdByHash(string $hash): int
     {
         return $this->channel->where('hash', $hash)->first()->id;
+    }
+
+    /**
+     * カラム名と値からchannelが登録済みであるかを確認する
+     *
+     * @param string $column
+     * @param $value
+     * @return bool
+     */
+    public function channel_exists(string $column, $value): bool
+    {
+        return $this->channel->where($column, $value)->exists();
     }
 
 }
