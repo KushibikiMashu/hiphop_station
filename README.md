@@ -33,5 +33,25 @@ Don't forget add this code in the file using alaouy/Youtube API
 use Alaouy\Youtube\Facades\Youtube;
 ```
 
-see URL below
+see details below
 https://github.com/alaouy/Youtube
+
+If you added a new folder under app directory, write the directory name in composer.json
+
+```
+   "autoload": {
+        "classmap": [
+            "database/seeds",
+            "database/factories",
+            "app/Repositories",
+            "app/Services"  /* here */
+        ],
+        ...
+   }
+```
+
+Update composer autoload
+
+```
+$ composer dump-autoload
+```

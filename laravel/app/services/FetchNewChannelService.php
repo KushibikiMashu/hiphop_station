@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\VideoRepository;
 use App\Repositories\VideoThumbnailRepository;
 use App\Repositories\ChannelRepository;
+use App\Repositories\ChannelThumbnailRepository;
 use App\Repositories\ApiRepository;
 use App\Repositories\DownloadJpgFileRepository;
 
@@ -13,14 +14,18 @@ class FetchNewChannelService
     private $video_repo;
     private $video_thumbnail_repo;
     private $channel_repo;
+    private $channel_thumbnail_repo;
     private $api_repo;
     private $jpg_repo;
+
+    const sizes = ['std', 'medium', 'high'];
 
     public function __construct
     (
         VideoRepository $video_repo,
         VideoThumbnailRepository $video_thumbnail_repo,
         ChannelRepository $channel_repo,
+        ChannelThumbnailRepository $channel_thumbnail_repo,
         ApiRepository $api_repo,
         DownloadJpgFileRepository $jpg_repo
     )
@@ -28,6 +33,7 @@ class FetchNewChannelService
         $this->video_repo = $video_repo;
         $this->video_thumbnail_repo = $video_thumbnail_repo;
         $this->channel_repo = $channel_repo;
+        $this->channel_thumbnail_repo = $channel_thumbnail_repo;
         $this->api_repo = $api_repo;
         $this->jpg_repo = $jpg_repo;
     }
@@ -35,8 +41,8 @@ class FetchNewChannelService
     public function run(array $channels): void
     {
         $new_channels = $this->getNewChannels($channels);
-        $this->saveChannelsAndChannelThumbnails($new_channels);
-        // download channel_thumbnail
+        $channel_thumbnails = $this->saveChannelsAndChannelThumbnails($new_channels);
+        $this->downloadImages($channel_thumbnails);
     }
 
     private function getNewChannels(array $channels): array
@@ -51,11 +57,52 @@ class FetchNewChannelService
         return $new_channel;
     }
 
-    private function saveChannelsAndChannelThumbnails(array $new_channels):void
+    private function saveChannelsAndChannelThumbnails(array $new_channels): array
     {
+        $channel_thumbnails = [];
         foreach ($new_channels as $channel) {
-            $this->channel_repo->saveRecord($this->api_repo->getChannelByHash($channel['hash']));
+            [$channel_array, $channel_thumbnail_array] = $this->api_repo->getChannelByHash($channel['hash']);
+            $saved_channel = $this->channel_repo->saveRecord($channel_array);
+            $channel_thumbnail_array['channel_id'] = $saved_channel['id'];
+            $channel_thumbnails[] = $this->channel_thumbnail_repo->saveRecord($channel_thumbnail_array);
+        }
+        return $channel_thumbnails;
+    }
+
+    /**
+     * channel_thumbnailテーブルに格納されているアドレスの画像をダウンロードする
+     *
+     * @param array $channel_thumbnails
+     */
+    private function downloadImages(array $channel_thumbnails): void
+    {
+        foreach ($channel_thumbnails as $record) {
+            foreach (self::sizes as $size) {
+                $this->downloadThumbnails($record, $size);
+            }
         }
     }
 
+    /**
+     * file_get_contentsで画像を取得する
+     *
+     * @param object $record
+     * @param string $size
+     */
+    private function downloadThumbnails($record, string $size): void
+    {
+        $table = $this->channel_thumbnail_repo->getTableName();
+        $url = str_replace('_live', '', $record->{$size});
+        if (!$hash = $this->channel_repo->getHashFromChannelThumbnail($record)) return;
+        $file_path = "image/{$table}/{$size}/{$hash}.jpg";
+        if (file_exists(public_path($file_path))) return;
+
+        $result = $this->jpg_repo->couldDownloadJpgFromUrl($url, $file_path);
+        if ($result === false) {
+            Log::warning('Cannot download image file from: ' . $url);
+            $this->channel_repo->deleteByHash($hash);
+            $this->channel_thumbnail_repo->deleteById($record->id);
+            // $hashを使って画像も消す
+        }
+    }
 }

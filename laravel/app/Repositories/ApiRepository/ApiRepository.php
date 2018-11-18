@@ -10,16 +10,19 @@ class ApiRepository implements ApiRepositoryInterface
     private $video_repo;
     private $channel_repo;
     private $youtube;
+    private $extended_youtube;
 
     public function __construct(
         VideoRepository $video_repo,
         ChannelRepository $channel_repo,
-        CustomizedYoutubeApi $youtube
+        \Youtube $youtube,
+        CustomizedYoutubeApi $extended_youtube
     )
     {
         $this->video_repo = $video_repo;
         $this->channel_repo = $channel_repo;
         $this->youtube = $youtube;
+        $this->extended_youtube = $extended_youtube;
     }
 
     public function getNewVideosOfRegisteredChannel(): array
@@ -32,7 +35,7 @@ class ApiRepository implements ApiRepositoryInterface
 
         foreach ($query as $hashes) {
             foreach ($hashes as $hash) {
-                $res = $this->youtube->listChannelVideos($hash, 50, $after, $before);
+                $res = $this->extended_youtube->listChannelVideos($hash, 50, $after, $before);
                 // 新しいvideoがない場合(false)か、基準になる日付の動画は配列$videosに追加しない
                 if ($res === false || (count($res) === 1 && $res[0]->snippet->publishedAt === $after)) {
                     continue;
@@ -47,11 +50,23 @@ class ApiRepository implements ApiRepositoryInterface
      * channelのhash（YouTubeの表記はChannelId）からchannelのデータを取得する
      *
      * @param $hash
-     * @return \StdClass
+     * @return array
      * @throws \Exception
      */
-    public function getChannelByHash($hash)
+    public function getChannelByHash($hash): array
     {
-        return $this->youtube->getChannelById($hash);
+        $res = $this->youtube::getChannelById($hash);
+        $channel = [
+            'title'        => $res->snippet->title,
+            'hash'         => $hash,
+            'video_count'  => $res->statistics->videoCount,
+            'published_at' => $res->snippet->publishedAt,
+        ];
+        $channel_thumbnail = [
+            'std'        => $res->snippet->thumbnails->default->url,
+            'medium'     => $res->snippet->thumbnails->medium->url,
+            'high'       => $res->snippet->thumbnails->high->url,
+        ];
+        return [$channel, $channel_thumbnail];
     }
 }
