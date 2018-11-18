@@ -25,6 +25,17 @@ class VideoThumbnailRepository implements YoutubeThumbnailRepositoryInterface
     }
 
     /**
+     * 指定したカラムの降順で全てのレコードを取得する
+     *
+     * @param string $column
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function fetchAllOrderBy(string $column): \Illuminate\Database\Eloquent\Collection
+    {
+        return $this->video_thumbnail->orderBy($column, 'desc')->get();
+    }
+
+    /**
      * テーブル名を取得する
      *
      * @return string

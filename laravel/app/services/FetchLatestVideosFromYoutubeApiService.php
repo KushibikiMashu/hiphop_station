@@ -15,6 +15,11 @@ class FetchLatestVideosFromYoutubeApiService
     private $api_repo;
 
     /**
+     * サムネイル画像の大きさ
+     */
+    const sizes = ['std', 'medium', 'high'];
+
+    /**
      * genreをbattle, songに振り分けるための動画タイトルのキーワード
      */
     const words = [
@@ -45,6 +50,7 @@ class FetchLatestVideosFromYoutubeApiService
         }
 
         $this->saveVideosAndThumbnails($responses);
+        $this->downloadImages(count($responses));
         return $responses;
     }
 
@@ -189,5 +195,45 @@ class FetchLatestVideosFromYoutubeApiService
             }
         }
         return false;
+    }
+
+    /**
+     * video_thumbnailテーブルに格納されているアドレスの画像をダウンロードする
+     *
+     * @param int $sum
+     */
+    private function downloadImages(int $sum): void
+    {
+        $query = $this->video_thumbnail_repo->fetchAllOrderBy('id');
+        $new_video_thumbnails = array_slice($query, $sum);
+
+        foreach ($new_video_thumbnails as $record) {
+            foreach (self::sizes as $size) {
+                $this->fetchThumbnailInDatabase($record, $size);
+            }
+        }
+    }
+
+    /**
+     * file_get_contentsで画像を取得する
+     *
+     * @param object $record
+     * @param string $size
+     */
+    private function fetchThumbnailInDatabase($record, string $size): void
+    {
+        $table = $this->video_thumbnail_repo->getTableName();
+        $url = str_replace('_live', '', $record->{$size});
+        if (!$hash = $this->video_repo->getHashFromVideoThumbnail($record)) return;
+        $file_path = "image/{$table}/{$size}/{$hash}.jpg";
+        if (file_exists(public_path($file_path))) return;
+
+        $result = $this->download_jpg_file_repo->couldDownloadJpgFromUrl($url, $file_path);
+        if ($result === false) {
+            Log::warning('Cannot download image file from: ' . $url);
+            $this->video_repo->deleteByHash($hash);
+            $this->video_thumbnail_repo->deleteById($record->id);
+            // $hashを使って画像も消す
+        }
     }
 }

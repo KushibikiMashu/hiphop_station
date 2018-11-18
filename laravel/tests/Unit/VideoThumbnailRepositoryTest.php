@@ -24,7 +24,7 @@ class VideoThumbnailRepositoryTest extends TestCase
     public function fetchAll__Videoテーブルのレコードを全て取得する(): void
     {
         $expected = $actual = [];
-        list($video, $video_thumbnail) = self::createVideoAndVideoThumbnailRecord();
+        [$video, $video_thumbnail] = self::createVideoAndVideoThumbnailRecord();
         $generator = $this->instance->fetchAll();
         foreach (iterator_to_array($generator) as $record) {
             $actual[] = $record->getOriginal();
@@ -35,6 +35,16 @@ class VideoThumbnailRepositoryTest extends TestCase
         $this->assertSame($expected, $actual);
         self::deleteRecordByTableAndId($video->getTable(), $video->id);
         self::deleteRecordByTableAndId($video_thumbnail->getTable(), $video_thumbnail->id);
+    }
+
+    /**
+     * @test
+     */
+    public function fetchAllOrderBy__指定したカラムの降順で全てのレコードを取得する(): void
+    {
+        $expected = VideoThumbnail::orderBy('id', 'desc')->get()->toArray();
+        $actual = $this->instance->fetchAllOrderBy('id')->toArray();
+        $this->assertSame($expected, $actual);
     }
 
     /**
