@@ -6,6 +6,10 @@ use App\Video;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
+use App\Services\CreateLatestJsonService;
+use App\Repositories\VideoRepository;
+use App\Repositories\ChannelRepository;
+
 class TestCommand extends Command
 {
     /**
@@ -37,8 +41,11 @@ class TestCommand extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(VideoRepository $i)
     {
+        dump($i->fetchColumns(['hash', 'title'])[0]);
+        dd(1);
+
         dump($this->testFlipVideoHashAndId());
     }
 
@@ -47,7 +54,7 @@ class TestCommand extends Command
         // コレクションの関数を使用
         $flipped_array = Video::get()->pluck('hash')->flip();
 
-        // FetchLatestVideosFromYoutubeAPIクラスのset_flipped_video_hash関数
+        // FetchLatestVideosFromYoutubeApiクラスのset_flipped_video_hash関数
         $video_query = DB::table(config('const.TABLE.VIDEO'))->get();
         $video_hashes = [];
         foreach ($video_query as $query) {

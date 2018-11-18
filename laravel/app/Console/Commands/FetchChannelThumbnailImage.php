@@ -2,8 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\ChannelThumbnail;
-use App\Console\Commands\Services\ThumbnailImageFetcher;
+use App\Services\ChannelThumbnailFetcherService;
 use Illuminate\Console\Command;
 
 class FetchChannelThumbnailImage extends Command
@@ -13,7 +12,7 @@ class FetchChannelThumbnailImage extends Command
      *
      * @var string
      */
-    protected $signature = 'fetch:channelThumbnail';
+    protected $signature = 'fetch:allChannelThumbnail';
 
     /**
      * The console command description.
@@ -33,10 +32,10 @@ class FetchChannelThumbnailImage extends Command
     /**
      * Execute the console command.
      *
-     * @param ChannelThumbnail $channelThumbnail
+     * @param ChannelThumbnailFetcherService $service
      */
-    public function handle(ChannelThumbnail $channelThumbnail)
+    public function handle(ChannelThumbnailFetcherService $service)
     {
-        (new ThumbnailImageFetcher($channelThumbnail))->downloadImages();
+        $service->run();
     }
 }

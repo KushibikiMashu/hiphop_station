@@ -2,10 +2,6 @@
 
 namespace App\Console;
 
-use App\Console\Commands\CreateJsonOfLatestVideoAndChannel;
-use App\Console\Commands\Services\ThumbnailImageFetcher;
-use App\ChannelThumbnail;
-use App\VideoThumbnail;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -20,10 +16,9 @@ class Kernel extends ConsoleKernel
         Commands\GetChannelData::class,
         Commands\GetVideoData::class,
         Commands\GenerateJson::class,
-        Commands\ExcuteUpdateVideoGenreQuery::class,
         Commands\FetchVideoThumbnailImage::class,
         Commands\FetchChannelThumbnailImage::class,
-        Commands\FetchLatestVideosFromYoutubeAPI::class,
+        Commands\FetchLatestVideosFromYoutubeApi::class,
         Commands\UpdateAddressOfStdVideoThumbnail::class,
         Commands\CreateJsonOfLatestVideoAndChannel::class,
         Commands\CreateResponseJsonFromYoutubeAPIForTest::class,
@@ -35,14 +30,12 @@ class Kernel extends ConsoleKernel
      * @param  \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
-    protected function schedule(Schedule $schedule)
+    public function schedule(Schedule $schedule)
     {
         $schedule->command('fetch:video')
             ->everyFiveMinutes()
             ->after(function () {
-                (new ThumbnailImageFetcher(new ChannelThumbnail))->downloadImages();
-                (new ThumbnailImageFetcher(new VideoThumbnail))->downloadImages();
-                (new CreateJsonOfLatestVideoAndChannel)->handle();
+                $this->call('create:json');
             })
             ->timezone('Asia/Tokyo');
     }

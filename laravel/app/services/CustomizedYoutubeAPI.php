@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Console\Commands\Services;
+namespace App\Services;
 
 use Alaouy\Youtube\Facades\Youtube;
 
-class CustomizedYoutubeAPI extends Youtube {
+class CustomizedYoutubeApi extends Youtube {
 
     /**
      * List videos in the channel
