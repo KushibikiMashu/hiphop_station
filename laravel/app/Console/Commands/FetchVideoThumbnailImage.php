@@ -12,7 +12,7 @@ class FetchVideoThumbnailImage extends Command
      *
      * @var string
      */
-    protected $signature = 'fetch:videoThumbnail';
+    protected $signature = 'fetch:allVideoThumbnail';
 
     /**
      * The console command description.

@@ -12,7 +12,7 @@ class FetchChannelThumbnailImage extends Command
      *
      * @var string
      */
-    protected $signature = 'fetch:channelThumbnail';
+    protected $signature = 'fetch:allChannelThumbnail';
 
     /**
      * The console command description.
