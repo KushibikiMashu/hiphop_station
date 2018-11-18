@@ -6,6 +6,7 @@ use App\Repositories\VideoRepository;
 use App\Repositories\VideoThumbnailRepository;
 use App\Repositories\ChannelRepository;
 use App\Repositories\ApiRepository;
+use App\Repositories\DownloadJpgFileRepository;
 
 class FetchLatestVideosFromYoutubeApiService
 {
@@ -13,6 +14,7 @@ class FetchLatestVideosFromYoutubeApiService
     private $video_thumbnail_repo;
     private $channel_repo;
     private $api_repo;
+    private $jpg_repo;
 
     /**
      * サムネイル画像の大きさ
@@ -32,13 +34,15 @@ class FetchLatestVideosFromYoutubeApiService
         VideoRepository $video_repo,
         VideoThumbnailRepository $video_thumbnail_repo,
         ChannelRepository $channel_repo,
-        ApiRepository $api_repo
+        ApiRepository $api_repo,
+        DownloadJpgFileRepository $jpg_repo
     )
     {
         $this->video_repo = $video_repo;
         $this->video_thumbnail_repo = $video_thumbnail_repo;
         $this->channel_repo = $channel_repo;
         $this->api_repo = $api_repo;
+        $this->jpg_repo = $jpg_repo;
     }
 
     public function run(): array
@@ -50,7 +54,7 @@ class FetchLatestVideosFromYoutubeApiService
         }
 
         $this->saveVideosAndThumbnails($responses);
-        $this->downloadImages(count($responses));
+        $this->downloadVideoThumbnails(count($responses[0]));
         return $responses;
     }
 
@@ -202,11 +206,9 @@ class FetchLatestVideosFromYoutubeApiService
      *
      * @param int $sum
      */
-    private function downloadImages(int $sum): void
+    private function downloadVideoThumbnails(int $sum): void
     {
-        $query = $this->video_thumbnail_repo->fetchAllOrderBy('id');
-        $new_video_thumbnails = array_slice($query, $sum);
-
+        $new_video_thumbnails = array_slice($this->video_thumbnail_repo->fetchAllOrderByAsArray('id'), 0, $sum);
         foreach ($new_video_thumbnails as $record) {
             foreach (self::sizes as $size) {
                 $this->fetchThumbnailInDatabase($record, $size);
@@ -228,7 +230,7 @@ class FetchLatestVideosFromYoutubeApiService
         $file_path = "image/{$table}/{$size}/{$hash}.jpg";
         if (file_exists(public_path($file_path))) return;
 
-        $result = $this->download_jpg_file_repo->couldDownloadJpgFromUrl($url, $file_path);
+        $result = $this->jpg_repo->couldDownloadJpgFromUrl($url, $file_path);
         if ($result === false) {
             Log::warning('Cannot download image file from: ' . $url);
             $this->video_repo->deleteByHash($hash);

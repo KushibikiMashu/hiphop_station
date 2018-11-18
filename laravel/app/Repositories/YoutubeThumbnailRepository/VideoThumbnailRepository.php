@@ -28,11 +28,16 @@ class VideoThumbnailRepository implements YoutubeThumbnailRepositoryInterface
      * 指定したカラムの降順で全てのレコードを取得する
      *
      * @param string $column
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return array
      */
-    public function fetchAllOrderBy(string $column): \Illuminate\Database\Eloquent\Collection
+    public function fetchAllOrderByAsArray(string $column): array
     {
-        return $this->video_thumbnail->orderBy($column, 'desc')->get();
+        $query = $this->video_thumbnail->orderBy($column, 'desc')->get();
+        $video_thumbnails = [];
+        foreach ($query as $record) {
+            $video_thumbnails[] = $record;
+        }
+        return $video_thumbnails;
     }
 
     /**

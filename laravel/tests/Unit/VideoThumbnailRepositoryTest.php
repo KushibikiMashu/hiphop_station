@@ -42,9 +42,16 @@ class VideoThumbnailRepositoryTest extends TestCase
      */
     public function fetchAllOrderBy__指定したカラムの降順で全てのレコードを取得する(): void
     {
-        $expected = VideoThumbnail::orderBy('id', 'desc')->get()->toArray();
-        $actual = $this->instance->fetchAllOrderBy('id')->toArray();
-        $this->assertSame($expected, $actual);
+        $expected = [];
+        $query = VideoThumbnail::orderBy('id', 'desc')->get();
+        foreach ($query as $record) {
+            $expected[] = $record;
+        }
+        $actual = $this->instance->fetchAllOrderByAsArray('id');
+        $this->assertSame(gettype($expected), gettype($actual));
+        $this->assertSame(count($expected), count($actual));
+        $this->assertSame(get_class($expected[0]), get_class($actual[0]));
+        $this->assertSame($expected[0]->getOriginal(), $actual[0]->getOriginal());
     }
 
     /**
