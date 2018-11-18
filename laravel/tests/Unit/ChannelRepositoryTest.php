@@ -150,4 +150,20 @@ class ChannelRepositoryTest extends TestCase
         $this->assertTrue($actual);
         self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
     }
+
+    /**
+     * @test
+     */
+    public function saveRecord__レコードを登録する(): void
+    {
+        $record = [
+            'title'        => 'test',
+            'hash'         => str_random(24),
+            'video_count'        => rand(100, 500),
+            'published_at' => '2018-01-01 00:00:00'
+        ];
+        $channel = $this->instance->saveRecord($record);
+        $this->assertDatabaseHas('channel', ['id' => $channel['id']]);
+        self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
+    }
 }

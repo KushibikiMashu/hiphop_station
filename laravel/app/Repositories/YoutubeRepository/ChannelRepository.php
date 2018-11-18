@@ -135,4 +135,14 @@ class ChannelRepository implements YoutubeRepositoryInterface
         return $this->channel->where($column, $value)->exists();
     }
 
+    /**
+     * channelをDBに登録する
+     *
+     * @param array $record
+     * @return Channel
+     */
+    public function saveRecord(array $record): Channel
+    {
+        return $this->channel->create($record);
+    }
 }

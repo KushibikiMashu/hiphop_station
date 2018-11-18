@@ -59,4 +59,24 @@ class ChannelThumbnailRepositoryTest extends TestCase
         $this->assertDatabaseMissing($this->table, $data);
         self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
     }
+
+    /**
+     * @test
+     */
+    public function saveRecord__レコードを登録する(): void
+    {
+        $channel = self::createChannelRecord();
+        $records = [
+            'channel_id' => $channel->id,
+            'std'      => $channel->hash,
+            'medium'   => $channel->hash,
+            'high'     => $channel->hash,
+        ];
+        $channel_thumbnail = $this->instance->saveRecord($records);
+        $expected = $channel->id;
+        $actual = $channel_thumbnail->channel_id;
+        $this->assertSame($expected, $actual);
+        self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
+        self::deleteRecordByTableAndId($channel_thumbnail->getTable(), $channel_thumbnail->id);
+    }
 }

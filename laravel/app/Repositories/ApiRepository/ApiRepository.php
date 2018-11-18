@@ -42,4 +42,16 @@ class ApiRepository implements ApiRepositoryInterface
         }
         return $videos;
     }
+
+    /**
+     * channelのhash（YouTubeの表記はChannelId）からchannelのデータを取得する
+     *
+     * @param $hash
+     * @return \StdClass
+     * @throws \Exception
+     */
+    public function getChannelByHash($hash)
+    {
+        return $this->youtube->getChannelById($hash);
+    }
 }

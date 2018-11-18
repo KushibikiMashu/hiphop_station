@@ -39,5 +39,6 @@ class FetchNewChannel extends Command
         // channelを集めたjsonファイルから取り出したハッシュでAPIを叩く
         $array = json_decode(file_get_contents(dirname(__FILE__) . '/youtube_channel.json'), true);
         $service->run($array);
+        // log出力
     }
 }
