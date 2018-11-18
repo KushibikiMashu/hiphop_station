@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use App\Repositories\VideoRepository;
-use App\Repositories\VideoThumbnailRepository;
 use App\Repositories\ChannelRepository;
 use App\Repositories\ChannelThumbnailRepository;
 use App\Repositories\ApiRepository;
@@ -11,8 +9,6 @@ use App\Repositories\DownloadJpgFileRepository;
 
 class FetchNewChannelService
 {
-    private $video_repo;
-    private $video_thumbnail_repo;
     private $channel_repo;
     private $channel_thumbnail_repo;
     private $api_repo;
@@ -22,29 +18,40 @@ class FetchNewChannelService
 
     public function __construct
     (
-        VideoRepository $video_repo,
-        VideoThumbnailRepository $video_thumbnail_repo,
         ChannelRepository $channel_repo,
         ChannelThumbnailRepository $channel_thumbnail_repo,
         ApiRepository $api_repo,
         DownloadJpgFileRepository $jpg_repo
     )
     {
-        $this->video_repo = $video_repo;
-        $this->video_thumbnail_repo = $video_thumbnail_repo;
         $this->channel_repo = $channel_repo;
         $this->channel_thumbnail_repo = $channel_thumbnail_repo;
         $this->api_repo = $api_repo;
         $this->jpg_repo = $jpg_repo;
     }
 
-    public function run(array $channels): void
+    /**
+     * commandから呼び出す
+     *
+     * @param array $channels
+     * @return int
+     * @throws \Exception
+     */
+    public function run(array $channels): int
     {
         $new_channels = $this->getNewChannels($channels);
+        if (empty($new_channels)) return 0;
         $channel_thumbnails = $this->saveChannelsAndChannelThumbnails($new_channels);
         $this->downloadImages($channel_thumbnails);
+        return count($channel_thumbnails);
     }
 
+    /**
+     * JSONファイルに追記されたchannelを取得する
+     *
+     * @param array $channels
+     * @return array
+     */
     private function getNewChannels(array $channels): array
     {
         $new_channel = [];
@@ -57,6 +64,13 @@ class FetchNewChannelService
         return $new_channel;
     }
 
+    /**
+     * 新しいchannelとchannel_thumbnailをDBに保存する
+     *
+     * @param array $new_channels
+     * @return array
+     * @throws \Exception
+     */
     private function saveChannelsAndChannelThumbnails(array $new_channels): array
     {
         $channel_thumbnails = [];
@@ -70,7 +84,7 @@ class FetchNewChannelService
     }
 
     /**
-     * channel_thumbnailテーブルに格納されているアドレスの画像をダウンロードする
+     * channelのサムネイル画像をダウンロードする
      *
      * @param array $channel_thumbnails
      */

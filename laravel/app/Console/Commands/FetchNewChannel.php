@@ -33,12 +33,19 @@ class FetchNewChannel extends Command
 
     /**
      * @param FetchNewChannelService $service
+     * @throws \Exception
      */
-    public function handle(FetchNewChannelService $service)
+    public function handle(FetchNewChannelService $service): void
     {
         // channelを集めたjsonファイルから取り出したハッシュでAPIを叩く
-        $array = json_decode(file_get_contents(dirname(__FILE__) . '/youtube_channel.json'), true);
-        $service->run($array);
-        // log出力
+        $channels = $this->getChannelJson();
+        $result = $service->run($channels);
+        ($result === 0) ? \Log::info('No new channel') : \Log::info('Complete inserting new channels and channel thumbnails');
+    }
+
+    private function getChannelJson(): array
+    {
+        $json = file_get_contents(dirname(__FILE__) . '/youtube_channel.json');
+        return json_decode($json, true);
     }
 }
