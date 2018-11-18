@@ -19,7 +19,7 @@ class CreateLatestJsonService
     public function getArrays() :array
     {
         $videos = $this->video_repo->fetchColumnsOrderByPublishedAt('id', 'channel_id', 'title', 'hash', 'genre', 'published_at');
-        $channels = $this->channel_repo->fetchColumnsOrderById('title', 'hash');
+        $channels = $this->channel_repo->fetchAnyColumns('title', 'hash');
         $main = $this->addExtraData($videos, $channels);
         return [$channels, $main];
     }

@@ -25,17 +25,20 @@ class ApiRepository implements ApiRepositoryInterface
     public function getNewVideosOfRegisteredChannel(): array
     {
         $now = Carbon::now();
-        $after = $this->video_repo->fetchLatestPublishedVideoRecord()->published_at;
+        $after = $this->video_repo->fetchLatestPublishedAtVideoRecord()->published_at;
         $before = substr($now->format(\DateTime::ATOM), 0, 19) . '.000Z';
+        $query = $this->channel_repo->fetchAnyColumn('hash');
         $videos = $res = [];
 
-        foreach ($this->channel_repo->fetchAll() as $query) {
-            $res = $this->youtube->listChannelVideos($query->hash, 50, $after, $before);
-            // 新しいvideoがない場合(false)か、基準になる日付の動画は配列$videosに追加しない
-            if ($res === false || (count($res) === 1 && $res[0]->snippet->publishedAt === $after)) {
-                continue;
+        foreach ($query as $hashes) {
+            foreach ($hashes as $hash) {
+                $res = $this->youtube->listChannelVideos($hash, 50, $after, $before);
+                // 新しいvideoがない場合(false)か、基準になる日付の動画は配列$videosに追加しない
+                if ($res === false || (count($res) === 1 && $res[0]->snippet->publishedAt === $after)) {
+                    continue;
+                }
+                $videos[] = $res;
             }
-            $videos[] = $res;
         }
         return $videos;
     }

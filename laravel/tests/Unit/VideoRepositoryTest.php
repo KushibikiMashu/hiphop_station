@@ -131,10 +131,10 @@ class VideoRepositoryTest extends TestCase
     /**
      * @test
      */
-    public function fetchLatestPublishedVideoRecord__最新のpublished_atのレコードを取得する(): void
+    public function fetchLatestPublishedAtVideoRecord__最新のpublished_atのレコードを取得する(): void
     {
         $video = self::createVideoRecord();
-        $actual = $this->instance->fetchLatestPublishedVideoRecord()->published_at;
+        $actual = $this->instance->fetchLatestPublishedAtVideoRecord()->published_at;
         $expected = $video->published_at;
         $this->assertSame($expected, $actual);
         self::deleteRecordByTableAndId($video->getTable(), $video->id);

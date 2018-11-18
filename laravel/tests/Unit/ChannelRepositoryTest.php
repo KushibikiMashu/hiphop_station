@@ -47,6 +47,36 @@ class ChannelRepositoryTest extends TestCase
         foreach (Channel::get() as $record) {
             $expected[] = $record->getOriginal();
         }
+        $this->assertInternalType('array', $actual);
+        $this->assertSame($expected, $actual);
+        self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
+    }
+
+    /**
+     * @test
+     */
+    public function fetchAnyColumn__任意のカラムを１つ取得する (): void
+    {
+        $channel = self::createChannelRecord();
+        $expected = [];
+        foreach (Channel::pluck('id') as $id) {
+            $expected[]['id'] = $id;
+        }
+        $actual = $this->instance->fetchAnyColumn('id');
+        $this->assertInternalType('array', $actual);
+        $this->assertSame($expected, $actual);
+        self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
+    }
+
+    /**
+     * @test
+     */
+    public function fetchAnyColumns__任意のカラムを複数取得する  (): void
+    {
+        $channel = self::createChannelRecord();
+        $expected = Channel::orderBy('id', 'asc')->get()->toArray();
+        $actual = $this->instance->fetchAnyColumns('id', 'title', 'hash', 'video_count', 'published_at', 'created_at', 'updated_at');
+        $this->assertInternalType('array', $actual);
         $this->assertSame($expected, $actual);
         self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
     }

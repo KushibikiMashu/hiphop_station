@@ -45,12 +45,23 @@ class ChannelRepository implements YoutubeRepositoryInterface
     }
 
     /**
+     * 引数のカラムを配列で取得する
+     *
+     * @param $column
+     * @return array
+     */
+    public function fetchAnyColumn(string $column): array
+    {
+        return $this->channel->select($column)->get()->toArray();
+    }
+
+    /**
      * 引数に書かれているカラムをchannelテーブルから降順の配列で取得する
      *
      * @param mixed ...$columns
      * @return array
      */
-    public function fetchColumnsOrderById(...$columns): array
+    public function fetchAnyColumns(...$columns): array
     {
         if (empty($columns) || count($columns) === 1) {
             return null;
