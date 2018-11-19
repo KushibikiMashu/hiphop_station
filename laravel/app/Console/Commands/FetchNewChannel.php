@@ -40,7 +40,7 @@ class FetchNewChannel extends Command
         // channelを集めたjsonファイルから取り出したハッシュでAPIを叩く
         $channels = $this->getChannelJson();
         $result = $service->run($channels);
-        ($result === 0) ? \Log::info('No new channel') : \Log::info('Complete inserting new channels and channel thumbnails');
+        $result ? \Log::info('Complete inserting new channels and channel thumbnails') : \Log::info('No new channel');
     }
 
     private function getChannelJson(): array

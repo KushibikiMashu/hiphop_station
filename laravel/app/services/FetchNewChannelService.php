@@ -34,16 +34,16 @@ class FetchNewChannelService
      * commandから呼び出す
      *
      * @param array $channels
-     * @return int
+     * @return bool
      * @throws \Exception
      */
-    public function run(array $channels): int
+    public function run(array $channels): bool
     {
         $new_channels = $this->getNewChannels($channels);
-        if (empty($new_channels)) return 0;
-        $channel_thumbnails = $this->saveChannelsAndThumbnails($new_channels);
+        if (empty($new_channels)) return false;
+        $this->saveChannelsAndThumbnails($new_channels);
         $this->downloadChannelThumbnails();
-        return count($channel_thumbnails);
+        return true;
     }
 
     /**
@@ -68,10 +68,9 @@ class FetchNewChannelService
      * 新しいchannelとchannel_thumbnailをDBに保存する
      *
      * @param array $new_channels
-     * @return array
      * @throws \Exception
      */
-    private function saveChannelsAndThumbnails(array $new_channels): array
+    private function saveChannelsAndThumbnails(array $new_channels): void
     {
         foreach ($new_channels as $channel) {
             [$channel_array, $channel_thumbnail_array] = $this->api_repo->getChannelByHash($channel['hash']);
@@ -87,7 +86,7 @@ class FetchNewChannelService
     private function downloadChannelThumbnails(): void
     {
         $five_minutes_ago = \Carbon\Carbon::now()->subMinutes(5);
-        $channel_thumbnails = $this->channel_thumbnail_repo->fetchThumbnailsOverTheLastFiveMinutes($five_minutes_ago);
+        $channel_thumbnails = $this->channel_thumbnail_repo->fetchRecordsOfOverTheLastFiveMinutes($five_minutes_ago);
         foreach ($channel_thumbnails as $record) {
             foreach (self::sizes as $size) {
                 $this->downloadThumbnails($record, $size);
@@ -114,7 +113,6 @@ class FetchNewChannelService
             Log::warning('Cannot download image file from: ' . $url);
             $this->channel_repo->deleteByHash($hash);
             $this->channel_thumbnail_repo->deleteById($record->id);
-            // $hashを使って画像も消す
         }
     }
 }
