@@ -148,4 +148,15 @@ class VideoRepository implements YoutubeRepositoryInterface
     {
         return $this->video->where('hash', $hash)->first()->id;
     }
+
+    /**
+     * channelに紐づくvideoが存在するかをチェックする
+     *
+     * @param $channel_id
+     * @return bool
+     */
+    public function channelVideoExists($channel_id): bool
+    {
+        return $this->video->where('channel_id', $channel_id)->exists();
+    }
 }
