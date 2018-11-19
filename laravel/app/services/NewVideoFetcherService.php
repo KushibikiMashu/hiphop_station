@@ -15,6 +15,7 @@ class NewVideoFetcherService
     private $api_repo;
 
     const sizes = ['std', 'medium', 'high'];
+    const format = \DateTime::ATOM;
 
     public function __construct
     (
@@ -70,9 +71,10 @@ class NewVideoFetcherService
     }
 
 
-    private function saveVideosAndThumbnails()
+    private function saveVideosAndThumbnails(array $videos, array $video_thumbnails)
     {
-        [$videos, $video_thumbnails] = $this->api_repo->getNewVideosByChannelHash($channel_id, $channel_hash, $maxResult, $after, $before);
+        dump($videos[0]);
+        dd($video_thumbnails[0]);
         for ($i = 0; $i < count($videos); $i++) {
             $saved_video = $this->video_repo->saveRecord($videos[$i]);
             $video_thumbnails['video_id'] = $saved_video['id'];
@@ -80,6 +82,40 @@ class NewVideoFetcherService
         }
     }
 
+    private function BetweenPublishedAtToNow()
+    {
+        $now_time = strtotime('now');
+        $pub_time = strtotime(new \DateTime($published_at));
+        while ($pub_time < $now_time) {
+            $start = $this->convertToYoutubeDatetimeFormat($pub_time);
+            $end = $this->AddOneWeek($pub_time);
 
+            // beforeが現在時刻を超えたら、現在時刻を利用する
+            if ($now_time < strtotime($end)) {
+                $end = $this->convertToYoutubeDatetimeFormat($now_time);
+            }
+
+            // listChannelVideoで取得
+            // [$videos, $video_thumbnails] = $this->api_repo->getNewVideosByChannelHash($channel_id, $channel_hash, $maxResult, $start, $end);
+            // if (is_null($video)) continue;
+
+            // save関数でDBに保存
+            // $this->saveVideosAndThumbnails($videos, $video_thumbnails);
+
+            // 本来のインクリメントはこう書く
+//            $pub_time += 86400 * 7;
+        }
+    }
+
+    private function convertToYoutubeDatetimeFormat($timestamp): string
+    {
+        return  substr(\Carbon\Carbon::createFromTimestamp($timestamp)->format(self::format), 0, 19) . '.000Z';
+    }
+
+    private function AddOneWeek($datetime): string
+    {
+        $timestamp = strtotime($datetime);
+        return  substr(\Carbon\Carbon::createFromTimestamp($timestamp)->addweek()->format(self::format), 0, 19) . '.000Z';
+    }
 
 }

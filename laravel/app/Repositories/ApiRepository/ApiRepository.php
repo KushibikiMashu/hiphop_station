@@ -93,8 +93,10 @@ class ApiRepository implements ApiRepositoryInterface
      */
     public function getNewVideosByChannelHash(int $channel_id, string $channel_hash, int $maxResult, string $after, string $before): array
     {
-        $video = $video_thumbnail = [];
         $res = $this->extended_youtube->listChannelVideos($channel_hash, $maxResult, $after, $before);
+        if ($res === false) return [];
+
+        $video = $video_thumbnail = [];
         foreach ($res as $data) {
             $title = $data->snippet->title;
             $genre = $this->determine_video_genre($channel_id, $title);

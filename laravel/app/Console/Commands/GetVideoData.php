@@ -120,7 +120,7 @@ class GetVideoData extends Command
 
             // beforeが現在時刻を超えたら、現在時刻を利用する
             if ($now_timestamp < strtotime($before)) {
-                $before_now = Carbon::createFromTimestamp($now_timestamp)->addweek()->format(DateTime::ATOM);
+                $before_now = Carbon::createFromTimestamp($now_timestamp)->format(DateTime::ATOM);
                 $before = substr($before_now, 0, 19) . '.000Z';
             }
 
