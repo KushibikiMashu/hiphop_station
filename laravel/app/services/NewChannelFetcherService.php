@@ -7,7 +7,7 @@ use App\Repositories\ChannelThumbnailRepository;
 use App\Repositories\ApiRepository;
 use App\Repositories\DownloadJpgFileRepository;
 
-class FetchNewChannelService
+class NewChannelFetcherService
 {
     private $channel_repo;
     private $channel_thumbnail_repo;

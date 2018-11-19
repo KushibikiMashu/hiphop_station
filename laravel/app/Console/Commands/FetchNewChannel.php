@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Services\FetchNewChannelService;
+use App\Services\NewChannelFetcherService;
 
 class FetchNewChannel extends Command
 {
@@ -32,10 +32,10 @@ class FetchNewChannel extends Command
     }
 
     /**
-     * @param FetchNewChannelService $service
+     * @param NewChannelFetcherService $service
      * @throws \Exception
      */
-    public function handle(FetchNewChannelService $service): void
+    public function handle(NewChannelFetcherService $service): void
     {
         // channelを集めたjsonファイルから取り出したハッシュでAPIを叩く
         $channels = $this->getChannelJson();
