@@ -73,10 +73,10 @@ class NewChannelFetcherService
     private function saveChannelsAndThumbnails(array $new_channels): void
     {
         foreach ($new_channels as $channel) {
-            [$channel_array, $channel_thumbnail_array] = $this->api_repo->getChannelByHash($channel['hash']);
-            $saved_channel = $this->channel_repo->saveRecord($channel_array);
-            $channel_thumbnail_array['channel_id'] = $saved_channel['id'];
-            $this->channel_thumbnail_repo->saveRecord($channel_thumbnail_array);
+            [$channels, $channel_thumbnails] = $this->api_repo->getChannelByHash($channel['hash']);
+            $saved_channel = $this->channel_repo->saveRecord($channels);
+            $channel_thumbnails['channel_id'] = $saved_channel['id'];
+            $this->channel_thumbnail_repo->saveRecord($channel_thumbnails);
         }
     }
 

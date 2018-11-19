@@ -6,7 +6,6 @@ use App\Repositories\ChannelRepository;
 use App\Repositories\VideoRepository;
 use App\Repositories\VideoThumbnailRepository;
 use App\Repositories\ApiRepository;
-use App\Video;
 
 class NewVideoFetcherService
 {
@@ -14,7 +13,6 @@ class NewVideoFetcherService
     private $video_repo;
     private $video_thumbnail_repo;
     private $api_repo;
-    private $youtube;
 
     const sizes = ['std', 'medium', 'high'];
 
@@ -23,15 +21,13 @@ class NewVideoFetcherService
         ChannelRepository $channel_repo,
         VideoRepository $video_repo,
         VideoThumbnailRepository $video_thumbnail_repo,
-        ApiRepository $api_repo,
-        CustomizedYoutubeApi $youtube
+        ApiRepository $api_repo
     )
     {
         $this->channel_repo = $channel_repo;
         $this->video_repo = $video_repo;
         $this->video_thumbnail_repo = $video_thumbnail_repo;
         $this->api_repo = $api_repo;
-        $this->youtube = $youtube;
     }
 
     /**
@@ -40,8 +36,9 @@ class NewVideoFetcherService
      */
     public function run()
     {
-        $hashes = $this->getNewChannelHash();
-        dd($hashes);
+        $new_channels = $this->getNewChannelHash();
+//        $this->saveVideosAndThumbnails($new_channels);
+        dd($new_channels);
 
         // loop文でlistChannelVideos()を適用する
         // １週間ずつ取得する
@@ -59,16 +56,30 @@ class NewVideoFetcherService
      */
     private function getNewChannelHash(): array
     {
-        $hashes = [];
+        $new_channels = [];
         foreach ($this->channel_repo->fetchAll() as $record) {
-            if($this->video_repo->channelVideoExists($record->id)) {
-                $hashes[] = $record->hash;
+            if ($this->video_repo->channelVideoExists($record->id)) {
+                continue;
             }
+            $new_channels[] = [
+                'id'   => $record->id,
+                'hash' => $record->hash
+            ];
         }
-        return $hashes;
+        return $new_channels;
     }
 
-//    private function
+
+    private function saveVideosAndThumbnails()
+    {
+        [$videos, $video_thumbnails] = $this->api_repo->getNewVideosByChannelHash($channel_id, $channel_hash, $maxResult, $after, $before);
+        for ($i = 0; $i < count($videos); $i++) {
+            $saved_video = $this->video_repo->saveRecord($videos[$i]);
+            $video_thumbnails['video_id'] = $saved_video['id'];
+            $this->video_thumbnail_repo->saveRecord($video_thumbnails[$i]);
+        }
+    }
+
 
 
 }
