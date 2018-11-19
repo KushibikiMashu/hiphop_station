@@ -59,4 +59,18 @@ class ChannelThumbnailRepository implements YoutubeThumbnailRepositoryInterface
     {
         return $this->channel_thumbnail->create($record);
     }
+
+    /**
+     * 5分前の間に登録されたサムネイルのレコードを取得する
+     *
+     * @param \Carbon\Carbon $five_minutes_ago
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function fetchRecordsOfOverTheLastFiveMinutes(\Carbon\Carbon $five_minutes_ago): \Illuminate\Database\Eloquent\Collection
+    {
+        $channel_thumbnails = $this->channel_thumbnail->all();
+        return $channel_thumbnails->filter(function ($channel_thumbnail) use ($five_minutes_ago) {
+            return $channel_thumbnail->created_at > $five_minutes_ago;
+        });
+    }
 }

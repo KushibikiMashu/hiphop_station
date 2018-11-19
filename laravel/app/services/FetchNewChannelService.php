@@ -41,8 +41,8 @@ class FetchNewChannelService
     {
         $new_channels = $this->getNewChannels($channels);
         if (empty($new_channels)) return 0;
-        $channel_thumbnails = $this->saveChannelsAndChannelThumbnails($new_channels);
-        $this->downloadImages($channel_thumbnails);
+        $channel_thumbnails = $this->saveChannelsAndThumbnails($new_channels);
+        $this->downloadChannelThumbnails();
         return count($channel_thumbnails);
     }
 
@@ -71,25 +71,23 @@ class FetchNewChannelService
      * @return array
      * @throws \Exception
      */
-    private function saveChannelsAndChannelThumbnails(array $new_channels): array
+    private function saveChannelsAndThumbnails(array $new_channels): array
     {
-        $channel_thumbnails = [];
         foreach ($new_channels as $channel) {
             [$channel_array, $channel_thumbnail_array] = $this->api_repo->getChannelByHash($channel['hash']);
             $saved_channel = $this->channel_repo->saveRecord($channel_array);
             $channel_thumbnail_array['channel_id'] = $saved_channel['id'];
-            $channel_thumbnails[] = $this->channel_thumbnail_repo->saveRecord($channel_thumbnail_array);
+            $this->channel_thumbnail_repo->saveRecord($channel_thumbnail_array);
         }
-        return $channel_thumbnails;
     }
 
     /**
      * channelのサムネイル画像をダウンロードする
-     *
-     * @param array $channel_thumbnails
      */
-    private function downloadImages(array $channel_thumbnails): void
+    private function downloadChannelThumbnails(): void
     {
+        $five_minutes_ago = \Carbon\Carbon::now()->subMinutes(5);
+        $channel_thumbnails = $this->channel_thumbnail_repo->fetchThumbnailsOverTheLastFiveMinutes($five_minutes_ago);
         foreach ($channel_thumbnails as $record) {
             foreach (self::sizes as $size) {
                 $this->downloadThumbnails($record, $size);
