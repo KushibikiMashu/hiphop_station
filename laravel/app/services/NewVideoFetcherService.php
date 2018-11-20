@@ -37,11 +37,9 @@ class NewVideoFetcherService
      */
     public function run()
     {
-        $this->BetweenPublishedAtToNow();
 
-        $new_channels = $this->getNewChannelHash();
+        $this->getNewChannelHash();
 //        $this->saveVideosAndThumbnails($new_channels);
-        dd($new_channels);
 
         // loop文でlistChannelVideos()を適用する
         // １週間ずつ取得する
@@ -54,24 +52,44 @@ class NewVideoFetcherService
 
     /**
      * 紐づくvideoがないchannelのhashを取得する
-     *
-     * @return array
      */
-    private function getNewChannelHash(): array
+    private function getNewChannelHash(): void
     {
-        $new_channels = [];
         foreach ($this->channel_repo->fetchAll() as $record) {
             if ($this->video_repo->channelVideoExists($record->id)) {
                 continue;
             }
-            $new_channels[] = [
-                'id'   => $record->id,
-                'hash' => $record->hash
-            ];
+            $this->getNewVideosByChannel($record);
         }
-        return $new_channels;
     }
 
+    private function getNewVideosByChannel($channel): void
+    {
+        $now_time = strtotime('now');
+        $pub_time = strtotime($channel->published_at);
+        while ($pub_time < $now_time) {
+            $start = $this->convertToYoutubeDatetimeFormat($pub_time);
+            $end = $this->AddOneWeek($pub_time);
+            // startが現在時刻を超えたら、現在時刻を利用する
+            if ($now_time < strtotime($end)) {
+                $end = $this->convertToYoutubeDatetimeFormat($now_time);
+            }
+            [$videos, $video_thumbnails] = $this->api_repo->getNewVideosByChannelHash($channel->id, $channel->hash, 50, $start, $end);
+            $pub_time += 86400 * 7;
+            if (is_null($videos)) continue;
+            $this->saveVideosAndThumbnails($videos, $video_thumbnails);
+        }
+    }
+
+    private function convertToYoutubeDatetimeFormat($timestamp): string
+    {
+        return substr(\Carbon\Carbon::createFromTimestamp($timestamp)->format(self::format), 0, 19) . '.000Z';
+    }
+
+    private function AddOneWeek($timestamp): string
+    {
+        return substr(\Carbon\Carbon::createFromTimestamp($timestamp)->addweek()->format(self::format), 0, 19) . '.000Z';
+    }
 
     private function saveVideosAndThumbnails(array $videos, array $video_thumbnails)
     {
@@ -83,48 +101,4 @@ class NewVideoFetcherService
             $this->video_thumbnail_repo->saveRecord($video_thumbnails[$i]);
         }
     }
-
-    private function BetweenPublishedAtToNow()
-    {
-        $now_time = strtotime('now');
-//        $pub_time = strtotime(new \DateTime($published_at));
-        $pub_time = strtotime('2017-09-14T10:22:40.000Z');
-        while ($pub_time < $now_time) {
-//            $start = $this->convertToYoutubeDatetimeFormat($pub_time);
-            $end = $this->AddOneWeek($pub_time);
-
-
-            // beforeが現在時刻を超えたら、現在時刻を利用する
-            if ($now_time < strtotime($end)) {
-                $end = $this->convertToYoutubeDatetimeFormat($now_time);
-            }
-
-
-            // listChannelVideoで取得
-            // [$videos, $video_thumbnails] = $this->api_repo->getNewVideosByChannelHash($channel_id, $channel_hash, $maxResult, $start, $end);
-            // if (is_null($video)) continue;
-
-            // save関数でDBに保存
-            // $this->saveVideosAndThumbnails($videos, $video_thumbnails);
-
-            dump(\Carbon\Carbon::createFromTimestamp(strtotime($end))->format(self::format));
-
-            // 本来のインクリメントはこう書く
-            $pub_time += 86400 * 7;
-        }
-
-        dd('end');
-    }
-
-    private function convertToYoutubeDatetimeFormat($timestamp): string
-    {
-        return substr(\Carbon\Carbon::createFromTimestamp($timestamp)->format(self::format), 0, 19) . '.000Z';
-    }
-
-    private function AddOneWeek($datetime): string
-    {
-        $timestamp = strtotime($datetime);
-        return substr(\Carbon\Carbon::createFromTimestamp($timestamp)->addweek()->format(self::format), 0, 19) . '.000Z';
-    }
-
 }
