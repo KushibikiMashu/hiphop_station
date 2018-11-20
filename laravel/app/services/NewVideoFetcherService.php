@@ -74,6 +74,7 @@ class NewVideoFetcherService
             if ($now_time < strtotime($end)) {
                 $end = $this->convertToYoutubeDatetimeFormat($now_time);
             }
+            dump();
             [$videos, $video_thumbnails] = $this->api_repo->getNewVideosByChannelHash($channel->id, $channel->hash, 50, $start, $end);
             $pub_time += 86400 * 7;
             if (is_null($videos)) continue;
@@ -93,9 +94,8 @@ class NewVideoFetcherService
 
     private function saveVideosAndThumbnails(array $videos, array $video_thumbnails)
     {
-        dump($videos[0]);
-        dd($video_thumbnails[0]);
         for ($i = 0; $i < count($videos); $i++) {
+            dump($videos[$i]);
             $saved_video = $this->video_repo->saveRecord($videos[$i]);
             $video_thumbnails['video_id'] = $saved_video['id'];
             $this->video_thumbnail_repo->saveRecord($video_thumbnails[$i]);

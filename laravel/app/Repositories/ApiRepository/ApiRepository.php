@@ -94,14 +94,14 @@ class ApiRepository implements ApiRepositoryInterface
     public function getNewVideosByChannelHash(int $channel_id, string $channel_hash, int $maxResult, string $after, string $before): array
     {
         $res = $this->extended_youtube->listChannelVideos($channel_hash, $maxResult, $after, $before);
-        if ($res === false) return [];
+        if ($res === false) return [null, null];
 
-        $video = $video_thumbnail = [];
+        $videos = $video_thumbnails = [];
         foreach ($res as $data) {
             $title = $data->snippet->title;
             $genre = $this->determine_video_genre($channel_id, $title);
 
-            $video[] = [
+            $videos[] = [
                 'channel_id'   => $channel_id,
                 'title'        => $title,
                 'hash'         => $data->id->videoId,
@@ -110,20 +110,20 @@ class ApiRepository implements ApiRepositoryInterface
             ];
 
             if ($data->snippet->liveBroadcastContent === 'none') {
-                $video_thumbnail[] = [
+                $video_thumbnails[] = [
                     'std'    => $data->snippet->thumbnails->default->url,
                     'medium' => $data->snippet->thumbnails->medium->url,
                     'high'   => $data->snippet->thumbnails->high->url,
                 ];
             } else {
-                $video_thumbnail[] = [
+                $video_thumbnails[] = [
                     'std'    => str_replace('_live', '', $data->snippet->thumbnails->default->url),
                     'medium' => str_replace('_live', '', $data->snippet->thumbnails->medium->url),
                     'high'   => str_replace('_live', '', $data->snippet->thumbnails->high->url),
                 ];
             }
         }
-        return [$video, $video_thumbnail];
+        return [$videos, $video_thumbnails];
     }
 
     /**
