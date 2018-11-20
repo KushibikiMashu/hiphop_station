@@ -96,11 +96,22 @@ class ApiRepository implements ApiRepositoryInterface
         $res = $this->extended_youtube->listChannelVideos($channel_hash, $maxResult, $after, $before);
         if ($res === false) return [null, null];
 
+        return $this->processResponse($channel_id, $res);
+    }
+
+    public function getNewVideosByChannelHashUnderFiftyVideos(int $channel_id, string $channel_hash, int $maxResult): array
+    {
+        $res = $this->extended_youtube->listChannelVideos($channel_hash, $maxResult);
+        if ($res === false) return [null, null];
+        return $this->processResponse($channel_id, $res);
+    }
+
+    private function processResponse($channel_id, $res):array
+    {
         $videos = $video_thumbnails = [];
         foreach ($res as $data) {
             $title = $data->snippet->title;
             $genre = $this->determine_video_genre($channel_id, $title);
-
             $videos[] = [
                 'channel_id'   => $channel_id,
                 'title'        => $title,

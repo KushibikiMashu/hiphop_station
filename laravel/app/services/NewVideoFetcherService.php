@@ -35,19 +35,10 @@ class NewVideoFetcherService
      * commandから呼び出す
      *
      */
-    public function run()
+    public function run(): void
     {
 
         $this->getNewChannelHash();
-//        $this->saveVideosAndThumbnails($new_channels);
-
-        // loop文でlistChannelVideos()を適用する
-        // １週間ずつ取得する
-
-        // Videoに登録する
-        // Video_Thumbnailに登録する
-        // (fetch:allVideoThumbnailコマンドを実行する)
-
     }
 
     /**
@@ -63,8 +54,20 @@ class NewVideoFetcherService
         }
     }
 
+    /**
+     * channelレコードを受け取って、published_atから現在に至るまでそのchannelに紐づく動画を全て取得する
+     *
+     * @param $channel
+     * @throws \Exception
+     */
     private function getNewVideosByChannel($channel): void
     {
+        if ($channel->video_count !== 0 && $channel->video_count <= 50) {
+            [$videos, $video_thumbnails] = $this->api_repo->getNewVideosByChannelHashUnderFiftyVideos($channel->id, $channel->hash, 50);
+            $this->saveVideosAndThumbnails($videos, $video_thumbnails);
+            return;
+        }
+
         $now_time = strtotime('now');
         $pub_time = strtotime($channel->published_at);
         while ($pub_time < $now_time) {
@@ -74,7 +77,7 @@ class NewVideoFetcherService
             if ($now_time < strtotime($end)) {
                 $end = $this->convertToYoutubeDatetimeFormat($now_time);
             }
-            dump($end);
+            dump($end); // あえて入れている
             [$videos, $video_thumbnails] = $this->api_repo->getNewVideosByChannelHash($channel->id, $channel->hash, 50, $start, $end);
             $pub_time += 86400 * 7;
             if (is_null($videos)) continue;
@@ -82,20 +85,38 @@ class NewVideoFetcherService
         }
     }
 
+    /**
+     * タイムスタンプを受け取ってYouTubeAPIのフォーマットを作成する
+     *
+     * @param $timestamp
+     * @return string
+     */
     private function convertToYoutubeDatetimeFormat($timestamp): string
     {
         return substr(\Carbon\Carbon::createFromTimestamp($timestamp)->format(self::format), 0, 19) . '.000Z';
     }
 
+    /**
+     * タイムスタンプを受け取って１週間プラスする
+     *
+     * @param $timestamp
+     * @return string
+     */
     private function AddOneWeek($timestamp): string
     {
         return substr(\Carbon\Carbon::createFromTimestamp($timestamp)->addweek()->format(self::format), 0, 19) . '.000Z';
     }
 
-    private function saveVideosAndThumbnails(array $videos, array $video_thumbnails)
+    /**
+     * videoとvideo_thumbnailをDBに保存する
+     *
+     * @param array $videos
+     * @param array $video_thumbnails
+     */
+    private function saveVideosAndThumbnails(array $videos, array $video_thumbnails): void
     {
         for ($i = 0; $i < count($videos); $i++) {
-            dump($videos[$i]);
+            dump($videos[$i]); // あえて入れている
             $saved_video = $this->video_repo->saveRecord($videos[$i]);
             $video_thumbnails[$i]['video_id'] = $saved_video->id;
             $this->video_thumbnail_repo->saveRecord($video_thumbnails[$i]);
