@@ -138,7 +138,7 @@ class FetchLatestVideosFromYoutubeApiService
 
         $result = $this->jpg_repo->couldDownloadJpgFromUrl($url, $file_path);
         if ($result === false) {
-            Log::warning('Cannot download image file from: ' . $url);
+            \Log::warning('Cannot download image file from: ' . $url);
             $this->video_repo->deleteByHash($hash);
             $this->video_thumbnail_repo->deleteById($record->id);
             // $hashを使って画像も消す

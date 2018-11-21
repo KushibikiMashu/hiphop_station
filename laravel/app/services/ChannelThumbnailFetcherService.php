@@ -59,13 +59,13 @@ class ChannelThumbnailFetcherService
         if (!$hash = $this->channel_repo->getHashByChannelThumbnail($record)) return;
         $file_path = "image/{$table}/{$size}/{$hash}.jpg";
         if (file_exists(public_path($file_path))) return;
+        dump($file_path); // あえて残す
 
         $result = $this->download_jpg_file_repo->couldDownloadJpgFromUrl($url, $file_path);
         if ($result === false) {
-            Log::warning('Cannot download image file from: ' . $url);
+            \Log::warning('Cannot download image file from: ' . $url);
             $this->channel_repo->deleteByHash($hash);
             $this->channel_thumbnail_repo->deleteById($record->id);
-            // $hashを使って画像も消す
         }
     }
 }
