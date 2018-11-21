@@ -10,8 +10,13 @@ class Video extends Model
     protected $guarded = ['id'];
     public $timestamps = true;
 
+    public function channel()
+    {
+        return $this->belongsTo('\App\Channel');
+    }
+
     public function video_thumbnail()
     {
-        return $this->hasMany('App\VideoThumbnail');
+        return $this->hasMany('\App\VideoThumbnail');
     }
 }

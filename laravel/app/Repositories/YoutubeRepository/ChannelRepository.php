@@ -91,7 +91,7 @@ class ChannelRepository implements YoutubeRepositoryInterface
      * @param $record
      * @return string
      */
-    public function getHashFromChannelThumbnail($record): string
+    public function getHashByChannelThumbnail($record): string
     {
         return $this->channel->where('id', $record->channel_id)->exists() ? $this->channel->find($record->channel_id)->hash : '';
     }
@@ -144,5 +144,16 @@ class ChannelRepository implements YoutubeRepositoryInterface
     public function saveRecord(array $record): Channel
     {
         return $this->channel->create($record);
+    }
+
+    /**
+     * channel_idからchannelオブジェクトを取得する
+     *
+     * @param int $channel_id
+     * @return Channel
+     */
+    public function fetchChannelByChannelId(int $channel_id): Channel
+    {
+        return $this->channel->find($channel_id);
     }
 }

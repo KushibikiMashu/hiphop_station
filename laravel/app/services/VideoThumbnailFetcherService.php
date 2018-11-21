@@ -59,6 +59,7 @@ class VideoThumbnailFetcherService
         if (!$hash = $this->video_repo->getHashFromVideoThumbnail($record)) return;
         $file_path = "image/{$table}/{$size}/{$hash}.jpg";
         if (file_exists(public_path($file_path))) return;
+        dump($file_path); // あえて残す
 
         $result = $this->download_jpg_file_repo->couldDownloadJpgFromUrl($url, $file_path);
         if ($result === false) {

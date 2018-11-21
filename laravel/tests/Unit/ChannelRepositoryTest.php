@@ -93,10 +93,10 @@ class ChannelRepositoryTest extends TestCase
     /**
      * @test
      */
-    public function getHashFromChannelThumbnail__idを受け取り、データが存在する場合はhashを返す(): void
+    public function getHashByChannelThumbnail__idを受け取り、データが存在する場合はhashを返す(): void
     {
         [$channel, $channel_thumbnail] = self::createChannelAndChannelThumbnailRecord();
-        $actual = $this->instance->getHashFromChannelThumbnail($channel_thumbnail);
+        $actual = $this->instance->getHashByChannelThumbnail($channel_thumbnail);
         $this->assertSame($channel->hash, $actual);
         self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
         self::deleteRecordByTableAndId($channel_thumbnail->getTable(), $channel_thumbnail->id);
@@ -105,11 +105,11 @@ class ChannelRepositoryTest extends TestCase
     /**
      * @test
      */
-    public function getHashFromChannelThumbnail__idを受け取り、データが存在しない場合は空文字を返す(): void
+    public function getHashByChannelThumbnail__idを受け取り、データが存在しない場合は空文字を返す(): void
     {
         [$channel, $channel_thumbnail] = self::createChannelAndChannelThumbnailRecord();
         self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
-        $actual = $this->instance->getHashFromChannelThumbnail($channel_thumbnail);
+        $actual = $this->instance->getHashByChannelThumbnail($channel_thumbnail);
         $this->assertSame('', $actual);
         self::deleteRecordByTableAndId($channel_thumbnail->getTable(), $channel_thumbnail->id);
     }
@@ -159,11 +159,23 @@ class ChannelRepositoryTest extends TestCase
         $record = [
             'title'        => 'test',
             'hash'         => str_random(24),
-            'video_count'        => rand(100, 500),
+            'video_count'  => rand(100, 500),
             'published_at' => '2018-01-01 00:00:00'
         ];
         $channel = $this->instance->saveRecord($record);
         $this->assertDatabaseHas('channel', ['id' => $channel['id']]);
+        self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
+    }
+
+    /**
+     * @test
+     */
+    public function fetchChannelByChannelId__channel_idからchannelオブジェクトを取得する(): void
+    {
+        $channel = self::createChannelRecord();
+        $channel->wasRecentlyCreated = false;
+        $actual = $this->instance->fetchChannelByChannelId($channel->id);
+        $this->assertEquals($channel, $actual);
         self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
     }
 }

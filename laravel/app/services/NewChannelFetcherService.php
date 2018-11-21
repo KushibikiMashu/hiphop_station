@@ -104,7 +104,7 @@ class NewChannelFetcherService
     {
         $table = $this->channel_thumbnail_repo->getTableName();
         $url = str_replace('_live', '', $record->{$size});
-        if (!$hash = $this->channel_repo->getHashFromChannelThumbnail($record)) return;
+        if (!$hash = $this->channel_repo->getHashByChannelThumbnail($record)) return;
         $file_path = "image/{$table}/{$size}/{$hash}.jpg";
         if (file_exists(public_path($file_path))) return;
 

@@ -34,16 +34,16 @@ class CreateLatestJsonService
     {
         $new_query = [];
         $sizes = ['std', 'medium', 'high'];
-        foreach ($videos as $record) {
-            $channel = \App\Channel::where('id', $record['channel_id'])->get()[0]; // channel_repoに書く
-            $record['channel']['title'] = $channel->title;
-            $record['channel']['hash'] = $channel->hash;
-            $record['thumbnail'] = [
-                'std'    => "/image/video_thumbnail/$sizes[0]/{$record['hash']}.jpg",
-                'medium' => "/image/video_thumbnail/$sizes[1]/{$record['hash']}.jpg",
-                'high'   => "/image/video_thumbnail/$sizes[2]/{$record['hash']}.jpg"
+        foreach ($videos as $video) {
+            $channel = $this->channel_repo->fetchChannelByChannelId($video['channel_id']);
+            $video['channel']['title'] = $channel->title;
+            $video['channel']['hash'] = $channel->hash;
+            $video['thumbnail'] = [
+                'std'    => "/image/video_thumbnail/$sizes[0]/{$video['hash']}.jpg",
+                'medium' => "/image/video_thumbnail/$sizes[1]/{$video['hash']}.jpg",
+                'high'   => "/image/video_thumbnail/$sizes[2]/{$video['hash']}.jpg"
             ];
-            $new_query[] = $record;
+            $new_query[] = $video;
         }
         return $new_query;
     }

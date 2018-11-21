@@ -10,6 +10,7 @@
 //use App\Console\Commands\FetchLatestVideosFromYoutubeApi;
 //use Illuminate\Support\Facades\DB;
 //use App\Video;
+//use App\Channel;
 //
 //class ForSimpleTest extends TestCase
 //{
@@ -29,13 +30,9 @@
 //     */
 //    public function simpleTest()
 //    {
-////        [$video, $video_thumbnail] = self::createVideoAndVideoThumbnailRecord();
-//        $query = $this->video_thumbnail_repo->fetchAllOrderByAsArray('id');
-//        $new_video_thumbnails = array_slice($query, 0, 2);
-//        dump($new_video_thumbnails[0]['id']);
+//
+//
 //        $this->assertTrue(True);
-////        self::deleteRecordByTableAndId($video_thumbnail->getTable(), $video_thumbnail->id);
-//        dd('end');
 //    }
 //
 //}
