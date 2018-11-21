@@ -76,6 +76,7 @@ class FetchLatestVideosFromYoutubeApiService
         $channel_id = $this->channel_repo->fetchChannelIdByHash($video->snippet->channelId);
         $title = $video->snippet->title;
         $genre = $this->api_repo->determine_video_genre($channel_id, $title);
+        \Log::info($title);
 
         return [
             'channel_id'   => $channel_id,
@@ -136,7 +137,6 @@ class FetchLatestVideosFromYoutubeApiService
             \Log::warning('Cannot download image file from: ' . $url);
             $this->video_repo->deleteByHash($hash);
             $this->video_thumbnail_repo->deleteById($record->id);
-            // $hashを使って画像も消す
         }
     }
 }
