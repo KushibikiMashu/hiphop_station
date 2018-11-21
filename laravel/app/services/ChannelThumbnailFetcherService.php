@@ -5,11 +5,9 @@ namespace App\Services;
 use App\Repositories\ChannelRepository;
 use App\Repositories\ChannelThumbnailRepository;
 use App\Repositories\DownloadJpgFileRepository;
-use Illuminate\Support\Facades\Log;
 
 class ChannelThumbnailFetcherService
 {
-    private $sizes = ['std', 'medium', 'high'];
     private $channel_repo;
     private $channel_thumbnail_repo;
     private $download_jpg_file_repo;
@@ -40,7 +38,7 @@ class ChannelThumbnailFetcherService
     {
         $generator = $this->channel_thumbnail_repo->fetchAll();
         foreach ($generator as $record) {
-            foreach ($this->sizes as $size) {
+            foreach (config('const.SIZES') as $size) {
                 $this->fetchThumbnailInDatabase($record, $size);
             }
         }

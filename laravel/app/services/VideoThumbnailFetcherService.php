@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Log;
 
 class VideoThumbnailFetcherService
 {
-    private $sizes = ['std', 'medium', 'high'];
     private $video_repo;
     private $video_thumbnail_repo;
     private $download_jpg_file_repo;
@@ -40,7 +39,7 @@ class VideoThumbnailFetcherService
     {
         $generator = $this->video_thumbnail_repo->fetchAll();
         foreach ($generator as $record) {
-            foreach ($this->sizes as $size) {
+            foreach (config('const.SIZES') as $size) {
                 $this->fetchThumbnailInDatabase($record, $size);
             }
         }

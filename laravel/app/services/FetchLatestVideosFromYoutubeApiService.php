@@ -16,11 +16,6 @@ class FetchLatestVideosFromYoutubeApiService
     private $api_repo;
     private $jpg_repo;
 
-    /**
-     * サムネイル画像の大きさ
-     */
-    const sizes = ['std', 'medium', 'high'];
-
     public function __construct
     (
         VideoRepository $video_repo,
@@ -116,7 +111,7 @@ class FetchLatestVideosFromYoutubeApiService
     {
         $new_video_thumbnails = array_slice($this->video_thumbnail_repo->fetchAllOrderByAsArray('id'), 0, $sum);
         foreach ($new_video_thumbnails as $record) {
-            foreach (self::sizes as $size) {
+            foreach (config('const.SIZES') as $size) {
                 $this->fetchThumbnailInDatabase($record, $size);
             }
         }

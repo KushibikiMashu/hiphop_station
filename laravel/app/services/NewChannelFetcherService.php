@@ -88,7 +88,7 @@ class NewChannelFetcherService
         $five_minutes_ago = \Carbon\Carbon::now()->subMinutes(5);
         $channel_thumbnails = $this->channel_thumbnail_repo->fetchRecordsOfOverTheLastFiveMinutes($five_minutes_ago);
         foreach ($channel_thumbnails as $record) {
-            foreach (self::sizes as $size) {
+            foreach (config('const.SIZES') as $size) {
                 $this->downloadThumbnails($record, $size);
             }
         }

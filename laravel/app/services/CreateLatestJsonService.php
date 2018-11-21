@@ -33,15 +33,14 @@ class CreateLatestJsonService
     private function addExtraData($videos): array
     {
         $new_query = [];
-        $sizes = ['std', 'medium', 'high'];
         foreach ($videos as $video) {
             $channel = $this->channel_repo->fetchChannelByChannelId($video['channel_id']);
             $video['channel']['title'] = $channel->title;
             $video['channel']['hash'] = $channel->hash;
             $video['thumbnail'] = [
-                'std'    => "/image/video_thumbnail/$sizes[0]/{$video['hash']}.jpg",
-                'medium' => "/image/video_thumbnail/$sizes[1]/{$video['hash']}.jpg",
-                'high'   => "/image/video_thumbnail/$sizes[2]/{$video['hash']}.jpg"
+                'std'    => '/image/video_thumbnail/' . config('const.SIZES')[0] . "/{$video['hash']}.jpg",
+                'medium' => '/image/video_thumbnail/' . config('const.SIZES')[1] . "/{$video['hash']}.jpg",
+                'high'   => '/image/video_thumbnail/' . config('const.SIZES')[2] . "/{$video['hash']}.jpg"
             ];
             $new_query[] = $video;
         }
