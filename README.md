@@ -36,6 +36,7 @@ use Alaouy\Youtube\Facades\Youtube;
 see details below
 https://github.com/alaouy/Youtube
 
+## composer
 If you added a new folder under app directory, write the directory name in composer.json
 
 ```
