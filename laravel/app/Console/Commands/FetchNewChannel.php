@@ -45,7 +45,6 @@ class FetchNewChannel extends Command
 
     private function getChannelJson(): array
     {
-        $json = file_get_contents(dirname(__FILE__) . '/youtube_channel.json');
-        return json_decode($json, true);
+        return config('channels');
     }
 }
