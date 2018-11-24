@@ -156,4 +156,15 @@ class ChannelRepository implements YoutubeRepositoryInterface
     {
         return $this->channel->find($channel_id);
     }
+
+    /**
+     * channelの動画数を更新する
+     *
+     * @param int $channel_id
+     * @param int $video_count
+     */
+    public function updateVideoCount(int $channel_id, int $video_count): void
+    {
+        $this->channel->where('id', $channel_id)->update(['video_count' => $video_count]);
+    }
 }

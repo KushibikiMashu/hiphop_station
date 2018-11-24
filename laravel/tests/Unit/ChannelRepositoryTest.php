@@ -178,4 +178,16 @@ class ChannelRepositoryTest extends TestCase
         $this->assertEquals($channel, $actual);
         self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
     }
+
+    /**
+     * @test
+     */
+    public function updateVideoCount__channelの動画数を更新する(): void
+    {
+        $channel = self::createChannelRecord();
+        $this->instance->updateVideoCount($channel->id, 1);
+        $actual = Channel::find($channel->id);
+        $this->assertSame(1, $actual->video_count);
+        self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
+    }
 }
