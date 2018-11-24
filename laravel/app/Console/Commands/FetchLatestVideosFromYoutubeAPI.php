@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
 use App\Services\FetchLatestVideosFromYoutubeApiService;
 
 class FetchLatestVideosFromYoutubeApi extends Command
@@ -55,7 +54,7 @@ class FetchLatestVideosFromYoutubeApi extends Command
     {
         $message = 'No new video';
         $this->info("[{$now}] " . $message);
-        Log::info($message);
+        \Log::info($message);
     }
 
     /**
@@ -69,7 +68,7 @@ class FetchLatestVideosFromYoutubeApi extends Command
         // 動画が全て重複していれば処理を終える
         $this->info("[{$now}] The number of fetched video: " . (string)count(array_collapse($responses)));
         $this->info("[{$now}] The title of latest video is " . $responses[0][0]->snippet->title);
-        Log::info('The number of fetched video: ' . (string)count($responses));
-        Log::info('The title of latest video is ' . $responses[0][0]->snippet->title);
+        \Log::info('The number of fetched video: ' . (string)count($responses));
+        \Log::info('The title of latest video is ' . $responses[0][0]->snippet->title);
     }
 }

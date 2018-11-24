@@ -204,5 +204,27 @@ class VideoRepositoryTest extends TestCase
         $this->assertSame($expected, $actual);
         self::deleteRecordByTableAndId($video->getTable(), $video->id);
     }
+
+    /**
+     * @test
+     */
+    public function channelVideoExists__channelに紐づくvideoが存在するかをチェックする(): void
+    {
+        $channel = self::createChannelRecord();
+        $actual = $this->instance->channelVideoExists($channel->id);
+        $this->assertFalse($actual);
+        self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
+    }
+
+    /**
+     * @test
+     */
+    public function countVideoByChannelId__channelに紐づくDB内の動画数を取得する(): void
+    {
+        $channel = self::createChannelRecord();
+        $actual = $this->instance->countVideoByChannelId($channel->id);
+        $this->assertSame(0, $actual);
+        self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
+    }
 }
 

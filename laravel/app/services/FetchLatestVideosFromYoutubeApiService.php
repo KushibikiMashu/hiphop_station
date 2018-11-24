@@ -16,21 +16,8 @@ class FetchLatestVideosFromYoutubeApiService
     private $api_repo;
     private $jpg_repo;
 
-    /**
-     * サムネイル画像の大きさ
-     */
-    const sizes = ['std', 'medium', 'high'];
-
-    /**
-     * genreをbattle, songに振り分けるための動画タイトルのキーワード
-     */
-    const words = [
-        '2'    => ['KOK', 'KING OF KINGS', 'SCHOOL OF RAP'],
-        '23'   => ['SPOTLIGHT', 'ENTER'],
-        'song' => ['【MV】', 'Music Video', 'MusicVideo'],
-    ];
-
-    public function __construct(
+    public function __construct
+    (
         VideoRepository $video_repo,
         VideoThumbnailRepository $video_thumbnail_repo,
         ChannelRepository $channel_repo,
@@ -88,7 +75,8 @@ class FetchLatestVideosFromYoutubeApiService
     {
         $channel_id = $this->channel_repo->fetchChannelIdByHash($video->snippet->channelId);
         $title = $video->snippet->title;
-        $genre = $this->determine_video_genre($channel_id, $title);
+        $genre = $this->api_repo->determine_video_genre($channel_id, $title);
+        \Log::info($title);
 
         return [
             'channel_id'   => $channel_id,
@@ -97,73 +85,6 @@ class FetchLatestVideosFromYoutubeApiService
             'genre'        => $genre,
             'published_at' => $video->snippet->publishedAt
         ];
-    }
-
-    /**
-     * 試着動画のgenreを振り分ける
-     *
-     * @param int $channel_id
-     * @param string $title
-     * @return string
-     */
-    private function determine_video_genre(int $channel_id, string $title): string
-    {
-        /**
-         * titleとchannel_idでgenreを分類する
-         * shinjuku tokyo, UMB, 戦国MCBattle, ifktv
-         * $flagで状態を持つ。0はsong。1はbattle。今後2はinterviewの予定
-         */
-        $flag = 0;
-        switch ($channel_id) {
-            // 基本的にsong
-            case '2':
-                // 配列はプロパティで持つ
-                if ($this->array_strpos($title, self::words['2']) === true) {
-                    $flag = 1;
-                }
-                break;
-            // 基本的にbattle
-            case '8':
-                $flag = 1;
-                if ($this->array_strpos($title, self::words['song']) === true) {
-                    $flag = 0;
-                }
-                break;
-            // 基本的にbattle
-            case '9':
-                $flag = 1;
-                if ($this->array_strpos($title, self::words['song']) === true) {
-                    $flag = 0;
-                }
-                break;
-            // 基本的にsong
-            case '23':
-                if ($this->array_strpos($title, self::words['23']) === true) {
-                    $flag = 1;
-                }
-                break;
-            default:
-                break;
-        }
-
-        switch ($flag) {
-            case 0:
-                $genre = 'song';
-                break;
-            case 1:
-                $genre = 'battle';
-                break;
-            // TODO 追加予定。プログラムの拡張性を考えて
-            // case 2:
-            //     $genre = 'interview';
-            //     break;
-            // case 3:
-            //     $genre = 'radio';
-            //     break;
-            default:
-                break;
-        }
-        return $genre;
     }
 
     /**
@@ -183,25 +104,6 @@ class FetchLatestVideosFromYoutubeApiService
     }
 
     /**
-     * $needleを配列にしたstrposの文字列検索をする
-     * $haystackの中に$needlesがあればtrueを返す
-     *
-     * @param string $haystack
-     * @param array $needles
-     * @param integer $offset
-     * @return boolean
-     */
-    private function array_strpos(string $haystack, array $needles, int $offset = 0): bool
-    {
-        foreach ($needles as $needle) {
-            if (strpos($haystack, $needle, $offset) !== false) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * video_thumbnailテーブルに格納されているアドレスの画像をダウンロードする
      *
      * @param int $sum
@@ -210,7 +112,7 @@ class FetchLatestVideosFromYoutubeApiService
     {
         $new_video_thumbnails = array_slice($this->video_thumbnail_repo->fetchAllOrderByAsArray('id'), 0, $sum);
         foreach ($new_video_thumbnails as $record) {
-            foreach (self::sizes as $size) {
+            foreach (config('const.SIZES') as $size) {
                 $this->fetchThumbnailInDatabase($record, $size);
             }
         }
@@ -232,10 +134,9 @@ class FetchLatestVideosFromYoutubeApiService
 
         $result = $this->jpg_repo->couldDownloadJpgFromUrl($url, $file_path);
         if ($result === false) {
-            Log::warning('Cannot download image file from: ' . $url);
+            \Log::warning('Cannot download image file from: ' . $url);
             $this->video_repo->deleteByHash($hash);
             $this->video_thumbnail_repo->deleteById($record->id);
-            // $hashを使って画像も消す
         }
     }
 }

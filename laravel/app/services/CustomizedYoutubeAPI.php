@@ -2,21 +2,20 @@
 
 namespace App\Services;
 
-use Alaouy\Youtube\Facades\Youtube;
-
-class CustomizedYoutubeApi extends Youtube {
+class CustomizedYoutubeApi extends \Youtube {
 
     /**
      * List videos in the channel
      *
      * @param string $channelId
-     * @param integer $maxResults
-     * @param string $publishedAfter
-     * @param string $publishedBefore
-     * @param string $order
+     * @param int $maxResults
+     * @param null $publishedAfter
+     * @param null $publishedBefore
+     * @param null $order
      * @param array $part
      * @param bool $pageInfo
      * @return array
+     * @throws \Exception
      */
     public function listChannelVideos($channelId, $maxResults = 10, $publishedAfter = null, $publishedBefore = null, $order = null, $part = ['id', 'snippet'], $pageInfo = false)
     {

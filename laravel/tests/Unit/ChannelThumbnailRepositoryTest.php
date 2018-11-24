@@ -23,7 +23,7 @@ class ChannelThumbnailRepositoryTest extends TestCase
     public function fetchAll__Channelテーブルのレコードを全て取得する(): void
     {
         $expected = $actual = [];
-        list($channel, $channel_thumbnail) = self::createChannelAndChannelThumbnailRecord();
+        [$channel, $channel_thumbnail] = self::createChannelAndChannelThumbnailRecord();
         $generator = $this->instance->fetchAll();
         foreach (iterator_to_array($generator) as $record) {
             $actual[] = $record->getOriginal();
@@ -58,5 +58,46 @@ class ChannelThumbnailRepositoryTest extends TestCase
         $this->instance->deleteById($id);
         $this->assertDatabaseMissing($this->table, $data);
         self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
+    }
+
+    /**
+     * @test
+     */
+    public function saveRecord__レコードを登録する(): void
+    {
+        $channel = self::createChannelRecord();
+        $records = [
+            'channel_id' => $channel->id,
+            'std'      => $channel->hash,
+            'medium'   => $channel->hash,
+            'high'     => $channel->hash,
+        ];
+        $channel_thumbnail = $this->instance->saveRecord($records);
+        $expected = $channel->id;
+        $actual = $channel_thumbnail->channel_id;
+        $this->assertSame($expected, $actual);
+        self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
+        self::deleteRecordByTableAndId($channel_thumbnail->getTable(), $channel_thumbnail->id);
+    }
+
+    /**
+     * @test
+     */
+    public function fetchRecordsOfOverTheLastFiveMinutes__5分前の間に登録されたサムネイルのレコードを取得する(): void
+    {
+        $expected = $actual = [];
+        [$channel, $channel_thumbnail] = self::createChannelAndChannelThumbnailRecord();
+        $five_minutes_ago = \Carbon\Carbon::now()->subMinutes(5);
+        $actual_channel_thumbnail = $this->instance->fetchRecordsOfOverTheLastFiveMinutes($five_minutes_ago);
+        $expected_channel_thumbnail = ChannelThumbnail::where('created_at', '>', $five_minutes_ago)->get();
+        foreach ($actual_channel_thumbnail as $record) {
+            $actual[] = $record->getOriginal();
+        }
+        foreach ($expected_channel_thumbnail as $record) {
+            $expected[] = $record->getOriginal();
+        }
+        $this->assertSame($expected, $actual);
+        self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
+        self::deleteRecordByTableAndId($channel_thumbnail->getTable(), $channel_thumbnail->id);
     }
 }

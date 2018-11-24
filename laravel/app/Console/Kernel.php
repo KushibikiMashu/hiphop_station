@@ -13,15 +13,20 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\GetChannelData::class,
-        Commands\GetVideoData::class,
-        Commands\GenerateJson::class,
+        //　新しいchannelを追加した時に叩くコマンド
+        Commands\FetchNewChannel::class,
+        Commands\NewVideoFetcherRelatedToNewChannel::class,
+
+        // 全てのvideo, channelのサムネイルを取得するコマンド
         Commands\FetchVideoThumbnailImage::class,
         Commands\FetchChannelThumbnailImage::class,
+
+        // ５分ごとに叩くコマンド
         Commands\FetchLatestVideosFromYoutubeApi::class,
-        Commands\UpdateAddressOfStdVideoThumbnail::class,
         Commands\CreateJsonOfLatestVideoAndChannel::class,
-        Commands\CreateResponseJsonFromYoutubeAPIForTest::class,
+
+        // DBに登録済みの値を書き換えるコマンド
+        Commands\ExecuteUpdateVideoGenreQuery::class,
     ];
 
     /**

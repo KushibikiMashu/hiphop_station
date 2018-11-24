@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Log;
 
 class VideoThumbnailFetcherService
 {
-    private $sizes = ['std', 'medium', 'high'];
     private $video_repo;
     private $video_thumbnail_repo;
     private $download_jpg_file_repo;
@@ -40,7 +39,7 @@ class VideoThumbnailFetcherService
     {
         $generator = $this->video_thumbnail_repo->fetchAll();
         foreach ($generator as $record) {
-            foreach ($this->sizes as $size) {
+            foreach (config('const.SIZES') as $size) {
                 $this->fetchThumbnailInDatabase($record, $size);
             }
         }
@@ -59,13 +58,13 @@ class VideoThumbnailFetcherService
         if (!$hash = $this->video_repo->getHashFromVideoThumbnail($record)) return;
         $file_path = "image/{$table}/{$size}/{$hash}.jpg";
         if (file_exists(public_path($file_path))) return;
+        dump($file_path); // あえて残す
 
         $result = $this->download_jpg_file_repo->couldDownloadJpgFromUrl($url, $file_path);
         if ($result === false) {
             Log::warning('Cannot download image file from: ' . $url);
             $this->video_repo->deleteByHash($hash);
             $this->video_thumbnail_repo->deleteById($record->id);
-            // $hashを使って画像も消す
         }
     }
 }

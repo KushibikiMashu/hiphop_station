@@ -12,6 +12,6 @@ class ChannelThumbnail extends Model
 
     public function channel()
     {
-        return $this->belongsTo('App\Channel');
+        return $this->belongsTo('\App\Channel');
     }
 }
