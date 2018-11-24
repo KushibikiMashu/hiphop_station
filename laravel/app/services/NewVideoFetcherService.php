@@ -32,7 +32,6 @@ class NewVideoFetcherService
 
     /**
      * commandから呼び出す
-     *
      */
     public function run(): void
     {

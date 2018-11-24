@@ -234,10 +234,9 @@ class ApiRepository implements ApiRepositoryInterface
      * @return int
      * @throws \Exception
      */
-    public function getVideoCount(string $hash): int
+    public function getVideoCountByChannelHash(string $hash): int
     {
         $res = $this->youtube::getChannelById($hash);
-        dd($res);
         return $res->statistics->videoCount;
     }
 }
