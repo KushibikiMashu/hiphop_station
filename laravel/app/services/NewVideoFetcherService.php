@@ -47,7 +47,6 @@ class NewVideoFetcherService
     private function getNewChannelHash(): void
     {
         foreach ($this->channel_repo->fetchAll() as $record) {
-            $this->updateVideoCount($record);
             $this->getNewVideosByChannel($record);
         }
     }
