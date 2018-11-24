@@ -106,10 +106,12 @@ class ApiRepository implements ApiRepositoryInterface
         return $this->processResponse($channel_id, $res);
     }
 
-    private function processResponse($channel_id, $res):array
+    private function processResponse($channel_id, $res): array
     {
         $videos = $video_thumbnails = [];
+        $registered_video_hashes = $this->video_repo->fetchPluckedColumn('hash')->flip();
         foreach ($res as $data) {
+            if (isset($registered_video_hashes[$data->id->videoId])) continue;
             $title = $data->snippet->title;
             $genre = $this->determine_video_genre($channel_id, $title);
             $videos[] = [
@@ -133,6 +135,7 @@ class ApiRepository implements ApiRepositoryInterface
                     'high'   => str_replace('_live', '', $data->snippet->thumbnails->high->url),
                 ];
             }
+            \Log::info($title);
         }
         return [$videos, $video_thumbnails];
     }
@@ -214,8 +217,7 @@ class ApiRepository implements ApiRepositoryInterface
      * @param integer $offset
      * @return boolean
      */
-    private
-    function array_strpos(string $haystack, array $needles, int $offset = 0): bool
+    private function array_strpos(string $haystack, array $needles, int $offset = 0): bool
     {
         foreach ($needles as $needle) {
             if (strpos($haystack, $needle, $offset) !== false) {
@@ -225,4 +227,17 @@ class ApiRepository implements ApiRepositoryInterface
         return false;
     }
 
+    /**
+     * チャンネルの動画数を取得する
+     *
+     * @param string $hash
+     * @return int
+     * @throws \Exception
+     */
+    public function getVideoCount(string $hash): int
+    {
+        $res = $this->youtube::getChannelById($hash);
+        dd($res);
+        return $res->statistics->videoCount;
+    }
 }

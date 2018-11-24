@@ -14,7 +14,6 @@ class NewVideoFetcherService
     private $video_thumbnail_repo;
     private $api_repo;
 
-    const sizes  = ['std', 'medium', 'high'];
     const format = \DateTime::ATOM;
 
     public function __construct
@@ -37,7 +36,8 @@ class NewVideoFetcherService
      */
     public function run(): void
     {
-
+//        video_countとvideoの数が一致しなければreturn
+//        count <= video return
         $this->getNewChannelHash();
     }
 
@@ -47,9 +47,7 @@ class NewVideoFetcherService
     private function getNewChannelHash(): void
     {
         foreach ($this->channel_repo->fetchAll() as $record) {
-            if ($this->video_repo->channelVideoExists($record->id)) {
-                continue;
-            }
+            $this->updateVideoCount($record);
             $this->getNewVideosByChannel($record);
         }
     }
@@ -62,9 +60,8 @@ class NewVideoFetcherService
      */
     private function getNewVideosByChannel($channel): void
     {
-        if ($channel->video_count !== 0 && $channel->video_count <= 50) {
-            [$videos, $video_thumbnails] = $this->api_repo->getNewVideosByChannelHashUnderFiftyVideos($channel->id, $channel->hash, 50);
-            $this->saveVideosAndThumbnails($videos, $video_thumbnails);
+        if (0 < $channel->video_count && $channel->video_count <= 50) {
+            $this->saveNewChannelUnderFiftyVideos($channel);
             return;
         }
 
@@ -83,6 +80,17 @@ class NewVideoFetcherService
             if (is_null($videos)) continue;
             $this->saveVideosAndThumbnails($videos, $video_thumbnails);
         }
+    }
+
+    /**
+     * 動画の数が50以下のchannelを登録する
+     *
+     * @param $channel
+     */
+    private function saveNewChannelUnderFiftyVideos($channel): void
+    {
+        [$videos, $video_thumbnails] = $this->api_repo->getNewVideosByChannelHashUnderFiftyVideos($channel->id, $channel->hash, 50);
+        $this->saveVideosAndThumbnails($videos, $video_thumbnails);
     }
 
     /**
