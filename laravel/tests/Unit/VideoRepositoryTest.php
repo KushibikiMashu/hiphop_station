@@ -215,5 +215,16 @@ class VideoRepositoryTest extends TestCase
         $this->assertFalse($actual);
         self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
     }
+
+    /**
+     * @test
+     */
+    public function countVideoByChannelId__channelに紐づくDB内の動画数を取得する(): void
+    {
+        $channel = self::createChannelRecord();
+        $actual = $this->instance->countVideoByChannelId($channel->id);
+        $this->assertSame(0, $actual);
+        self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
+    }
 }
 

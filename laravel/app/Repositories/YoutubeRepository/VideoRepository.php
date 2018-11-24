@@ -159,4 +159,15 @@ class VideoRepository implements YoutubeRepositoryInterface
     {
         return $this->video->where('channel_id', $channel_id)->exists();
     }
+
+    /**
+     * channelに紐づくDB内の動画数を取得する
+     *
+     * @param int $channel_id
+     * @return int
+     */
+    public function countVideoByChannelId(int $channel_id): int
+    {
+        return $this->video->where('channel_id', $channel_id)->count();
+    }
 }

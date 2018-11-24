@@ -37,5 +37,6 @@ class NewVideoFetcherRelatedToNewChannel extends Command
     public function handle(NewVideoFetcherService $service)
     {
         $service->run();
+        \Log::info("OK 'Fetch:NewVideo'");
     }
 }

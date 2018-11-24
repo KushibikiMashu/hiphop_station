@@ -35,19 +35,24 @@ class NewVideoFetcherService
      */
     public function run(): void
     {
-//        video_countとvideoの数が一致しなければreturn
-//        count <= video return
-        $this->getNewChannelHash();
+        foreach ($this->channel_repo->fetchAll() as $record) {
+            if($this->isSameVideoCount($record)) continue;
+            $this->getNewVideosByChannel($record);
+        }
     }
 
     /**
-     * 紐づくvideoがないchannelのhashを取得する
+     * channelのvideo_countとDBの動画数を比較する
+     *
+     * @param $channel
+     * @return bool
      */
-    private function getNewChannelHash(): void
+    private function isSameVideoCount($channel): bool
     {
-        foreach ($this->channel_repo->fetchAll() as $record) {
-            $this->getNewVideosByChannel($record);
-        }
+        $video_count = $this->channel_repo->fetchChannelByChannelId($channel->id)->video_count;
+        $registered_video_sum = $this->video_repo->countVideoByChannelId($channel->id);
+        if($video_count <= $registered_video_sum) return true;
+        return false;
     }
 
     /**
@@ -63,18 +68,19 @@ class NewVideoFetcherService
             return;
         }
 
+        // チャンネル公開日から1ヶ月ごとに取得する
         $now_time = strtotime('now');
         $pub_time = strtotime($channel->published_at);
         while ($pub_time < $now_time) {
             $start = $this->convertToYoutubeDatetimeFormat($pub_time);
-            $end = $this->AddOneWeek($pub_time);
+            $end = $this->AddOneMonth($pub_time);
             // startが現在時刻を超えたら、現在時刻を利用する
             if ($now_time < strtotime($end)) {
                 $end = $this->convertToYoutubeDatetimeFormat($now_time);
             }
             dump($end); // あえて入れている
             [$videos, $video_thumbnails] = $this->api_repo->getNewVideosByChannelHash($channel->id, $channel->hash, 50, $start, $end);
-            $pub_time += 86400 * 7;
+            $pub_time += 86400 * 30;
             if (is_null($videos)) continue;
             $this->saveVideosAndThumbnails($videos, $video_thumbnails);
         }
@@ -108,9 +114,9 @@ class NewVideoFetcherService
      * @param $timestamp
      * @return string
      */
-    private function AddOneWeek($timestamp): string
+    private function AddOneMonth($timestamp): string
     {
-        return substr(\Carbon\Carbon::createFromTimestamp($timestamp)->addweek()->format(self::format), 0, 19) . '.000Z';
+        return substr(\Carbon\Carbon::createFromTimestamp($timestamp)->addDays(30)->format(self::format), 0, 19) . '.000Z';
     }
 
     /**
