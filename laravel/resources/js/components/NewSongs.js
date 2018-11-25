@@ -74,6 +74,9 @@ const styles = theme => ({
         marginTop: 12,
         borderRadius: 20,
         backgroundColor: '#BDBDBD',
+    },
+    diffDate: {
+        marginLeft: 'auto'
     }
 });
 
@@ -176,8 +179,8 @@ class NewSongs extends React.Component {
                             <Typography variant="caption">
                                 {items[i].channel.title}
                             </Typography>
-                            <Typography variant="caption">
-                                {items[i].published_at}
+                            <Typography variant="caption" className={classes.diffDate}>
+                                {items[i].diff_date}
                             </Typography>
                         </CardActions>
                     </Card>
