@@ -12,6 +12,7 @@ import {Link} from 'react-router-dom';
 import request from 'superagent';
 import {pathToJson} from './const';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import LabelBottomNavigation from "./LabelBottomNavigation";
 
 const PATH = pathToJson("main");
 
@@ -39,6 +40,7 @@ const styles = theme => ({
     },
     button: {
         marginTop: 12,
+        marginBottom: 44,
     },
     flexDummy: {
         maxHeight: 640
@@ -74,6 +76,10 @@ const styles = theme => ({
         marginTop: 12,
         borderRadius: 20,
         backgroundColor: '#BDBDBD',
+    },
+    labelTopNavigation: {
+        bottom: 0,
+        position: 'fixed',
     }
 });
 
@@ -148,6 +154,9 @@ class NewSongs extends React.Component {
                     <Grid container justify='center' direction="row" spacing={16}>
                         {videos}
                     </Grid>
+                    <Grid container justify='center' className={classes.labelTopNavigation}>
+                        <LabelBottomNavigation/>
+                    </Grid>
                 </div>
             );
         }
@@ -193,6 +202,9 @@ class NewSongs extends React.Component {
                     }}>
                         LOAD MORE
                     </Button>
+                </Grid>
+                <Grid container justify='center' className={classes.labelTopNavigation}>
+                    <LabelBottomNavigation/>
                 </Grid>
             </div>
         );

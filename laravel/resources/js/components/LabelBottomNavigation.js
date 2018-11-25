@@ -12,11 +12,11 @@ import LiveTvIcon from '@material-ui/icons/LiveTv';
 
 const styles = {
     root: {
-        width: 600,
+        width: '100%',
     },
 };
 
-class LabelTopNavigation extends React.Component {
+class LabelBottomNavigation extends React.Component {
     state = {
         value: 'new',
     };
@@ -41,8 +41,8 @@ class LabelTopNavigation extends React.Component {
     }
 }
 
-LabelTopNavigation.propTypes = {
+LabelBottomNavigation.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(LabelTopNavigation);
+export default withStyles(styles)(LabelBottomNavigation);
