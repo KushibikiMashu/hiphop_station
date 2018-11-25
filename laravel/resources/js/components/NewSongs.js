@@ -145,9 +145,6 @@ class NewSongs extends React.Component {
 
             return (
                 <div className={classes.flexDummy}>
-                    <Typography variant="headline" className={classes.headline}>
-                        最新曲
-                    </Typography>
                     <Grid container justify='center' direction="row" spacing={16}>
                         {videos}
                     </Grid>
@@ -187,9 +184,6 @@ class NewSongs extends React.Component {
 
         return (
             <div className={classes.flex}>
-                <Typography variant="headline" className={classes.headline}>
-                    最新曲
-                </Typography>
                 <Grid container justify='center' direction="row" spacing={16}>
                     {videos}
                 </Grid>

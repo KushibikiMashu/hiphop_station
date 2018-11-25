@@ -6,13 +6,13 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { grey900 } from '@material-ui/core/colors'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-
+import LabelTopNavigation from './LabelTopNavigation';
 import NewSongs from './NewSongs'
 import NewMCBattle from './NewMCBattle'
 import VideoPlayer from './VideoPlayer'
-
 import request from 'superagent';
 import { pathToJson } from './const';
+import Grid from "@material-ui/core/Grid/Grid";
 const PATH = pathToJson("main");
 
 const styles = theme => ({
@@ -33,10 +33,16 @@ const styles = theme => ({
     paddingBottom: theme.spacing.unit * 3,
     minWidth: 0, // So the Typography noWrap works
   },
-  toolbar: theme.mixins.toolbar,
+  toolbar: {
+      height: 52
+  },
+  nav: {
+      justify: 'center'
+ },
+    labelTopNavigation: {
+      marginBottom: 12
+    }
 });
-
-
 
 class ClippedDrawer extends React.Component {
   constructor(props) {
@@ -78,9 +84,12 @@ class ClippedDrawer extends React.Component {
               </Typography>
             </Toolbar>
           </AppBar>
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
-            <Route exact path='/' component={NewSongs} />
+            <main className={classes.content}>
+              <div className={classes.toolbar} />
+                <Grid container justify='center' className={classes.labelTopNavigation}>
+                    <LabelTopNavigation/>
+                </Grid>
+              <Route exact path='/' component={NewSongs} />
             <Route path='/video' />
             <Route path='/battle' component={NewMCBattle} />
             <Route path='/video/:hash' render={() => <VideoPlayer videos={this.state.items} />} />
