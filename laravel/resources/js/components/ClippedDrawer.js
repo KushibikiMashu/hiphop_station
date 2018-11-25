@@ -13,6 +13,8 @@ import VideoPlayer from './VideoPlayer'
 import request from 'superagent';
 import { pathToJson } from './const';
 import Grid from "@material-ui/core/Grid/Grid";
+import Battle from './Battle';
+import LabelBottomNavigation from "./LabelBottomNavigation";
 
 const PATH = pathToJson("main");
 
@@ -40,6 +42,10 @@ const styles = theme => ({
   nav: {
       justify: 'center'
  },
+    labelTopNavigation: {
+        bottom: 0,
+        position: 'fixed',
+    }
 });
 
 class ClippedDrawer extends React.Component {
@@ -84,11 +90,14 @@ class ClippedDrawer extends React.Component {
           </AppBar>
             <main className={classes.content}>
               <div className={classes.toolbar} />
-              <Route exact path='/' component={NewSongs} />
-            <Route path='/video' />
-            <Route path='/battle' component={NewMCBattle} />
+            <Route exact path='/' component={NewSongs} />
             <Route path='/video/:hash' render={() => <VideoPlayer videos={this.state.items} />} />
           </main>
+            <Grid container justify='center' className={classes.labelTopNavigation}>
+                <LabelBottomNavigation/>
+                {/*<Route path='/music_video' render={() => <MusicVideo />} />*/}
+                {/*<Route path='/battle' render={() => <Battle />} />*/}
+            </Grid>
         </div>
       </Router>
     );

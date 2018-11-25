@@ -83,7 +83,7 @@ const styles = theme => ({
     }
 });
 
-class NewSongs extends React.Component {
+class Battle extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -203,13 +203,16 @@ class NewSongs extends React.Component {
                         LOAD MORE
                     </Button>
                 </Grid>
+                <Grid container justify='center' className={classes.labelTopNavigation}>
+                    <LabelBottomNavigation/>
+                </Grid>
             </div>
         );
     }
 }
 
-NewSongs.propTypes = {
+Battle.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(NewSongs);
+export default withStyles(styles)(Battle);
