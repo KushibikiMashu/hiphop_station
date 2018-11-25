@@ -101,12 +101,9 @@ class NewSongs extends React.Component {
             return;
         }
 
-        setTimeout(
-            () => {
-                this.setState({items: res.body})
-            },
-            1500
-        );
+        this.setState({
+            items: res.body
+        });
     };
 
     // 「LOAD MORE」ボタンをクリックすると、新たに10個の動画を表示する
