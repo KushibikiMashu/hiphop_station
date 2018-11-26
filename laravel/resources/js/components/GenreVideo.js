@@ -89,7 +89,7 @@ class Battle extends React.Component {
         this.state = {
             items: null,
             hasMoreVideos: true,
-            loadedVideosCount: 40, // デフォルトの動画表示数
+            loadedVideosCount: 100, // デフォルトの動画表示数
         };
     }
 

@@ -91,7 +91,7 @@ class ClippedDrawer extends React.Component {
                         <div className={classes.toolbar}/>
                         <Route exact path='/' component={NewSongs}/>
                         <Route path='/video/:hash' render={() => <VideoPlayer videos={this.state.items}/>}/>
-                        <Route path='/music_video' render={() => <GenreVideo genre='song'/>}/>
+                        <Route path='/music_video' render={() => <GenreVideo genre='MV'/>}/>
                         <Route path='/battle' render={() => <GenreVideo genre='battle'/>}/>
                         <Route path='/interview' render={() => <GenreVideo genre='interview'/>}/>
                         <Route path='/others' render={() => <GenreVideo genre='others'/>}/>
