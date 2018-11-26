@@ -21,25 +21,20 @@ class ApiRepository implements ApiRepositoryInterface
         'song' => ['【MV】', 'Music Video', 'MusicVideo'],
     ];
 
-    public function __construct(
-        VideoRepository $video_repo,
-        ChannelRepository $channel_repo,
-        \Youtube $youtube,
-        CustomizedYoutubeApi $extended_youtube
-    )
+    public function __construct()
     {
-        $this->video_repo = $video_repo;
-        $this->channel_repo = $channel_repo;
-        $this->youtube = $youtube;
-        $this->extended_youtube = $extended_youtube;
+        $this->video_repo       = new VideoRepository;
+        $this->channel_repo     = new ChannelRepository;
+        $this->youtube          = new \Youtube;
+        $this->extended_youtube = new CustomizedYoutubeApi;
     }
 
     public function getNewVideosOfRegisteredChannel(): array
     {
-        $now = Carbon::now();
-        $after = $this->video_repo->fetchLatestPublishedAtVideoRecord()->published_at;
+        $now    = Carbon::now();
+        $after  = $this->video_repo->fetchLatestPublishedAtVideoRecord()->published_at;
         $before = substr($now->format(\DateTime::ATOM), 0, 19) . '.000Z';
-        $query = $this->channel_repo->fetchAnyColumn('hash');
+        $query  = $this->channel_repo->fetchAnyColumn('hash');
         $videos = $res = [];
 
         foreach ($query as $hashes) {
@@ -64,7 +59,7 @@ class ApiRepository implements ApiRepositoryInterface
      */
     public function getChannelByHash($hash): array
     {
-        $res = $this->youtube::getChannelById($hash);
+        $res     = $this->youtube::getChannelById($hash);
         $channel = [
             'title'        => $res->snippet->title,
             'hash'         => $hash,
@@ -108,12 +103,12 @@ class ApiRepository implements ApiRepositoryInterface
 
     private function processResponse($channel_id, $res): array
     {
-        $videos = $video_thumbnails = [];
+        $videos                  = $video_thumbnails = [];
         $registered_video_hashes = $this->video_repo->fetchPluckedColumn('hash')->flip();
         foreach ($res as $data) {
             if (isset($registered_video_hashes[$data->id->videoId])) continue;
-            $title = $data->snippet->title;
-            $genre = $this->determine_video_genre($channel_id, $title);
+            $title    = $data->snippet->title;
+            $genre    = $this->determine_video_genre($channel_id, $title);
             $videos[] = [
                 'channel_id'   => $channel_id,
                 'title'        => $title,

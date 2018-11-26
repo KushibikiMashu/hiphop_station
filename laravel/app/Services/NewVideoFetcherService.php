@@ -7,29 +7,15 @@ use App\Repositories\VideoRepository;
 use App\Repositories\VideoThumbnailRepository;
 use App\Repositories\ApiRepository;
 
-class NewVideoFetcherService
+class NewVideoFetcherService extends BaseService
 {
-    private $channel_repo;
-    private $video_repo;
-    private $video_thumbnail_repo;
-    private $api_repo;
-
     const format = \DateTime::ATOM;
 
-    public function __construct
-    (
-        ChannelRepository $channel_repo,
-        VideoRepository $video_repo,
-        VideoThumbnailRepository $video_thumbnail_repo,
-        ApiRepository $api_repo
-    )
+    public function __construct()
     {
-        $this->channel_repo = $channel_repo;
-        $this->video_repo = $video_repo;
-        $this->video_thumbnail_repo = $video_thumbnail_repo;
-        $this->api_repo = $api_repo;
+        parent::__construct();
     }
-
+    
     /**
      * commandから呼び出す
      */
