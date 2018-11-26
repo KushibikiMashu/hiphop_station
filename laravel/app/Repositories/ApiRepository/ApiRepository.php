@@ -12,34 +12,20 @@ class ApiRepository implements ApiRepositoryInterface
     private $youtube;
     private $extended_youtube;
 
-    /**
-     * genreをbattle, songに振り分けるための動画タイトルのキーワード
-     */
-    const words = [
-        '2'    => ['KOK', 'KING OF KINGS', 'SCHOOL OF RAP'],
-        '23'   => ['SPOTLIGHT', 'ENTER'],
-        'song' => ['【MV】', 'Music Video', 'MusicVideo'],
-    ];
-
-    public function __construct(
-        VideoRepository $video_repo,
-        ChannelRepository $channel_repo,
-        \Youtube $youtube,
-        CustomizedYoutubeApi $extended_youtube
-    )
+    public function __construct()
     {
-        $this->video_repo = $video_repo;
-        $this->channel_repo = $channel_repo;
-        $this->youtube = $youtube;
-        $this->extended_youtube = $extended_youtube;
+        $this->video_repo       = new VideoRepository;
+        $this->channel_repo     = new ChannelRepository;
+        $this->youtube          = new \Youtube;
+        $this->extended_youtube = new CustomizedYoutubeApi;
     }
 
     public function getNewVideosOfRegisteredChannel(): array
     {
-        $now = Carbon::now();
-        $after = $this->video_repo->fetchLatestPublishedAtVideoRecord()->published_at;
+        $now    = Carbon::now();
+        $after  = $this->video_repo->fetchLatestPublishedAtVideoRecord()->published_at;
         $before = substr($now->format(\DateTime::ATOM), 0, 19) . '.000Z';
-        $query = $this->channel_repo->fetchAnyColumn('hash');
+        $query  = $this->channel_repo->fetchAnyColumn('hash');
         $videos = $res = [];
 
         foreach ($query as $hashes) {
@@ -64,7 +50,7 @@ class ApiRepository implements ApiRepositoryInterface
      */
     public function getChannelByHash($hash): array
     {
-        $res = $this->youtube::getChannelById($hash);
+        $res     = $this->youtube::getChannelById($hash);
         $channel = [
             'title'        => $res->snippet->title,
             'hash'         => $hash,
@@ -108,16 +94,17 @@ class ApiRepository implements ApiRepositoryInterface
 
     private function processResponse($channel_id, $res): array
     {
-        $videos = $video_thumbnails = [];
+        $videos                  = $video_thumbnails = [];
         $registered_video_hashes = $this->video_repo->fetchPluckedColumn('hash')->flip();
         foreach ($res as $data) {
             if (isset($registered_video_hashes[$data->id->videoId])) continue;
-            $title = $data->snippet->title;
-            $genre = $this->determine_video_genre($channel_id, $title);
+            $title    = $data->snippet->title;
+            $hash = $data->id->videoId;
+            $genre    = $this->determine_video_genre($hash, $title);
             $videos[] = [
                 'channel_id'   => $channel_id,
                 'title'        => $title,
-                'hash'         => $data->id->videoId,
+                'hash'         => $hash,
                 'genre'        => $genre,
                 'published_at' => $data->snippet->publishedAt,
             ];
@@ -143,64 +130,78 @@ class ApiRepository implements ApiRepositoryInterface
     /**
      * 試着動画のgenreを振り分ける
      *
-     * @param int $channel_id
+     * @param string $hash
      * @param string $title
      * @return string
      */
-    public function determine_video_genre(int $channel_id, string $title): string
+    public function determine_video_genre(string $hash, string $title): string
     {
         /**
          * titleとchannel_idでgenreを分類する
          * shinjuku tokyo, UMB, 戦国MCBattle, ifktv
          * $flagで状態を持つ。0はsong。1はbattle。今後2はinterviewの予定
          */
+        $channels = config('channels');
+        $keywords = config('const.KEYWORDS');
         $flag = 0;
-        switch ($channel_id) {
+        switch ($hash) {
             // 基本的にsong
-            case '2':
+            case $channels[2]['hash']:
                 // 配列はプロパティで持つ
-                if ($this->array_strpos($title, self::words['2']) === true) {
+                if ($this->array_strpos($title, $keywords['2']) === true) {
                     $flag = 1;
                 }
                 break;
             // 基本的にbattle
-            case '8':
+            case $channels[8]['hash']:
                 $flag = 1;
-                if ($this->array_strpos($title, self::words['song']) === true) {
+                if ($this->array_strpos($title, $keywords['song']) === true) {
                     $flag = 0;
+                }
+                if ($this->array_strpos($title, $keywords['8']) === true) {
+                    $flag = 3;
                 }
                 break;
             // 基本的にbattle
-            case '9':
+            case $channels[9]['hash']:
                 $flag = 1;
-                if ($this->array_strpos($title, self::words['song']) === true) {
+                if ($this->array_strpos($title, $keywords['song']) === true) {
                     $flag = 0;
                 }
                 break;
             // 基本的にsong
-            case '23':
-                if ($this->array_strpos($title, self::words['23']) === true) {
+            case $channels[23]['hash']:
+                if ($this->array_strpos($title, $keywords['23']) === true) {
                     $flag = 1;
                 }
+                break;
+            case $channels[31]['hash']:
+                $flag = 2;
+                break;
+            case $channels[33]['hash']:
+                $flag = 2;
                 break;
             default:
                 break;
         }
 
+        if ($this->array_strpos($title, $keywords['interview']) === true) {
+            $flag = 2;
+        }
+
         switch ($flag) {
             case 0:
-                $genre = 'song';
+                $genre = 'MV';
                 break;
             case 1:
                 $genre = 'battle';
                 break;
-            // TODO 追加予定。プログラムの拡張性を考えて
             case 2:
                 $genre = 'interview';
                 break;
-            // case 3:
-            //     $genre = 'radio';
-            //     break;
+             case 3:
+                 $genre = 'others';
+                 break;
             default:
                 break;
         }

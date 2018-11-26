@@ -7,27 +7,11 @@ use App\Repositories\ChannelThumbnailRepository;
 use App\Repositories\ApiRepository;
 use App\Repositories\DownloadJpgFileRepository;
 
-class NewChannelFetcherService
+class NewChannelFetcherService extends BaseService
 {
-    private $channel_repo;
-    private $channel_thumbnail_repo;
-    private $api_repo;
-    private $jpg_repo;
-
-    const sizes = ['std', 'medium', 'high'];
-
-    public function __construct
-    (
-        ChannelRepository $channel_repo,
-        ChannelThumbnailRepository $channel_thumbnail_repo,
-        ApiRepository $api_repo,
-        DownloadJpgFileRepository $jpg_repo
-    )
+    public function __construct()
     {
-        $this->channel_repo = $channel_repo;
-        $this->channel_thumbnail_repo = $channel_thumbnail_repo;
-        $this->api_repo = $api_repo;
-        $this->jpg_repo = $jpg_repo;
+        parent::__construct();
     }
 
     /**

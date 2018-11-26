@@ -7,21 +7,11 @@ use App\Repositories\VideoThumbnailRepository;
 use App\Repositories\DownloadJpgFileRepository;
 use Illuminate\Support\Facades\Log;
 
-class VideoThumbnailFetcherService
+class VideoThumbnailFetcherService extends BaseService
 {
-    private $video_repo;
-    private $video_thumbnail_repo;
-    private $download_jpg_file_repo;
-
-    public function __construct(
-        VideoRepository $video_repo,
-        VideoThumbnailRepository $video_thumbnail_repo,
-        DownloadJpgFileRepository $download_jpg_file_repo
-    )
+    public function __construct()
     {
-        $this->video_repo = $video_repo;
-        $this->video_thumbnail_repo = $video_thumbnail_repo;
-        $this->download_jpg_file_repo = $download_jpg_file_repo;
+        parent::__construct();
     }
 
     /**

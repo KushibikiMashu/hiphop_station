@@ -77,18 +77,19 @@ const styles = theme => ({
         borderRadius: 20,
         backgroundColor: '#BDBDBD',
     },
-    diffDate: {
-        marginLeft: 'auto'
+    labelTopNavigation: {
+        bottom: 0,
+        position: 'fixed',
     }
 });
 
-class NewSongs extends React.Component {
+class Battle extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             items: null,
             hasMoreVideos: true,
-            loadedVideosCount: 20, // デフォルトの動画表示数
+            loadedVideosCount: 100, // デフォルトの動画表示数
         };
     }
 
@@ -124,7 +125,7 @@ class NewSongs extends React.Component {
 
     // loadVideos関数が呼ばれると、再度render関数が作動する
     render() {
-        const {classes} = this.props;
+        const {classes, genre} = this.props;
         var videos = [];
 
         // asyncでres.bodyがstateに登録されるようにする
@@ -163,6 +164,10 @@ class NewSongs extends React.Component {
         // loadedVideosCountの数だけ動画を読み込む
         const items = this.state.items;
         for (var i = 0; i < this.state.loadedVideosCount; i++) {
+            // battleのみを表示する
+            if(items[i].genre !== genre){
+                continue;
+            }
             videos.push(
                 <Grid item key={i}>
                     <Card className={classes.card}>
@@ -181,8 +186,8 @@ class NewSongs extends React.Component {
                             <Typography variant="caption">
                                 {items[i].channel.title}
                             </Typography>
-                            <Typography variant="caption" className={classes.diffDate}>
-                                {items[i].diff_date}
+                            <Typography variant="caption">
+                                {items[i].published_at}
                             </Typography>
                         </CardActions>
                     </Card>
@@ -207,8 +212,8 @@ class NewSongs extends React.Component {
     }
 }
 
-NewSongs.propTypes = {
+Battle.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(NewSongs);
+export default withStyles(styles)(Battle);
