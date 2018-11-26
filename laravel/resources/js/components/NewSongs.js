@@ -153,9 +153,6 @@ class NewSongs extends React.Component {
                     <Grid container justify='center' direction="row" spacing={16}>
                         {videos}
                     </Grid>
-                    <Grid container justify='center' className={classes.labelTopNavigation}>
-                        <LabelBottomNavigation/>
-                    </Grid>
                 </div>
             );
         }
