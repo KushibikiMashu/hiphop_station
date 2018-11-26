@@ -33,8 +33,8 @@ class LabelBottomNavigation extends React.Component {
 
         return (
             <BottomNavigation value={value} onChange={this.handleChange} className={classes.root}>
-                <BottomNavigationAction label="New Arrival" value="new" component={Link} to='/' icon={<FiberNewIcon/>}/>
-                <BottomNavigationAction label="Music Video" value="music video" component={Link} to='/music_video' icon={<MusicVideoIcon/>}/>
+                <BottomNavigationAction label="New" value="new" component={Link} to='/' icon={<FiberNewIcon/>}/>
+                <BottomNavigationAction label="MV" value="music video" component={Link} to='/music_video' icon={<MusicVideoIcon/>}/>
                 <BottomNavigationAction label="Battle" value="battle" component={Link} to='/battle' icon={<NewReleasesIcon/>}/>
                 <BottomNavigationAction label="Interview" value="interview" component={Link} to='/interview' icon={<PersonIcon/>} />
                 <BottomNavigationAction label="Others" value="others" component={Link} to='/others' icon={<LiveTvIcon/>} />
