@@ -12,6 +12,7 @@ import request from 'superagent';
 import {pathToJson} from './const';
 import Grid from "@material-ui/core/Grid/Grid";
 import LabelBottomNavigation from "./LabelBottomNavigation";
+import GenreVideo from "./GenreVideo";
 
 const PATH = pathToJson("main");
 
@@ -90,11 +91,13 @@ class ClippedDrawer extends React.Component {
                         <div className={classes.toolbar}/>
                         <Route exact path='/' component={NewSongs}/>
                         <Route path='/video/:hash' render={() => <VideoPlayer videos={this.state.items}/>}/>
+                        <Route path='/music_video' render={() => <GenreVideo genre='song'/>}/>
+                        <Route path='/battle' render={() => <GenreVideo genre='battle'/>}/>
+                        <Route path='/interview' render={() => <GenreVideo genre='interview'/>}/>
+                        <Route path='/others' render={() => <GenreVideo genre='others'/>}/>
                     </main>
                     <Grid container justify='center' className={classes.labelTopNavigation}>
                         <LabelBottomNavigation/>
-                        {/*<Route path='/music_video' render={() => <MusicVideo />} />*/}
-                        {/*<Route path='/battle' render={() => <Battle />} />*/}
                     </Grid>
                 </div>
             </Router>

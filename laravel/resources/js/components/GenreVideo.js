@@ -89,7 +89,7 @@ class Battle extends React.Component {
         this.state = {
             items: null,
             hasMoreVideos: true,
-            loadedVideosCount: 20, // デフォルトの動画表示数
+            loadedVideosCount: 40, // デフォルトの動画表示数
         };
     }
 
@@ -125,7 +125,7 @@ class Battle extends React.Component {
 
     // loadVideos関数が呼ばれると、再度render関数が作動する
     render() {
-        const {classes} = this.props;
+        const {classes, genre} = this.props;
         var videos = [];
 
         // asyncでres.bodyがstateに登録されるようにする
@@ -164,6 +164,10 @@ class Battle extends React.Component {
         // loadedVideosCountの数だけ動画を読み込む
         const items = this.state.items;
         for (var i = 0; i < this.state.loadedVideosCount; i++) {
+            // battleのみを表示する
+            if(items[i].genre !== genre){
+                continue;
+            }
             videos.push(
                 <Grid item key={i}>
                     <Card className={classes.card}>
@@ -202,9 +206,6 @@ class Battle extends React.Component {
                     }}>
                         LOAD MORE
                     </Button>
-                </Grid>
-                <Grid container justify='center' className={classes.labelTopNavigation}>
-                    <LabelBottomNavigation/>
                 </Grid>
             </div>
         );
