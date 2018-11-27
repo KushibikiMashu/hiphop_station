@@ -29,7 +29,6 @@ class NewVideoService extends BaseService
             $channel                   = $this->channel_repo->fetchChannelByChannelId($video['channel_id']);
             $video['channel']['title'] = $channel->title;
             unset($video['channel_id'], $video['created_at'], $video['updated_at']);
-            dd($video);
             $new_videos[] = $video;
         }
         return $new_videos;

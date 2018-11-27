@@ -2,4 +2,6 @@ const pathToJson = (filename) => {
     return location.origin + "/json/" + filename + ".json";
 }
 
-export { pathToJson };
+const newList = location.origin + '/new/list';
+
+export { pathToJson, newList };
