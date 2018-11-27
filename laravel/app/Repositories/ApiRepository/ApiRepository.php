@@ -148,30 +148,30 @@ class ApiRepository implements ApiRepositoryInterface
             // 基本的にsong
             case $channels[2]['hash']:
                 // 配列はプロパティで持つ
-                if ($this->array_strpos($title, $keywords['2']) === true) {
+                if (arrayStrpos($title, $keywords['2']) === true) {
                     $flag = 1;
                 }
                 break;
             // 基本的にbattle
             case $channels[8]['hash']:
                 $flag = 1;
-                if ($this->array_strpos($title, $keywords['song']) === true) {
+                if (arrayStrpos($title, $keywords['song']) === true) {
                     $flag = 0;
                 }
-                if ($this->array_strpos($title, $keywords['8']) === true) {
+                if (arrayStrpos($title, $keywords['8']) === true) {
                     $flag = 3;
                 }
                 break;
             // 基本的にbattle
             case $channels[9]['hash']:
                 $flag = 1;
-                if ($this->array_strpos($title, $keywords['song']) === true) {
+                if (arrayStrpos($title, $keywords['song']) === true) {
                     $flag = 0;
                 }
                 break;
             // 基本的にsong
             case $channels[23]['hash']:
-                if ($this->array_strpos($title, $keywords['23']) === true) {
+                if (arrayStrpos($title, $keywords['23']) === true) {
                     $flag = 1;
                 }
                 break;
@@ -185,7 +185,7 @@ class ApiRepository implements ApiRepositoryInterface
                 break;
         }
 
-        if ($this->array_strpos($title, $keywords['interview']) === true) {
+        if (arrayStrpos($title, $keywords['interview']) === true) {
             $flag = 2;
         }
 
@@ -206,26 +206,6 @@ class ApiRepository implements ApiRepositoryInterface
                 break;
         }
         return $genre;
-    }
-
-
-    /**
-     * $needleを配列にしたstrposの文字列検索をする
-     * $haystackの中に$needlesがあればtrueを返す
-     *
-     * @param string $haystack
-     * @param array $needles
-     * @param integer $offset
-     * @return boolean
-     */
-    private function array_strpos(string $haystack, array $needles, int $offset = 0): bool
-    {
-        foreach ($needles as $needle) {
-            if (strpos($haystack, $needle, $offset) !== false) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
