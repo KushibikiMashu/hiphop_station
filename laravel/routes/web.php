@@ -23,3 +23,6 @@ Route::get('/channel/{hash?}', 'SpaController@index');
 Route::get('/music_video', 'SpaController@index');
 Route::get('/interview', 'SpaController@index');
 Route::get('/others', 'SpaController@index');
+
+// API
+Route::get('/new/list', 'ApiController@getNew');

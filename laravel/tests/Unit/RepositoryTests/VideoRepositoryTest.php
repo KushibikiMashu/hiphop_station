@@ -226,5 +226,19 @@ class VideoRepositoryTest extends TestCase
         $this->assertSame(0, $actual);
         self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
     }
-}
 
+    /**
+     * @test
+     */
+    public function getVideosOfThisWeek__１週間以内の動画を取得する():void
+    {
+        $video = self::createVideoRecord();
+        $actual = $this->instance->getVideosOfThisWeek();
+        $actual_array = [];
+        foreach ($actual as $video) {
+            $actual_array[] = $video->getOriginal();
+        }
+        $this->assertContains($video->getOriginal(), $actual_array);
+        self::deleteRecordByTableAndId($video->getTable(), $video->id);
+    }
+}

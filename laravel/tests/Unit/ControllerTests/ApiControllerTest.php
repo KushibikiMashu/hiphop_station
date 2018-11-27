@@ -15,8 +15,15 @@ class ApiControllerTest extends TestCase
         $this->instance = new \App\Http\Controllers\ApiController;
     }
 
-    public function testExample()
+    /**
+     * @test
+     */
+    public function getNew__新着動画をJSONで返す()
     {
-        $this->assertTrue(true);
+        $video    = self::createVideoRecord();
+        $response = $this->get('/new/list');
+        $response->assertStatus(200);
+//            ->assertJson(['title' => $video->getOriginal()['title']]);
+        self::deleteRecordByTableAndId($video->getTable(), $video->id);
     }
 }
