@@ -11,19 +11,11 @@ namespace App\Services;
 use App\Repositories\ChannelRepository;
 use App\Repositories\ApiRepository;
 
-class ExecuteUpdateVideoCountQueryService
+class ExecuteUpdateVideoCountQueryService extends BaseService
 {
-    private $channel_repo;
-    private $api_repo;
-
-    public function __construct
-    (
-        ChannelRepository $channel_repo,
-        ApiRepository $api_repo
-    )
+    public function __construct()
     {
-        $this->channel_repo = $channel_repo;
-        $this->api_repo = $api_repo;
+        parent::__construct();
     }
 
     /**

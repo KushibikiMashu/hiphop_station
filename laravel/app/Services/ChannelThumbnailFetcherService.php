@@ -6,21 +6,11 @@ use App\Repositories\ChannelRepository;
 use App\Repositories\ChannelThumbnailRepository;
 use App\Repositories\DownloadJpgFileRepository;
 
-class ChannelThumbnailFetcherService
+class ChannelThumbnailFetcherService extends BaseService
 {
-    private $channel_repo;
-    private $channel_thumbnail_repo;
-    private $download_jpg_file_repo;
-
-    public function __construct(
-        ChannelRepository $channel_repo,
-        ChannelThumbnailRepository $channel_thumbnail_repo,
-        DownloadJpgFileRepository $download_jpg_file_repo
-    )
+    public function __construct()
     {
-        $this->channel_repo = $channel_repo;
-        $this->channel_thumbnail_repo = $channel_thumbnail_repo;
-        $this->download_jpg_file_repo = $download_jpg_file_repo;
+        parent::__construct();
     }
 
     /**

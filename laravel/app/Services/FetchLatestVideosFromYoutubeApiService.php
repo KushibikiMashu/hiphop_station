@@ -8,28 +8,11 @@ use App\Repositories\ChannelRepository;
 use App\Repositories\ApiRepository;
 use App\Repositories\DownloadJpgFileRepository;
 
-class FetchLatestVideosFromYoutubeApiService
+class FetchLatestVideosFromYoutubeApiService extends BaseService
 {
-    private $video_repo;
-    private $video_thumbnail_repo;
-    private $channel_repo;
-    private $api_repo;
-    private $jpg_repo;
-
-    public function __construct
-    (
-        VideoRepository $video_repo,
-        VideoThumbnailRepository $video_thumbnail_repo,
-        ChannelRepository $channel_repo,
-        ApiRepository $api_repo,
-        DownloadJpgFileRepository $jpg_repo
-    )
+    public function __construct()
     {
-        $this->video_repo = $video_repo;
-        $this->video_thumbnail_repo = $video_thumbnail_repo;
-        $this->channel_repo = $channel_repo;
-        $this->api_repo = $api_repo;
-        $this->jpg_repo = $jpg_repo;
+        parent::__construct();
     }
 
     public function run(): array

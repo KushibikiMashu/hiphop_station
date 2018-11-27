@@ -5,15 +5,11 @@ namespace App\Services;
 use App\Repositories\VideoRepository;
 use App\Repositories\ChannelRepository;
 
-class CreateLatestJsonService
+class CreateLatestJsonService extends BaseService
 {
-    private $video_repo;
-    private $channel_repo;
-
-    public function __construct(VideoRepository $video_repo, ChannelRepository $channel_repo)
+    public function __construct()
     {
-        $this->video_repo   = $video_repo;
-        $this->channel_repo = $channel_repo;
+        parent::__construct();
     }
 
     public function getArrays(): array

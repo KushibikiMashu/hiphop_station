@@ -19,3 +19,7 @@ Route::get('/battle', 'MaterialUiSampleController@react');
 Route::get('/battle/{hash?}', 'MaterialUiSampleController@react');
 Route::get('/channel', 'MaterialUiSampleController@react');
 Route::get('/channel/{hash?}', 'MaterialUiSampleController@react');
+
+Route::get('/music_video', 'MaterialUiSampleController@react');
+Route::get('/interview', 'MaterialUiSampleController@react');
+Route::get('/others', 'MaterialUiSampleController@react');
