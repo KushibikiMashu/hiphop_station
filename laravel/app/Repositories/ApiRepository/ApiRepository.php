@@ -145,9 +145,12 @@ class ApiRepository implements ApiRepositoryInterface
         $keywords = config('const.KEYWORDS');
         $flag = 0;
         switch ($hash) {
-            // 基本的にsong
+            case $channels[1]['hash']:
+                if ($this->array_strpos($title, $keywords['others']) === true) {
+                    $flag = 3;
+                }
+                break;
             case $channels[2]['hash']:
-                // 配列はプロパティで持つ
                 if ($this->array_strpos($title, $keywords['2']) === true) {
                     $flag = 1;
                 }
@@ -185,6 +188,7 @@ class ApiRepository implements ApiRepositoryInterface
                 break;
         }
 
+        // インタビューは全てのチャンネルにまたがるため、全てのタイトルをチェックする
         if ($this->array_strpos($title, $keywords['interview']) === true) {
             $flag = 2;
         }
@@ -207,8 +211,7 @@ class ApiRepository implements ApiRepositoryInterface
         }
         return $genre;
     }
-
-
+    
     /**
      * $needleを配列にしたstrposの文字列検索をする
      * $haystackの中に$needlesがあればtrueを返す

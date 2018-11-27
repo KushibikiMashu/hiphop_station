@@ -40,6 +40,7 @@ class UpdateVideoGenre extends Command
         foreach($videos as $video) {
             $channel = $video->channel;
             $genre = $api_repo->determine_video_genre($channel->hash, $video->title);
+            if ($genre === $video->genre) continue;
             \App\Video::find($video->id)->update(['genre' => $genre]);
         }
     }
