@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Api;
 
-class NewVideoService extends BaseService
+class NewVideoService extends \App\Services\BaseService
 {
     public function __construct()
     {

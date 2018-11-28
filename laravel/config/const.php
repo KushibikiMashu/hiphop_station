@@ -11,5 +11,6 @@ return [
         '23'        => ['SPOTLIGHT', 'ENTER'],
         'song'      => ['【MV】', 'Music Video', 'MusicVideo'],
         'interview' => ['インタビュー'],
+        'hiphop'    => ['HIPHOP'],
     ],
 ];

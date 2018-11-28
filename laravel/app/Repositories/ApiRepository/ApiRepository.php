@@ -99,7 +99,7 @@ class ApiRepository implements ApiRepositoryInterface
         foreach ($res as $data) {
             if (isset($registered_video_hashes[$data->id->videoId])) continue;
             $title    = $data->snippet->title;
-            $hash = $data->id->videoId;
+            $hash     = $data->id->videoId;
             $genre    = $this->determine_video_genre($hash, $title);
             $videos[] = [
                 'channel_id'   => $channel_id,
@@ -143,7 +143,7 @@ class ApiRepository implements ApiRepositoryInterface
          */
         $channels = config('channels');
         $keywords = config('const.KEYWORDS');
-        $flag = 0;
+        $flag     = 0;
         switch ($hash) {
             // 基本的にsong
             case $channels[2]['hash']:
@@ -154,19 +154,21 @@ class ApiRepository implements ApiRepositoryInterface
                 break;
             // 基本的にbattle
             case $channels[8]['hash']:
-                $flag = 1;
                 if (arrayStrpos($title, $keywords['song']) === true) {
                     $flag = 0;
-                }
-                if (arrayStrpos($title, $keywords['8']) === true) {
+                } else if (arrayStrpos($title, $keywords['8']) === true) {
                     $flag = 3;
+                } else {
+                    dump($title);
+                    $flag = 1;
                 }
                 break;
             // 基本的にbattle
             case $channels[9]['hash']:
-                $flag = 1;
                 if (arrayStrpos($title, $keywords['song']) === true) {
                     $flag = 0;
+                } else {
+                    $flag = 1;
                 }
                 break;
             // 基本的にsong
@@ -180,6 +182,14 @@ class ApiRepository implements ApiRepositoryInterface
                 break;
             case $channels[33]['hash']:
                 $flag = 2;
+                break;
+            case $channels[39]['hash']:
+                // 基本的にHIPHOPではない
+                if (arrayStrpos($title, $keywords['hiphop']) === true) {
+                    $flag = 0;
+                } else {
+                    $flag = 99;
+                }
                 break;
             default:
                 break;
@@ -199,9 +209,12 @@ class ApiRepository implements ApiRepositoryInterface
             case 2:
                 $genre = 'interview';
                 break;
-             case 3:
-                 $genre = 'others';
-                 break;
+            case 3:
+                $genre = 'others';
+                break;
+            case 99:
+                $genre = 'not HIPHOP';
+                break;
             default:
                 break;
         }
