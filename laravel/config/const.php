@@ -10,7 +10,8 @@ return [
         '8'         => ['BATTLEFIELD'],
         '23'        => ['SPOTLIGHT', 'ENTER'],
         'song'      => ['【MV】', 'Music Video', 'MusicVideo'],
-        'interview' => ['インタビュー'],
+        'interview' => ['インタビュー', 'interview'],
+        'others'    => ['”悩む”相談室'],
         'hiphop'    => ['HIPHOP'],
     ],
 ];

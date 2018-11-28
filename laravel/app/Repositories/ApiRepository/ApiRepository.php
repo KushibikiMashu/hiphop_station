@@ -159,7 +159,6 @@ class ApiRepository implements ApiRepositoryInterface
                 } else if (arrayStrpos($title, $keywords['8']) === true) {
                     $flag = 3;
                 } else {
-                    dump($title);
                     $flag = 1;
                 }
                 break;
