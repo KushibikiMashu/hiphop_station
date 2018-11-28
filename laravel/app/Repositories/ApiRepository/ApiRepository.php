@@ -145,7 +145,11 @@ class ApiRepository implements ApiRepositoryInterface
         $keywords = config('const.KEYWORDS');
         $flag     = 0;
         switch ($hash) {
-            // 基本的にsong
+            case $channels[1]['hash']:
+                if ($this->array_strpos($title, $keywords['others']) === true) {
+                    $flag = 3;
+                }
+                break;
             case $channels[2]['hash']:
                 // 配列はプロパティで持つ
                 if (arrayStrpos($title, $keywords['2']) === true) {
