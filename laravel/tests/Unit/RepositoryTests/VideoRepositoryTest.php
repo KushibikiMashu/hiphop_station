@@ -226,5 +226,43 @@ class VideoRepositoryTest extends TestCase
         $this->assertSame(0, $actual);
         self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
     }
-}
 
+    /**
+     * @test
+     */
+    public function getVideosOfThisWeek__１週間以内の動画を取得する():void
+    {
+        $video = self::createVideoRecord();
+        $actual = $this->instance->getVideosOfThisWeek();
+        $this->assertContains($video->getOriginal(), $actual);
+        self::deleteRecordByTableAndId($video->getTable(), $video->id);
+    }
+
+    /**
+     * @test
+     */
+    public function getAllVideoJoinedChannelTwoWeeks__この２週間のchannelとvideoテーブルをjoinしたレコードを取得する(): void
+    {
+        $channel = self::createChannelRecord();
+        $video = self::createVideoRecord();
+        $actual = $this->instance->getAllVideoJoinedChannelTwoWeeks();
+
+        $first = $actual[0];
+        $this->assertArrayHasKey('id', $first);
+        $this->assertArrayHasKey('title', $first);
+        $this->assertArrayHasKey('hash', $first);
+        $this->assertArrayHasKey('genre', $first);
+        $this->assertArrayHasKey('published_at', $first);
+        $this->assertArrayHasKey('created_at', $first);
+        $this->assertArrayHasKey('channel_id', $first);
+        $this->assertArrayHasKey('channel_title', $first);
+        $this->assertArrayHasKey('channel_hash', $first);
+        $this->assertArrayHasKey('channel_published_at', $first);
+        $this->assertArrayHasKey('channel_created_at', $first);
+
+        $oldest_date = $actual[count($actual) - 1]->created_at;
+        $this->assertTrue($oldest_date > (new \Carbon\Carbon)->subWeeks(2)->format('Y-m-d H:i:s'));
+        self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
+        self::deleteRecordByTableAndId($video->getTable(), $video->id);
+    }
+}

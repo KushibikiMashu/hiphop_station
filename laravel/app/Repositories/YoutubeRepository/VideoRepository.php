@@ -56,7 +56,7 @@ class VideoRepository implements YoutubeRepositoryInterface
         if (empty($columns) || count($columns) === 1) {
             return [];
         }
-        $query = $this->video->select($columns[0]);
+        $query          = $this->video->select($columns[0]);
         $select_columns = array_slice($columns, 1);
         for ($i = 0; $i < count($select_columns); $i++) {
             $query->addSelect($select_columns[$i]);
@@ -169,5 +169,47 @@ class VideoRepository implements YoutubeRepositoryInterface
     public function countVideoByChannelId(int $channel_id): int
     {
         return $this->video->where('channel_id', $channel_id)->count();
+    }
+
+    /**
+     * published_atが１週間以内の動画を取得する
+     *
+     * @return array
+     */
+    public function getVideosOfThisWeek(): array
+    {
+        $videos = $this->video->all();
+        return $videos->filter(function ($video) {
+            $published_at = new \Carbon\Carbon($video->published_at);
+            $oneWeekAgo   = (new \Carbon\Carbon())->subWeek();
+            return $published_at->gte($oneWeekAgo);
+        })->toArray();
+    }
+
+    /**
+     * channelテーブルとvideoテーブルをjoinしたレコードを取得する
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getAllVideoJoinedChannelTwoWeeks(): \Illuminate\Support\Collection
+    {
+        return $this->video
+            ->select(
+                'video.id as id',
+                'video.title as title',
+                'video.hash as hash',
+                'video.genre as genre',
+                'video.published_at as published_at',
+                'video.created_at as created_at',
+                'channel.id as channel_id',
+                'channel.title as channel_title',
+                'channel.hash as channel_hash',
+                'channel.published_at as channel_published_at',
+                'channel.created_at as channel_created_at'
+                )
+            ->join('channel', 'video.channel_id', '=', 'channel.id')
+            ->where('video.created_at', '>', (new \Carbon\Carbon)->subWeeks(2)->format('Y-m-d H:i:s'))
+            ->orderBy('video.created_at', 'desc')
+            ->get();
     }
 }

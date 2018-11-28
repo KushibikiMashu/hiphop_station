@@ -148,5 +148,17 @@ return [
     37 => [
         'channel' => 'HANNYA OFFICIAL',
         'hash'    => 'UCni75rWpno21KFxWaa7dYUw'
-    ]
+    ],
+    38 => [
+        'channel' => 'Yuto.com TM Official',
+        'hash'    => 'UCIndcy_6oTnSowpHLgXCkUw'
+    ],
+    39 => [
+        'channel' => 'AbemaTV公式 YouTube',
+        'hash'    => 'UCLsdm7nCJCVTWSid7G_f0Pg'
+    ],
+    40 => [
+        'channel' => 'YELLOWBLACK FILM',
+        'hash'    => 'UCy_pgokoyAhgpbAP-_XtCzA'
+    ],
 ];

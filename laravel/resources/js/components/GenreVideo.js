@@ -10,11 +10,8 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import {Link} from 'react-router-dom';
 import request from 'superagent';
-import {pathToJson} from './const';
+import {pathToJson, newList} from './const';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import LabelBottomNavigation from "./LabelBottomNavigation";
-
-const PATH = pathToJson("main");
 
 const styles = theme => ({
     flex: {
@@ -83,22 +80,35 @@ const styles = theme => ({
     }
 });
 
-class Battle extends React.Component {
+class GenreVideo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             items: null,
             hasMoreVideos: true,
-            loadedVideosCount: 100, // デフォルトの動画表示数
+            loadedVideosCount: 20, // デフォルトの動画表示数
         };
     }
 
     // コンポーネントがマウントする前に動画情報のJSONを読み込む
     componentWillMount() {
-        request.get(PATH)
+        request.get(newList)
             .end((err, res) => {
-                this.loadedJson(err, res);
+                this.setItems(err, res);
+                // this.loadedJson(err, res);
             });
+    };
+
+    // 読み込んだ全ての動画情報を配列でitemsに格納
+    setItems(err, res) {
+        if (err) {
+            return;
+        }
+
+        this.setState({
+            // hasMoreVideos: res.body.length < 20 ? false : true,
+            items: res.body
+        });
     };
 
     // 読み込んだ全ての動画情報を配列でitemsに格納
@@ -157,12 +167,12 @@ class Battle extends React.Component {
                 </div>
             );
         }
-
+        
         // loadedVideosCountの数だけ動画を読み込む
         const items = this.state.items;
         for (var i = 0; i < this.state.loadedVideosCount; i++) {
             // battleのみを表示する
-            if(items[i].genre !== genre){
+            if(items[i].genre !== genre || items[i] === undefined){
                 continue;
             }
             videos.push(
@@ -170,7 +180,7 @@ class Battle extends React.Component {
                     <Card className={classes.card}>
                         <CardMedia
                             className={classes.media}
-                            image={items[i].thumbnail.high}
+                            image={items[i].thumbnail}
                             component={Link}
                             to={'/video/' + items[i].hash}
                         />
@@ -181,7 +191,7 @@ class Battle extends React.Component {
                         </CardContent>
                         <CardActions>
                             <Typography variant="caption">
-                                {items[i].channel.title}
+                                {items[i].channel_title}
                             </Typography>
                             <Typography variant="caption">
                                 {items[i].published_at}
@@ -209,8 +219,8 @@ class Battle extends React.Component {
     }
 }
 
-Battle.propTypes = {
+GenreVideo.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Battle);
+export default withStyles(styles)(GenreVideo);

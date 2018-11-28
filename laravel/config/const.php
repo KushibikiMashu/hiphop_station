@@ -12,5 +12,6 @@ return [
         'song'      => ['【MV】', 'Music Video', 'MusicVideo'],
         'interview' => ['インタビュー', 'interview'],
         'others'    => ['”悩む”相談室'],
+        'hiphop'    => ['HIPHOP'],
     ],
 ];
