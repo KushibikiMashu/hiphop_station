@@ -25,4 +25,4 @@ Route::get('/interview', 'SpaController@index');
 Route::get('/others', 'SpaController@index');
 
 // API
-Route::get('/new/list', 'ApiController@getNew');
+Route::get('/api/video/new', 'ApiController@getVideoNew');
