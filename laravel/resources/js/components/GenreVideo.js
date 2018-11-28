@@ -12,7 +12,6 @@ import {Link} from 'react-router-dom';
 import request from 'superagent';
 import {pathToJson, newList} from './const';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import LabelBottomNavigation from "./LabelBottomNavigation";
 
 const styles = theme => ({
     flex: {
@@ -107,7 +106,7 @@ class GenreVideo extends React.Component {
         }
 
         this.setState({
-            hasMoreVideos: res.body.length < 20 ? false : true,
+            // hasMoreVideos: res.body.length < 20 ? false : true,
             items: res.body
         });
     };
@@ -168,8 +167,7 @@ class GenreVideo extends React.Component {
                 </div>
             );
         }
-
-
+        
         // loadedVideosCountの数だけ動画を読み込む
         const items = this.state.items;
         for (var i = 0; i < this.state.loadedVideosCount; i++) {
@@ -182,7 +180,7 @@ class GenreVideo extends React.Component {
                     <Card className={classes.card}>
                         <CardMedia
                             className={classes.media}
-                            image={items[i].thumbnail.high}
+                            image={items[i].thumbnail}
                             component={Link}
                             to={'/video/' + items[i].hash}
                         />
@@ -193,7 +191,7 @@ class GenreVideo extends React.Component {
                         </CardContent>
                         <CardActions>
                             <Typography variant="caption">
-                                {items[i].channel.title}
+                                {items[i].channel_title}
                             </Typography>
                             <Typography variant="caption">
                                 {items[i].published_at}
@@ -203,8 +201,6 @@ class GenreVideo extends React.Component {
                 </Grid>
             )
         }
-
-        console.log({videos});
 
         return (
             <div className={classes.flex}>
