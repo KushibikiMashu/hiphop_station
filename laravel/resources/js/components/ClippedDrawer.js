@@ -1,9 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import {grey900} from '@material-ui/core/colors'
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import NewSongs from './NewSongs'
@@ -11,8 +8,9 @@ import VideoPlayer from './VideoPlayer'
 import request from 'superagent';
 import {pathToJson} from './const';
 import Grid from "@material-ui/core/Grid/Grid";
-import LabelBottomNavigation from "./LabelBottomNavigation";
+import LabelBottomNavigation from "./organisms/LabelBottomNavigation";
 import GenreVideo from "./GenreVideo";
+import TitleBar from "./organisms/TitleBar";
 
 const PATH = pathToJson("main");
 
@@ -45,6 +43,9 @@ const styles = theme => ({
         position: 'fixed',
     }
 });
+
+
+TitleBar.propTypes = {classes: PropTypes.any};
 
 class ClippedDrawer extends React.Component {
     constructor(props) {
@@ -79,14 +80,7 @@ class ClippedDrawer extends React.Component {
         return (
             <Router basename="/">
                 <div className={classes.root}>
-                    <AppBar position="fixed" className={classes.appBar} style={{backgroundColor: '#424242'}}>
-                        <Toolbar>
-                            <Typography variant="title" color="inherit" noWrap
-                                        style={{margin: "0 auto", textDecoration: "none"}} component={Link} to="/">
-                                日本語ラップStation
-                            </Typography>
-                        </Toolbar>
-                    </AppBar>
+                    <TitleBar title='HIPSTY'/>
                     <main className={classes.content}>
                         <div className={classes.toolbar}/>
                         <Route exact path='/' component={NewSongs}/>
