@@ -34,9 +34,9 @@ class VideoApiService extends \App\Services\BaseService
      */
     private function addOtherData($video)
     {
-        $video->title     = mb_strimwidth($video->title, 0, 50, '...');
-        $video->diff_date = getDateDiff($video->published_at);
-        $video->thumbnail = '/image/video_thumbnail/' . config('const.SIZES')[2] . "/{$video->hash}.jpg";
+        $video->shortTitle = mb_strimwidth($video->title, 0, 50, '...');
+        $video->diffDate   = getDateDiff($video->published_at);
+        $video->thumbnail  = '/image/video_thumbnail/' . config('const.SIZES')[2] . "/{$video->hash}.jpg";
         return $video;
     }
 }

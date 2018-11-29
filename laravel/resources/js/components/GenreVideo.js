@@ -186,7 +186,7 @@ class GenreVideo extends React.Component {
                         />
                         <CardContent className={classes.cardContent}>
                             <Typography gutterBottom variant="subheading">
-                                {items[i].title}
+                                {items[i].shortTitle}
                             </Typography>
                         </CardContent>
                         <CardActions>
@@ -194,7 +194,7 @@ class GenreVideo extends React.Component {
                                 {items[i].channel_title}
                             </Typography>
                             <Typography variant="caption">
-                                {items[i].published_at}
+                                {items[i].diffDate}
                             </Typography>
                         </CardActions>
                     </Card>
