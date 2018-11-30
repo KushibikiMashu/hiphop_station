@@ -16,7 +16,8 @@ $ docker-compose up -d
 Set React in Laravel
 ```
 $ cd laravel
-$ composer install
+$ php artisan key:generate
+$ composer i
 $ npm i
 $ npm run prod
 ```
