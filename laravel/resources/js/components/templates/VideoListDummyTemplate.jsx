@@ -9,7 +9,7 @@ const styles = theme => ({
     },
 })
 
-function VideoListDummy(props) {
+function VideoListDummyTemplate(props) {
     const {classes, videos} = props
 
     return (
@@ -21,9 +21,9 @@ function VideoListDummy(props) {
     )
 }
 
-VideoListDummy.propTypes = {
+VideoListDummyTemplate.propTypes = {
     classes: PropTypes.any,
     videos: PropTypes.array.isRequired,
 }
 
-export default withStyles(styles)(VideoListDummy)
+export default withStyles(styles)(VideoListDummyTemplate)

@@ -3,12 +3,13 @@ import request from 'superagent'
 import {pathToJson} from '../const'
 import VideoCard from '../organisms/VideoCard'
 import VideoCardDummy from '../organisms/VideoCardDummy'
-import VideoList from '../templates/VideoList'
-import VideoListDummy from '../templates/VideoListDummy'
+import VideoListTemplate from '../templates/VideoListTemplate'
+import VideoListDummyTemplate from '../templates/VideoListDummyTemplate'
+import Grid from "@material-ui/core/Grid/Grid";
 
 const PATH = pathToJson("main")
 
-export default class LandingPage extends React.Component {
+export default class VideoList extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -58,7 +59,7 @@ export default class LandingPage extends React.Component {
                 videos.push(<VideoCardDummy key={i}/>)
             }
 
-            return <VideoListDummy videos={videos}/>
+            return <VideoListDummyTemplate videos={videos}/>
         }
 
         // loadedVideosCountの数だけ動画を読み込む
@@ -67,7 +68,9 @@ export default class LandingPage extends React.Component {
             videos.push(<VideoCard key={i} items={items} i={i}/>)
         }
 
-        return <VideoList videos={videos} onClick={() => {this.loadVideos()}}/>
+        return (
+            <VideoListTemplate videos={videos} onClick={() => {this.loadVideos()}}/>
+        )
     }
 }
 

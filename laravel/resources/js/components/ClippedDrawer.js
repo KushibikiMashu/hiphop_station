@@ -10,7 +10,7 @@ import Grid from "@material-ui/core/Grid/Grid";
 import LabelBottomNavigation from "./organisms/LabelBottomNavigation";
 import GenreVideo from "./GenreVideo";
 import TitleBar from "./organisms/TitleBar";
-import LandingPage from "./pages/LandingPage";
+import VideoList from "./pages/VideoList";
 
 const PATH = pathToJson("main");
 
@@ -38,15 +38,15 @@ const styles = theme => ({
     nav: {
         justify: 'center'
     },
-    labelTopNavigation: {
+    labelBottomNavigation: {
         bottom: 0,
         position: 'fixed',
     }
-});
+})
 
 TitleBar.propTypes = {classes: PropTypes.any};
 
-class ClippedDrawer extends React.Component {
+class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -82,14 +82,14 @@ class ClippedDrawer extends React.Component {
                     <TitleBar title='HIPSTY'/>
                     <main className={classes.content}>
                         <div className={classes.toolbar}/>
-                        <Route exact path='/' component={LandingPage}/>
+                        <Route exact path='/' component={VideoList}/>
                         <Route path='/video/:hash' render={() => <VideoPlayer videos={this.state.items}/>}/>
                         <Route path='/music_video' render={() => <GenreVideo genre='MV'/>}/>
                         <Route path='/battle' render={() => <GenreVideo genre='battle'/>}/>
                         <Route path='/interview' render={() => <GenreVideo genre='interview'/>}/>
                         <Route path='/others' render={() => <GenreVideo genre='others'/>}/>
                     </main>
-                    <Grid container justify='center' className={classes.labelTopNavigation}>
+                    <Grid container justify='center' className={classes.labelBottomNavigation}>
                         <LabelBottomNavigation/>
                     </Grid>
                 </div>
@@ -98,8 +98,8 @@ class ClippedDrawer extends React.Component {
     }
 }
 
-ClippedDrawer.propTypes = {
+App.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ClippedDrawer);
+export default withStyles(styles)(App);

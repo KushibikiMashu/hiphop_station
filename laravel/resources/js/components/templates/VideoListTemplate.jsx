@@ -14,7 +14,7 @@ const styles = theme => ({
     },
 })
 
-function VideoList(props) {
+function VideoListTemplate(props) {
     const {classes, videos, onClick} = props
 
     return (
@@ -32,10 +32,10 @@ function VideoList(props) {
     )
 }
 
-VideoList.propTypes = {
+VideoListTemplate.propTypes = {
     classes: PropTypes.object.isRequired,
     videos: PropTypes.array.isRequired,
     onClick: PropTypes.func,
 }
 
-export default withStyles(styles)(VideoList)
+export default withStyles(styles)(VideoListTemplate)
