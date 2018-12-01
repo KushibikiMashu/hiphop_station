@@ -75,7 +75,7 @@ class Main extends React.Component {
                     <TitleBar title={title}/>
                     <main className={classes.content}>
                         <div className={classes.toolbar}/>
-                        <Routing/>
+                        <Routing videos={this.state.items}/>
                     </main>
                     <Grid container justify='center' className={classes.labelBottomNavigation}>
                         <LabelBottomNavigation/>

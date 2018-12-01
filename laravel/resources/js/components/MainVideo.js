@@ -7,6 +7,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import ResponsiveIframe from './ResponsiveIframe';
+import CustomCardActions from './molecules/CustomCardActions';
 
 const styles = theme => ({
     flex: {
@@ -31,9 +32,10 @@ class MainVideo extends React.Component {
     }
 
     render() {
-        const { classes } = this.props;
-        var video = this.props.video;
+        const { classes, video } = this.props;
+        // var video = this.props.video;
         var src = "https://www.youtube.com/embed/" + video.hash;
+        console.log(video.published_at);
 
         return (
             <React.Fragment>
@@ -47,6 +49,7 @@ class MainVideo extends React.Component {
                                         {video.title}
                                     </Typography>
                                 </CardContent>
+                                {/*<CustomCardActions channelTitle={video.channel.title} PublishedDate={video.published_at}/>*/}
                                 <CardActions>
                                     <Typography variant="caption">
                                         {video.channel.title}
