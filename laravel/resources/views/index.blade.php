@@ -2,7 +2,7 @@
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
-        <title>日本語ラップStation</title>
+        <title>Hipsty | 日本語ラップの動画サイト</title>
     </head>
     <body>
         <div id="material"></div>
