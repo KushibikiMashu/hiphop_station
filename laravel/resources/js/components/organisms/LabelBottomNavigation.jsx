@@ -9,11 +9,16 @@ import NewReleasesIcon from '@material-ui/icons/NewReleases'
 import PersonIcon from '@material-ui/icons/Person'
 import LiveTvIcon from '@material-ui/icons/LiveTv'
 import {Link} from "react-router-dom"
+import Grid from "@material-ui/core/Grid/Grid";
 
 const styles = {
     root: {
         width: '100%',
         textAlign: 'center',
+    },
+    labelBottomNavigation: {
+        bottom: 0,
+        position: 'fixed',
     },
 }
 
@@ -31,13 +36,15 @@ class LabelBottomNavigation extends React.Component {
         const {value} = this.state
 
         return (
-            <BottomNavigation value={value} onChange={this.handleChange} className={classes.root}>
-                <BottomNavigationAction label="New" value="new" component={Link} to='/' icon={<FiberNewIcon/>}/>
-                <BottomNavigationAction label="MV" value="music video" component={Link} to='/music_video' icon={<MusicVideoIcon/>}/>
-                <BottomNavigationAction label="Battle" value="battle" component={Link} to='/battle' icon={<NewReleasesIcon/>}/>
-                <BottomNavigationAction label="Interview" value="interview" component={Link} to='/interview' icon={<PersonIcon/>} />
-                <BottomNavigationAction label="Others" value="others" component={Link} to='/others' icon={<LiveTvIcon/>} />
-            </BottomNavigation>
+            <Grid container justify='center' className={classes.labelBottomNavigation}>
+                <BottomNavigation value={value} onChange={this.handleChange} className={classes.root}>
+                    <BottomNavigationAction label="New" value="new" component={Link} to='/' icon={<FiberNewIcon/>}/>
+                    <BottomNavigationAction label="MV" value="music video" component={Link} to='/music_video' icon={<MusicVideoIcon/>}/>
+                    <BottomNavigationAction label="Battle" value="battle" component={Link} to='/battle' icon={<NewReleasesIcon/>}/>
+                    <BottomNavigationAction label="Interview" value="interview" component={Link} to='/interview' icon={<PersonIcon/>} />
+                    <BottomNavigationAction label="Others" value="others" component={Link} to='/others' icon={<LiveTvIcon/>} />
+                </BottomNavigation>
+            </Grid>
         )
     }
 }

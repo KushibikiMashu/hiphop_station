@@ -13,22 +13,23 @@ const styles = theme => ({
 })
 
 function CustomCardMedia(props) {
-    const {classes, items, i} = props
+    const {classes, hash, thumbnail} = props
+    const videoPlayer = '/video/' + hash
 
     return (
         <CardMedia
             className={classes.media}
-            image={items[i].thumbnail.high}
+            image={thumbnail}
             component={Link}
-            to={"/video/" + items[i].hash}
+            to={videoPlayer}
         />
     )
 }
 
 CustomCardMedia.propTypes = {
     classes: PropTypes.object.isRequired,
-    items: PropTypes.array.isRequired,
-    i: PropTypes.number.isRequired,
+    hash: PropTypes.string.isRequired,
+    thumbnail: PropTypes.string.isRequired,
 }
 
 export default withStyles(styles)(CustomCardMedia)

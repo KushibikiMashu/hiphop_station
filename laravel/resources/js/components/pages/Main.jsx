@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import {grey900} from '@material-ui/core/colors'
-import { withStyles } from '@material-ui/core/styles'
+import {withStyles} from '@material-ui/core/styles'
 import {BrowserRouter as Router} from 'react-router-dom'
 import request from 'superagent'
 import {pathToJson} from '../const'
@@ -68,6 +68,10 @@ class Main extends React.Component {
     render() {
         const {classes} = this.props
         const title = "HIPSTY"
+        let items = this.state.items
+        if (items === null) {
+            items = []
+        }
 
         return (
             <Router basename="/">
@@ -75,11 +79,9 @@ class Main extends React.Component {
                     <TitleBar title={title}/>
                     <main className={classes.content}>
                         <div className={classes.toolbar}/>
-                        <Routing videos={this.state.items}/>
+                        <Routing videos={items}/>
                     </main>
-                    <Grid container justify='center' className={classes.labelBottomNavigation}>
-                        <LabelBottomNavigation/>
-                    </Grid>
+                    <LabelBottomNavigation/>
                 </div>
             </Router>
         )

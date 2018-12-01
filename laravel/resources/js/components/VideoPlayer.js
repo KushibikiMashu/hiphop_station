@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import request from 'superagent';
 import MainVideo from './MainVideo';
+import VideoCardPlaying from './organisms/VideoCardPlaying';
 import Button from '@material-ui/core/Button';
 import { pathToJson } from './const';
 const PATH = pathToJson("main");
@@ -48,7 +49,7 @@ class VideoPlayer extends React.Component {
 
         return (
             <React.Fragment>
-                <MainVideo hash={hash} video={playingVideo} />
+                <VideoCardPlaying video={playingVideo} />
                 <div style={{'display': 'flex', justifyContent: 'center', marginTop: 12}}>
                     <Button variant="extendedFab" component={Link} to={'/'}>HOME</Button>
                 </div>

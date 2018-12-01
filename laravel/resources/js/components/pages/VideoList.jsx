@@ -65,12 +65,13 @@ export default class VideoList extends React.Component {
         // loadedVideosCountの数だけ動画を読み込む
         const items = this.state.items
         for (let i = 0; i < this.state.loadedVideosCount; i++) {
-            videos.push(<VideoCard key={i} video={items[i]} items={items} i={i}/>)
+            videos.push(<VideoCard key={i} video={items[i]}/>)
         }
 
         return (
-            <VideoListTemplate videos={videos} onClick={() => {this.loadVideos()}}/>
+            <VideoListTemplate videos={videos} onClick={() => {
+                this.loadVideos()
+            }}/>
         )
     }
 }
-

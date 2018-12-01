@@ -18,9 +18,6 @@ class ResponsiveIframe extends React.Component {
             height: isSmallScreen ? 280 : 460
         };
 
-        console.log(isSmallScreen);
-        console.log(ifremeProps);
-
          // 条件式でwidth/heightを変更する
          // 参考 https://codesandbox.io/s/l0x8kqz7q?module=%2Fdemo.js
 

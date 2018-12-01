@@ -5,21 +5,21 @@ import CardActions from "@material-ui/core/CardActions/CardActions"
 import Typography from "@material-ui/core/Typography/Typography"
 
 const styles = theme => ({
-    PublishedDate: {
+    date: {
         marginLeft: 'auto'
     }
 })
 
 function CustomCardActions(props) {
-    const {classes, channelTitle, PublishedDate} = props
+    const {classes, title, date} = props
 
     return (
         <CardActions>
             <Typography variant="caption">
-                {channelTitle}
+                {title}
             </Typography>
-            <Typography variant="caption" className={classes.PublishedDate}>
-                {PublishedDate}
+            <Typography variant="caption" className={classes.date}>
+                {date}
             </Typography>
         </CardActions>
     )
@@ -27,8 +27,8 @@ function CustomCardActions(props) {
 
 CustomCardActions.propTypes = {
     classes: PropTypes.object.isRequired,
-    channelTitle: PropTypes.string.isRequired,
-    PublishedDate: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
 }
 
 export default withStyles(styles)(CustomCardActions)

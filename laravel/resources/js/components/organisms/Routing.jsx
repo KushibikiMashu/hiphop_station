@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
+import PropTypes from 'prop-types'
 import VideoList from "../pages/VideoList";
 import VideoPlayer from '../VideoPlayer'
 import GenreVideo from "../GenreVideo";
@@ -20,6 +21,5 @@ export default function Routing(props) {
 }
 
 Routing.propTypes = {
-    // videos: PropTypes.array.isRequired,
-    // genre: PropTypes.string.isRequired,
+    videos: PropTypes.array.isRequired,
 };

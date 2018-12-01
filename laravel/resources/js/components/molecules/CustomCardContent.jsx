@@ -14,12 +14,12 @@ const styles = theme => ({
 })
 
 function CustomCardContent(props) {
-    const {classes, items, i} = props
+    const { classes, title } = props
 
     return (
         <CardContent className={classes.cardContent}>
             <Typography gutterBottom variant="subheading">
-                {items[i].title}
+                {title}
             </Typography>
         </CardContent>
     )
@@ -27,7 +27,7 @@ function CustomCardContent(props) {
 
 CustomCardContent.propTypes = {
     classes: PropTypes.object.isRequired,
-    items: PropTypes.array.isRequired,
+    title: PropTypes.string.isRequired,
 }
 
 export default withStyles(styles)(CustomCardContent)

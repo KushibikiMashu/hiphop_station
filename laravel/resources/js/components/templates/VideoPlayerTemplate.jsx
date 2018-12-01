@@ -1,12 +1,14 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
 import {withStyles} from "@material-ui/core";
-import MainVideo from './MainVideo'
 import Button from '@material-ui/core/Button'
+import VideoCardPlaying from './organisms/VideoCardPlaying';
+import Grid from "@material-ui/core/Grid/Grid";
 
 const styles = theme => ({
     button: {
-        'display': 'flex',
+        display: 'flex',
         justifyContent: 'center',
         marginTop: 12,
     }
@@ -18,7 +20,6 @@ function VideoPlayerTemplate() {
     const {classes, videos} = props
 
     var hash = location.pathname.split('/').pop()
-
     var playingVideo = {}
     videos.map(video => {
         if (video.hash !== hash) {
@@ -29,7 +30,11 @@ function VideoPlayerTemplate() {
 
     return (
         <React.Fragment>
-            <MainVideo hash={hash} video={playingVideo}/>
+            <Grid container justify='center' spacing={16}>
+                <Grid item>
+                    <VideoCardPlaying video={playingVideo}/>
+                </Grid>
+            </Grid>
             <div className={classes.button}>
                 <Button variant="extendedFab" component={Link} to={'/'}>HOME</Button>
             </div>
@@ -39,6 +44,7 @@ function VideoPlayerTemplate() {
 
 VideoPlayerTemplate.propTypes = {
     classes: PropTypes.object.isRequired,
+    video: PropTypes.object.isRequired,
 }
 
 export default withStyles(styles)(VideoPlayerTemplate)
