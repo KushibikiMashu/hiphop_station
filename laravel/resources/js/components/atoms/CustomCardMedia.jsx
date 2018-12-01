@@ -1,6 +1,7 @@
 import React from "react"
 import {Link} from "react-router-dom"
 import PropTypes from 'prop-types';
+import {withStyles} from '@material-ui/core/styles';
 import CardMedia from "@material-ui/core/CardMedia/CardMedia"
 
 const styles = theme => ({
@@ -26,8 +27,8 @@ function CustomCardMedia(props) {
 
 CustomCardMedia.propTypes = {
     classes: PropTypes.object.isRequired,
-    items: PropTypes.object.isRequired,
+    items: PropTypes.array.isRequired,
     i: PropTypes.number.isRequired,
 }
 
-export default CustomCardMedia(styles)(CustomCardMedia)
+export default withStyles(styles)(CustomCardMedia)

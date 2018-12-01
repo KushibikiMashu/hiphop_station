@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -12,6 +12,7 @@ import {Link} from 'react-router-dom';
 import request from 'superagent';
 import {pathToJson} from './const';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import VideoCard from './organisms/VideoCard';
 import LabelBottomNavigation from "./LabelBottomNavigation";
 
 const PATH = pathToJson("main");
@@ -82,6 +83,59 @@ const styles = theme => ({
     }
 });
 
+class VideoList extends Component {
+    render() {
+        return <div className={this.props.classes.flex}>
+            <Grid container justify='center' direction="row" spacing={16}>
+                {this.props.videos}
+            </Grid>
+            <Grid container justify='center' direction="row">
+                <Button variant="extendedFab" aria-label="Load" className={this.props.classes.button}
+                        onClick={this.props.onClick}>
+                    LOAD MORE
+                </Button>
+            </Grid>
+        </div>;
+    }
+}
+
+VideoList.propTypes = {
+    classes: PropTypes.any,
+    videos: PropTypes.arrayOf(PropTypes.any),
+    onClick: PropTypes.func
+};
+
+function DummyVideoCard(props) {
+    return <Grid item>
+        <Card className={props.classes.cardDummy}>
+            <CardMedia
+                className={props.classes.mediaDummy} // 黒にする
+            />
+            <CardContent className={props.classes.cardContentDummy}>
+                <LinearProgress className={props.classes.progressLong}/>
+                <LinearProgress className={props.classes.progressShort}/>
+            </CardContent>
+            <CardActions>
+            </CardActions>
+        </Card>
+    </Grid>;
+}
+
+DummyVideoCard.propTypes = {classes: PropTypes.any};
+
+function DummyVideoList(props) {
+    return <div className={props.classes.flexDummy}>
+        <Grid container justify='center' direction="row" spacing={16}>
+            {props.videos}
+        </Grid>
+    </div>;
+}
+
+DummyVideoList.propTypes = {
+    classes: PropTypes.any,
+    videos: PropTypes.arrayOf(PropTypes.any)
+};
+
 class NewSongs extends React.Component {
     constructor(props) {
         super(props);
@@ -132,28 +186,12 @@ class NewSongs extends React.Component {
 
             for (var i = 0; i < 10; i++) {
                 videos.push(
-                    <Grid item key={i}>
-                        <Card className={classes.cardDummy}>
-                            <CardMedia
-                                className={classes.mediaDummy} // 黒にする
-                            />
-                            <CardContent className={classes.cardContentDummy}>
-                                <LinearProgress className={classes.progressLong}/>
-                                <LinearProgress className={classes.progressShort}/>
-                            </CardContent>
-                            <CardActions>
-                            </CardActions>
-                        </Card>
-                    </Grid>
+                    <DummyVideoCard key={i} classes={classes}/>
                 )
             }
 
             return (
-                <div className={classes.flexDummy}>
-                    <Grid container justify='center' direction="row" spacing={16}>
-                        {videos}
-                    </Grid>
-                </div>
+                <DummyVideoList classes={classes} videos={videos}/>
             );
         }
 
@@ -161,45 +199,14 @@ class NewSongs extends React.Component {
         const items = this.state.items;
         for (var i = 0; i < this.state.loadedVideosCount; i++) {
             videos.push(
-                <Grid item key={i}>
-                    <Card className={classes.card}>
-                        <CardMedia
-                            className={classes.media}
-                            image={items[i].thumbnail.high}
-                            component={Link}
-                            to={'/video/' + items[i].hash}
-                        />
-                        <CardContent className={classes.cardContent}>
-                            <Typography gutterBottom variant="subheading">
-                                {items[i].title}
-                            </Typography>
-                        </CardContent>
-                        <CardActions>
-                            <Typography variant="caption">
-                                {items[i].channel.title}
-                            </Typography>
-                            <Typography variant="caption" className={classes.diffDate}>
-                                {items[i].diff_date}
-                            </Typography>
-                        </CardActions>
-                    </Card>
-                </Grid>
+                <VideoCard key={i} items={items} i={i}/>
             )
         }
 
         return (
-            <div className={classes.flex}>
-                <Grid container justify='center' direction="row" spacing={16}>
-                    {videos}
-                </Grid>
-                <Grid container justify='center' direction="row">
-                    <Button variant="extendedFab" aria-label="Load" className={classes.button} onClick={() => {
-                        this.loadVideos()
-                    }}>
-                        LOAD MORE
-                    </Button>
-                </Grid>
-            </div>
+            <VideoList classes={classes} videos={videos} onClick={() => {
+                this.loadVideos()
+            }}/>
         );
     }
 }

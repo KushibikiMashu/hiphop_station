@@ -1,7 +1,8 @@
 import React from "react"
+import PropTypes from 'prop-types';
+import {withStyles} from '@material-ui/core/styles';
 import CardContent from "@material-ui/core/CardContent/CardContent"
 import Typography from "@material-ui/core/Typography/Typography"
-import {withStyles} from "@material-ui/core"
 
 const styles = theme => ({
     cardContent: {
@@ -26,7 +27,7 @@ function CustomCardContent(props) {
 
 CustomCardContent.propTypes = {
     classes: PropTypes.object.isRequired,
-    items: PropTypes.object.isRequired,
+    items: PropTypes.array.isRequired,
 }
 
 export default withStyles(styles)(CustomCardContent)
