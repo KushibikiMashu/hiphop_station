@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import {grey900} from '@material-ui/core/colors'
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
-import NewSongs from './NewSongs'
 import VideoPlayer from './VideoPlayer'
 import request from 'superagent';
 import {pathToJson} from './const';
@@ -11,6 +10,7 @@ import Grid from "@material-ui/core/Grid/Grid";
 import LabelBottomNavigation from "./organisms/LabelBottomNavigation";
 import GenreVideo from "./GenreVideo";
 import TitleBar from "./organisms/TitleBar";
+import LandingPage from "./pages/LandingPage";
 
 const PATH = pathToJson("main");
 
@@ -43,7 +43,6 @@ const styles = theme => ({
         position: 'fixed',
     }
 });
-
 
 TitleBar.propTypes = {classes: PropTypes.any};
 
@@ -83,7 +82,7 @@ class ClippedDrawer extends React.Component {
                     <TitleBar title='HIPSTY'/>
                     <main className={classes.content}>
                         <div className={classes.toolbar}/>
-                        <Route exact path='/' component={NewSongs}/>
+                        <Route exact path='/' component={LandingPage}/>
                         <Route path='/video/:hash' render={() => <VideoPlayer videos={this.state.items}/>}/>
                         <Route path='/music_video' render={() => <GenreVideo genre='MV'/>}/>
                         <Route path='/battle' render={() => <GenreVideo genre='battle'/>}/>
