@@ -12,7 +12,7 @@ export default function App(){
     )
 }
 
-if (document.getElementById('material')) {
-    ReactDOM.render(<App />, document.getElementById('material'))
+if (document.getElementById('root')) {
+    ReactDOM.render(<App />, document.getElementById('root'))
 }
 
