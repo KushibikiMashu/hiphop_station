@@ -161,4 +161,8 @@ return [
         'channel' => 'YELLOWBLACK FILM',
         'hash'    => 'UCy_pgokoyAhgpbAP-_XtCzA'
     ],
+    41 => [
+        'channel' => '術ノ穴/subenoana', // メイキング→others
+        'hash'    => 'UCb__Bm7VBJWGaXSuHZMkSrQ'
+    ],
 ];
