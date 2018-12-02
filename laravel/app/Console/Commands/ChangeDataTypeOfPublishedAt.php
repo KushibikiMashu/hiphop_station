@@ -41,6 +41,7 @@ class ChangeDataTypeOfPublishedAt extends Command
         foreach ($channels as $channel) {
             $channel->published_at = (new \Carbon\Carbon($channel->published_at_original))->format('Y-m-d H:i:s');
             $channel->save();
+            $this->info($channel->id);
         }
         $this->info('Channel変更完了');
 
