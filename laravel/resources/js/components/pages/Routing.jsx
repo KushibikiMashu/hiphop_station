@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import PropTypes from 'prop-types'
-import VideoList from "../pages/VideoList";
+import VideoList from "./VideoList";
 import VideoPlayerTemplate from '../templates/VideoPlayerTemplate'
 
 export default function Routing(props) {

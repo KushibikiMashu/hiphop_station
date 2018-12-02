@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {withStyles} from "@material-ui/core"
 import Grid from "@material-ui/core/Grid/Grid"
 import TitleBar from "../organisms/TitleBar"
-import Routing from "../organisms/Routing"
+import Routing from "../pages/Routing"
 import LabelBottomNavigation from "../organisms/LabelBottomNavigation"
 
 const styles = theme => ({

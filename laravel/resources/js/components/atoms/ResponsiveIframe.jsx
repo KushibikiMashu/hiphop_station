@@ -26,9 +26,7 @@ function ResponsiveIframe(props) {
 }
 
 ResponsiveIframe.propTypes = {
-    size: PropTypes.string.isRequired,
-    width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    height: PropTypes.number.isRequired,
+    src: PropTypes.string.isRequired,
 }
 
 export default withWidth()(ResponsiveIframe)

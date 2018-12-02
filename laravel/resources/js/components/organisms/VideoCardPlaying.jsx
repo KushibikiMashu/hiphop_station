@@ -34,7 +34,7 @@ function VideoCardPlaying(props) {
 
 VideoCardPlaying.propTypes = {
     classes: PropTypes.object.isRequired,
-    video: PropTypes.array.isRequired,
+    video: PropTypes.object.isRequired,
 }
 
 export default withStyles(styles)(VideoCardPlaying)

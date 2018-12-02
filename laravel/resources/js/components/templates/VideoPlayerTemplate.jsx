@@ -43,7 +43,7 @@ function VideoPlayerTemplate(props) {
 
 VideoPlayerTemplate.propTypes = {
     classes: PropTypes.object.isRequired,
-    video: PropTypes.array.isRequired,
+    videos: PropTypes.array.isRequired,
 }
 
 export default withStyles(styles)(VideoPlayerTemplate)
