@@ -19,9 +19,9 @@ function VideoCard(props) {
     return (
         <Grid item>
             <Card className={classes.card}>
-                <CustomCardMedia hash={video.hash} thumbnail={video.thumbnail.high}/>
-                <CustomCardContent title={video.title}/>
-                <CustomCardActions title={video.channel.title} date={video.diff_date}/>
+                <CustomCardMedia hash={video.hash} thumbnail={video.thumbnail}/>
+                <CustomCardContent title={video.shortTitle}/>
+                <CustomCardActions title={video.channelTitle} date={video.diffDate}/>
             </Card>
         </Grid>
     )

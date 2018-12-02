@@ -1,11 +1,11 @@
 import React from 'react'
 import request from 'superagent'
-import { pathToJson } from '../const'
+import { videoList } from '../const'
 import MainTemplate from '../templates/MainTemplate'
 import MainDummyTemplate from '../templates/MainDummyTemplate';
 import VideoCardDummy from "../organisms/VideoCardDummy";
 
-const PATH = pathToJson('main')
+const PATH = videoList
 
 export default class Main extends React.Component {
     constructor(props) {

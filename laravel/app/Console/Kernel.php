@@ -39,9 +39,6 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('fetch:video')
             ->everyFiveMinutes()
-            ->after(function () {
-                $this->call('create:json');
-            })
             ->timezone('Asia/Tokyo');
     }
 

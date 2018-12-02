@@ -3,5 +3,6 @@ const pathToJson = (filename) => {
 }
 
 const newList = location.origin + '/api/video/new';
+const videoList = location.origin + '/api/video/list';
 
-export { pathToJson, newList };
+export { pathToJson, newList, videoList };

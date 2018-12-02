@@ -26,7 +26,7 @@ function VideoCardPlaying(props) {
             <Card className={classes.card}>
                 <ResponsiveIframe src={src}/>
                 <CustomCardContent title={video.title}/>
-                <CustomCardActions title={video.channel.title} date={video.published_at}/>
+                <CustomCardActions title={video.channelTitle} date={video.publishedAt}/>
             </Card>
         </div>
     )
