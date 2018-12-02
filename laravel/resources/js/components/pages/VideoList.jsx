@@ -1,10 +1,7 @@
 import React from 'react'
-import request from 'superagent'
 import {pathToJson} from '../const'
 import VideoCard from '../organisms/VideoCard'
-import VideoCardDummy from '../organisms/VideoCardDummy'
 import VideoListTemplate from '../templates/VideoListTemplate'
-import VideoListDummyTemplate from '../templates/VideoListDummyTemplate'
 
 const PATH = pathToJson("main")
 
@@ -40,7 +37,6 @@ export default class VideoList extends React.Component {
             }
         } else {
             let i = 0
-            console.log('通ってる');
             while(items.length < this.state.loadedVideosCount){
                 // 親コンポーネントから指定されたジャンルの動画のみ追加する
                 if (videos[i].genre !== genre || videos[i] === undefined) {
