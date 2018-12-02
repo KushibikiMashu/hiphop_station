@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
-import {withStyles} from "@material-ui/core";
+import {withStyles} from "@material-ui/core"
+import VideoCardPlaying from '../organisms/VideoCardPlaying'
+import Grid from "@material-ui/core/Grid/Grid"
 import Button from '@material-ui/core/Button'
-import VideoCardPlaying from './organisms/VideoCardPlaying';
-import Grid from "@material-ui/core/Grid/Grid";
 
 const styles = theme => ({
     button: {
@@ -14,13 +14,13 @@ const styles = theme => ({
     }
 })
 
-function VideoPlayerTemplate() {
+function VideoPlayerTemplate(props) {
     // propsでvideoのオブジェクトを渡してもらう。
     // そのvideoをMainVideoに渡す。
     const {classes, videos} = props
 
     var hash = location.pathname.split('/').pop()
-    var playingVideo = {}
+    var playingVideo = []
     videos.map(video => {
         if (video.hash !== hash) {
             return
@@ -44,7 +44,7 @@ function VideoPlayerTemplate() {
 
 VideoPlayerTemplate.propTypes = {
     classes: PropTypes.object.isRequired,
-    video: PropTypes.object.isRequired,
+    video: PropTypes.array.isRequired,
 }
 
 export default withStyles(styles)(VideoPlayerTemplate)

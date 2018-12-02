@@ -2,12 +2,12 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import PropTypes from 'prop-types'
 import VideoList from "../pages/VideoList";
-import VideoPlayer from '../VideoPlayer'
+import VideoPlayerTemplate from '../templates/VideoPlayerTemplate'
 
 export default function Routing(props) {
     const { videos } = props
 
-    // ジャンルごとに動画を渡す
+    // ジャンルごとに動画を振り分ける。振り分けた動画をVideoListに渡す
 
     return (
         <React.Fragment>
@@ -16,7 +16,7 @@ export default function Routing(props) {
             <Route path='/battle' render={() => <VideoList videos={videos} genre='battle'/>}/>
             <Route path='/interview' render={() => <VideoList videos={videos} genre='interview'/>}/>
             <Route path='/others' render={() => <VideoList videos={videos} genre='others'/>}/>
-            <Route path='/video/:hash' render={() => <VideoPlayer videos={videos}/>}/>
+            <Route path='/video/:hash' render={() => <VideoPlayerTemplate videos={videos}/>}/>
         </React.Fragment>
     );
 }

@@ -1,6 +1,6 @@
 import React from 'react'
-import PropTypes from "prop-types"
-import withWidth, { isWidthUp } from "@material-ui/core/withWidth"
+import PropTypes from 'prop-types'
+import withWidth, { isWidthUp } from '@material-ui/core/withWidth'
 
 class ResponsiveIframe extends React.Component {
     constructor(props){
@@ -12,9 +12,9 @@ class ResponsiveIframe extends React.Component {
 
         const isSmallScreen = /xs/.test(width)
         const ifremeProps = {
-            size: isSmallScreen ? "small" : "large",
-            // width: isSmallScreen ? "100%" : 640,
-            width: isSmallScreen ? "100%" : 640,
+            size: isSmallScreen ? 'small' : 'large',
+            // width: isSmallScreen ? '100%' : 640,
+            width: isSmallScreen ? '100%' : 640,
             height: isSmallScreen ? 280 : 460
         }
 
@@ -23,12 +23,12 @@ class ResponsiveIframe extends React.Component {
 
         if (isWidthUp('sm', width)) {
             return (
-                <iframe src={src} {...ifremeProps} frameBorder="0" allow="autoplay encrypted-media" allowFullScreen></iframe>
+                <iframe src={src} {...ifremeProps} frameBorder='0' allow='autoplay encrypted-media' allowFullScreen></iframe>
             )
         }
 
         return (
-            <iframe src={src} {...ifremeProps} frameBorder="0" allow="autoplay encrypted-media" allowFullScreen></iframe>
+            <iframe src={src} {...ifremeProps} frameBorder='0' allow='autoplay encrypted-media' allowFullScreen></iframe>
         )
     }
 }
