@@ -3,8 +3,6 @@ import {pathToJson} from '../const'
 import VideoCard from '../organisms/VideoCard'
 import VideoListTemplate from '../templates/VideoListTemplate'
 
-const PATH = pathToJson("main")
-
 export default class VideoList extends React.Component {
     constructor(props) {
         super(props)
