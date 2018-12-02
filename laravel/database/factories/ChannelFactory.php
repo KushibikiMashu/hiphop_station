@@ -9,7 +9,7 @@ $factory->define(Channel::class, function (Faker $faker) {
         'title' => $faker->realText(20),
         'hash' => str_random(24),
         'video_count' => $faker->randomDigit(3),
-        'published_at' => (string)$now,
+        'published_at' => $now->format('Y-m-d H:i:s'),
         'created_at' => $now,
         'updated_at' => $now,
     ];

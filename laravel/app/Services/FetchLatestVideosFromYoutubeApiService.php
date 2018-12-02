@@ -2,12 +2,6 @@
 
 namespace App\Services;
 
-use App\Repositories\VideoRepository;
-use App\Repositories\VideoThumbnailRepository;
-use App\Repositories\ChannelRepository;
-use App\Repositories\ApiRepository;
-use App\Repositories\DownloadJpgFileRepository;
-
 class FetchLatestVideosFromYoutubeApiService extends BaseService
 {
     public function __construct()
@@ -57,8 +51,8 @@ class FetchLatestVideosFromYoutubeApiService extends BaseService
     private function prepare_video_record($video): array
     {
         $channel_id = $this->channel_repo->fetchChannelIdByHash($video->snippet->channelId);
-        $title = $video->snippet->title;
-        $genre = $this->api_repo->determine_video_genre($channel_id, $title);
+        $title      = $video->snippet->title;
+        $genre      = $this->api_repo->determine_video_genre($channel_id, $title);
         \Log::info($title);
 
         return [
@@ -66,7 +60,7 @@ class FetchLatestVideosFromYoutubeApiService extends BaseService
             'title'        => $title,
             'hash'         => $video->id->videoId,
             'genre'        => $genre,
-            'published_at' => $video->snippet->publishedAt
+            'published_at' => (new \Carbon\Carbon($video->snippet->publishedAt))->format('Y-m-d H:i:s')
         ];
     }
 
@@ -110,7 +104,7 @@ class FetchLatestVideosFromYoutubeApiService extends BaseService
     private function fetchThumbnailInDatabase($record, string $size): void
     {
         $table = $this->video_thumbnail_repo->getTableName();
-        $url = str_replace('_live', '', $record->{$size});
+        $url   = str_replace('_live', '', $record->{$size});
         if (!$hash = $this->video_repo->getHashFromVideoThumbnail($record)) return;
         $file_path = "image/{$table}/{$size}/{$hash}.jpg";
         if (file_exists(public_path($file_path))) return;

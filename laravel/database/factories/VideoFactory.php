@@ -11,7 +11,7 @@ $factory->define(Video::class, function (Faker $faker) {
         'title' => $faker->realText(30),
         'hash' => str_random(11),
         'genre' => $faker->randomElement(['song', 'battle']),
-        'published_at' => (string)$now,
+        'published_at' => $now->format('Y-m-d H:i:s'),
         'created_at' => $now,
         'updated_at' => $now,
     ];

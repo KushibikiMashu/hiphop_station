@@ -2,9 +2,6 @@
 
 namespace App\Services;
 
-use App\Repositories\VideoRepository;
-use App\Repositories\ChannelRepository;
-
 class CreateLatestJsonService extends BaseService
 {
     public function __construct()
@@ -31,7 +28,6 @@ class CreateLatestJsonService extends BaseService
         $new_query = [];
         foreach ($videos as $video) {
             $video['title']            = mb_strimwidth($video['title'], 0, 50, '...');
-            $video['published_at']     = (new \Carbon\Carbon($video['published_at']))->format('Y-m-d H:i:s');
             $video['diff_date']        = getDateDiff($video['published_at']);
             $video['thumbnail']        = [
                 'std'    => '/image/video_thumbnail/' . config('const.SIZES')[0] . "/{$video['hash']}.jpg",

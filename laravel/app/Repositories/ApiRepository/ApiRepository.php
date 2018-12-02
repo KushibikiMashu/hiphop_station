@@ -107,7 +107,7 @@ class ApiRepository implements ApiRepositoryInterface
                 'title'        => $title,
                 'hash'         => $hash,
                 'genre'        => $genre,
-                'published_at' => $data->snippet->publishedAt,
+                'published_at' => (new \Carbon\Carbon($data->snippet->publishedAt))->format('Y-m-d H:i:s')
             ];
 
             if ($data->snippet->liveBroadcastContent === 'none') {
@@ -147,7 +147,7 @@ class ApiRepository implements ApiRepositoryInterface
         $flag     = 0;
         switch ($hash) {
             case $channels[1]['hash']:
-                if ($this->array_strpos($title, $keywords['others']) === true) {
+                if (array_strpos($title, $keywords['others']) === true) {
                     $flag = 3;
                 }
                 break;
