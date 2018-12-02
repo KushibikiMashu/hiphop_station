@@ -8,9 +8,8 @@ import Button from '@material-ui/core/Button'
 
 const styles = theme => ({
     button: {
-        display: 'flex',
-        justifyContent: 'center',
         marginTop: 12,
+        marginBottom: 44,
     }
 })
 
@@ -35,9 +34,9 @@ function VideoPlayerTemplate(props) {
                     <VideoCardPlaying video={playingVideo}/>
                 </Grid>
             </Grid>
-            <div className={classes.button}>
-                <Button variant="extendedFab" component={Link} to={'/'}>HOME</Button>
-            </div>
+            <Grid container justify='center' direction="row">
+                <Button variant="extendedFab" className={classes.button} component={Link} to={'/'}>HOME</Button>
+            </Grid>
         </React.Fragment>
     )
 }
