@@ -1,13 +1,13 @@
 import React from "react"
 import PropTypes from 'prop-types'
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import CardActions from "@material-ui/core/CardActions/CardActions"
 import Typography from "@material-ui/core/Typography/Typography"
 
 const styles = theme => ({
     root: {
-      paddingLeft: 12,
-      paddingRight: 12,
+        paddingLeft: 12,
+        paddingRight: 12,
     },
     date: {
         marginLeft: 'auto',

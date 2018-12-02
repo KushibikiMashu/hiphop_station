@@ -1,6 +1,6 @@
 import React from 'react'
 import request from 'superagent'
-import {pathToJson} from '../const'
+import { pathToJson } from '../const'
 import MainTemplate from '../templates/MainTemplate'
 import MainDummyTemplate from '../templates/MainDummyTemplate';
 import VideoCardDummy from "../organisms/VideoCardDummy";

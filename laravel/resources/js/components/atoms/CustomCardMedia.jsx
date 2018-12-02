@@ -1,7 +1,7 @@
 import React from "react"
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom"
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import CardMedia from "@material-ui/core/CardMedia/CardMedia"
 
 const styles = theme => ({

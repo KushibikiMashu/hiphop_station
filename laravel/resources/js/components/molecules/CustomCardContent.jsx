@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import CardContent from "@material-ui/core/CardContent/CardContent"
 import Typography from "@material-ui/core/Typography/Typography"
 
@@ -14,7 +14,7 @@ const styles = theme => ({
 })
 
 function CustomCardContent(props) {
-    const { classes, title } = props
+    const {classes, title} = props
 
     return (
         <CardContent className={classes.cardContent}>

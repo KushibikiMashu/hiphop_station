@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Link} from 'react-router-dom'
-import {withStyles} from "@material-ui/core"
+import { Link } from 'react-router-dom'
+import { withStyles } from "@material-ui/core"
 import VideoCardPlaying from '../organisms/VideoCardPlaying'
 import Grid from "@material-ui/core/Grid/Grid"
 import Button from '@material-ui/core/Button'
