@@ -7,8 +7,8 @@ import CardMedia from "@material-ui/core/CardMedia/CardMedia"
 const styles = theme => ({
     media: {
         height: 0,
+        width: 260,
         paddingTop: '56.25%', // 16:9
-        backgroundSize: 'cover',
     },
 })
 
@@ -17,12 +17,8 @@ function CustomCardMedia(props) {
     const videoPlayer = '/video/' + hash
 
     return (
-        <CardMedia
-            className={classes.media}
-            image={thumbnail}
-            component={Link}
-            to={videoPlayer}
-        />
+        <CardMedia className={classes.media} image={thumbnail} title={hash} component={Link} to={videoPlayer}/>
+
     )
 }
 

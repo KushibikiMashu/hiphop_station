@@ -49,7 +49,7 @@ function VideoCardDummy(props) {
     return (
         <Grid item>
             <Card className={classes.card}>
-                <CardMedia className={classes.media}/>
+                <CardMedia className={classes.media} src=''/>
                 <CardContent className={classes.cardContent}>
                     <LinearProgress className={classes.progressLong}/>
                     <LinearProgress className={classes.progressShort}/>

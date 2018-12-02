@@ -1,21 +1,43 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import {Route} from 'react-router-dom';
 import PropTypes from 'prop-types'
 import VideoList from "./VideoList";
 import VideoPlayerTemplate from '../templates/VideoPlayerTemplate'
 
 export default function Routing(props) {
-    const { videos } = props
+    const {videos} = props
+    var MV = [],
+        battle = [],
+        interview = [],
+        otheres = []
 
     // ジャンルごとに動画を振り分ける。振り分けた動画をVideoListに渡す
+    videos.map(video => {
+        switch (video.genre) {
+            case 'MV':
+                MV.push(video)
+                break
+            case 'battle':
+                battle.push(video)
+                break
+            case 'interview':
+                interview.push(video)
+                break
+            case 'others':
+                otheres.push(video)
+                break
+            default:
+                break
+        }
+    })
 
     return (
         <React.Fragment>
             <Route exact path='/' render={() => <VideoList videos={videos}/>}/>
-            <Route path='/music_video' render={() => <VideoList videos={videos} genre='MV'/>}/>
-            <Route path='/battle' render={() => <VideoList videos={videos} genre='battle'/>}/>
-            <Route path='/interview' render={() => <VideoList videos={videos} genre='interview'/>}/>
-            <Route path='/others' render={() => <VideoList videos={videos} genre='others'/>}/>
+            <Route path='/music_video' render={() => <VideoList videos={MV}/>}/>
+            <Route path='/battle' render={() => <VideoList videos={battle}/>}/>
+            <Route path='/interview' render={() => <VideoList videos={interview}/>}/>
+            <Route path='/others' render={() => <VideoList videos={otheres}/>}/>
             <Route path='/video/:hash' render={() => <VideoPlayerTemplate videos={videos}/>}/>
         </React.Fragment>
     );
@@ -23,5 +45,4 @@ export default function Routing(props) {
 
 Routing.propTypes = {
     videos: PropTypes.array.isRequired,
-    genre: PropTypes.string,
 };

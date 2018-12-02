@@ -25,7 +25,7 @@ function VideoListTemplate(props) {
             <Grid container justify='center' direction="row">
                 <Button variant="extendedFab" aria-label="Load" className={classes.button}
                         onClick={onClick}>
-                    LOAD MORE
+                    次の20件を表示
                 </Button>
             </Grid>
         </div>

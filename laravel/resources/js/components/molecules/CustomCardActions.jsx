@@ -5,8 +5,12 @@ import CardActions from "@material-ui/core/CardActions/CardActions"
 import Typography from "@material-ui/core/Typography/Typography"
 
 const styles = theme => ({
+    root: {
+      paddingLeft: 12,
+      paddingRight: 12,
+    },
     date: {
-        marginLeft: 'auto'
+        marginLeft: 'auto',
     }
 })
 
@@ -14,7 +18,7 @@ function CustomCardActions(props) {
     const {classes, title, date} = props
 
     return (
-        <CardActions>
+        <CardActions className={classes.root}>
             <Typography variant="caption">
                 {title}
             </Typography>

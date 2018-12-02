@@ -1,60 +1,54 @@
 import React from 'react'
-import {pathToJson} from '../const'
 import VideoCard from '../organisms/VideoCard'
 import VideoListTemplate from '../templates/VideoListTemplate'
+import MaxVideoListTemplate from '../templates/MaxVideoListTemplate'
 
 export default class VideoList extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            items: null,
             hasMoreVideos: true,
             loadedVideosCount: 20, // デフォルトの動画表示数
         }
     }
 
-    // 「LOAD MORE」ボタンをクリックすると、新たに10個の動画を表示する
-    loadVideos() {
-        // if (this.state.loadedVideosCount >= this.state.items.length) {
-        //     return
-        // }
+    // 「次の20件を表示」ボタンをクリックすると、新たに10個の動画を表示する
+    loadVideos(e, max) {
+        const loadedVideosCount = this.state.loadedVideosCount
+        if (loadedVideosCount + 20 < max) {
+            this.setState({
+                loadedVideosCount: loadedVideosCount + 20
+            })
+            return false
+        }
 
         this.setState({
-            loadedVideosCount: this.state.loadedVideosCount + 26
+            hasMoreVideos: false,
+            loadedVideosCount: max
         })
     }
 
     // loadVideos関数が呼ばれると、再度render関数が作動する
     render() {
-        const {videos, genre} = this.props
+        const {hasMoreVideos, loadedVideosCount} = this.state
+        const {videos} = this.props
         let items = []
-        if(!genre){
-            for (let i = 0; i < this.state.loadedVideosCount; i++) {
-                // 親コンポーネントから指定されたジャンルの動画のみ追加する
-                items.push(<VideoCard key={i} video={videos[i]}/>)
-            }
-        } else {
-            let i = 0
-            while(items.length < this.state.loadedVideosCount){
-                // 親コンポーネントから指定されたジャンルの動画のみ追加する
-                if (videos[i].genre !== genre || videos[i] === undefined) {
-                    i++
-                    console.log(i);
-                    continue;
-                }
-                items.push(<VideoCard key={i} video={videos[i]}/>)
-                i++
-                console.log(i);
-                if(videos.length === i){
-                    break
-                }
-            }
+
+        for (let i = 0; i < loadedVideosCount; i++) {
+            // 親コンポーネントから指定されたジャンルの動画のみ追加する
+            items.push(<VideoCard key={i} video={videos[i]}/>)
+        }
+
+        if (hasMoreVideos) {
+            return (
+                <VideoListTemplate videos={items} onClick={e => {
+                    this.loadVideos(e, videos.length)
+                }}/>
+            )
         }
 
         return (
-            <VideoListTemplate videos={items} onClick={() => {
-                this.loadVideos()
-            }}/>
+            <MaxVideoListTemplate videos={items}/>
         )
     }
 }
