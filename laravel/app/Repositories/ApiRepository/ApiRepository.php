@@ -23,7 +23,8 @@ class ApiRepository implements ApiRepositoryInterface
     public function getNewVideosOfRegisteredChannel(): array
     {
         $now    = Carbon::now();
-        $after  = $this->video_repo->fetchLatestPublishedAtVideoRecord()->published_at;
+        $after  = substr((new Carbon($this->video_repo->fetchLatestPublishedAtVideoRecord()->published_at))
+                ->format(\DateTime::ATOM), 0, 19) . '.000Z';
         $before = substr($now->format(\DateTime::ATOM), 0, 19) . '.000Z';
         $query  = $this->channel_repo->fetchAnyColumn('hash');
         $videos = $res = [];
@@ -55,7 +56,7 @@ class ApiRepository implements ApiRepositoryInterface
             'title'        => $res->snippet->title,
             'hash'         => $hash,
             'video_count'  => $res->statistics->videoCount,
-            'published_at' => $res->snippet->publishedAt,
+            'published_at' => (new Carbon($res->snippet->publishedAt))->format('Y-m-d H:i:s'),
         ];
 
         $channel_thumbnail = [
@@ -99,14 +100,14 @@ class ApiRepository implements ApiRepositoryInterface
         foreach ($res as $data) {
             if (isset($registered_video_hashes[$data->id->videoId])) continue;
             $title    = $data->snippet->title;
-            $hash = $data->id->videoId;
+            $hash     = $data->id->videoId;
             $genre    = $this->determine_video_genre($hash, $title);
             $videos[] = [
                 'channel_id'   => $channel_id,
                 'title'        => $title,
                 'hash'         => $hash,
                 'genre'        => $genre,
-                'published_at' => $data->snippet->publishedAt,
+                'published_at' => (new \Carbon\Carbon($data->snippet->publishedAt))->format('Y-m-d H:i:s')
             ];
 
             if ($data->snippet->liveBroadcastContent === 'none') {
@@ -143,38 +144,40 @@ class ApiRepository implements ApiRepositoryInterface
          */
         $channels = config('channels');
         $keywords = config('const.KEYWORDS');
-        $flag = 0;
+        $flag     = 0;
         switch ($hash) {
             case $channels[1]['hash']:
-                if ($this->array_strpos($title, $keywords['others']) === true) {
+                if (array_strpos($title, $keywords['others']) === true) {
                     $flag = 3;
                 }
                 break;
             case $channels[2]['hash']:
-                if ($this->array_strpos($title, $keywords['2']) === true) {
+                // 配列はプロパティで持つ
+                if (arrayStrpos($title, $keywords['2']) === true) {
                     $flag = 1;
                 }
                 break;
             // 基本的にbattle
             case $channels[8]['hash']:
-                $flag = 1;
-                if ($this->array_strpos($title, $keywords['song']) === true) {
+                if (arrayStrpos($title, $keywords['song']) === true) {
                     $flag = 0;
-                }
-                if ($this->array_strpos($title, $keywords['8']) === true) {
+                } else if (arrayStrpos($title, $keywords['8']) === true) {
                     $flag = 3;
+                } else {
+                    $flag = 1;
                 }
                 break;
             // 基本的にbattle
             case $channels[9]['hash']:
-                $flag = 1;
-                if ($this->array_strpos($title, $keywords['song']) === true) {
+                if (arrayStrpos($title, $keywords['song']) === true) {
                     $flag = 0;
+                } else {
+                    $flag = 1;
                 }
                 break;
             // 基本的にsong
             case $channels[23]['hash']:
-                if ($this->array_strpos($title, $keywords['23']) === true) {
+                if (arrayStrpos($title, $keywords['23']) === true) {
                     $flag = 1;
                 }
                 break;
@@ -184,12 +187,19 @@ class ApiRepository implements ApiRepositoryInterface
             case $channels[33]['hash']:
                 $flag = 2;
                 break;
+            case $channels[39]['hash']:
+                // 基本的にHIPHOPではない
+                if (arrayStrpos($title, $keywords['hiphop']) === true) {
+                    $flag = 0;
+                } else {
+                    $flag = 99;
+                }
+                break;
             default:
                 break;
         }
 
-        // インタビューは全てのチャンネルにまたがるため、全てのタイトルをチェックする
-        if ($this->array_strpos($title, $keywords['interview']) === true) {
+        if (arrayStrpos($title, $keywords['interview']) === true) {
             $flag = 2;
         }
 
@@ -203,32 +213,16 @@ class ApiRepository implements ApiRepositoryInterface
             case 2:
                 $genre = 'interview';
                 break;
-             case 3:
-                 $genre = 'others';
-                 break;
+            case 3:
+                $genre = 'others';
+                break;
+            case 99:
+                $genre = 'not HIPHOP';
+                break;
             default:
                 break;
         }
         return $genre;
-    }
-    
-    /**
-     * $needleを配列にしたstrposの文字列検索をする
-     * $haystackの中に$needlesがあればtrueを返す
-     *
-     * @param string $haystack
-     * @param array $needles
-     * @param integer $offset
-     * @return boolean
-     */
-    private function array_strpos(string $haystack, array $needles, int $offset = 0): bool
-    {
-        foreach ($needles as $needle) {
-            if (strpos($haystack, $needle, $offset) !== false) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

@@ -16,7 +16,8 @@ $ docker-compose up -d
 Set React in Laravel
 ```
 $ cd laravel
-$ composer install
+$ php artisan key:generate
+$ composer i
 $ npm i
 $ npm run prod
 ```
@@ -45,7 +46,10 @@ If you added a new folder under app directory, write the directory name in compo
             "database/seeds",
             "database/factories",
             "app/Repositories",
-            "app/Services"  /* here */
+            "app/Services"
+        ],
+        "files": [
+            "app/helpers.php"
         ],
         ...
    }

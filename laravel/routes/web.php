@@ -11,15 +11,18 @@
 |
 */
 
-Route::get('/', 'MaterialUiSampleController@react');
-Route::get('/video', 'MaterialUiSampleController@react');
-Route::get('/video/{hash?}', 'MaterialUiSampleController@react');
+Route::get('/', 'SpaController@index');
+Route::get('/video', 'SpaController@index');
+Route::get('/video/{hash?}', 'SpaController@index');
 
-Route::get('/battle', 'MaterialUiSampleController@react');
-Route::get('/battle/{hash?}', 'MaterialUiSampleController@react');
-Route::get('/channel', 'MaterialUiSampleController@react');
-Route::get('/channel/{hash?}', 'MaterialUiSampleController@react');
+Route::get('/battle', 'SpaController@index');
+Route::get('/battle/{hash?}', 'SpaController@index');
+Route::get('/channel', 'SpaController@index');
+Route::get('/channel/{hash?}', 'SpaController@index');
 
-Route::get('/music_video', 'MaterialUiSampleController@react');
-Route::get('/interview', 'MaterialUiSampleController@react');
-Route::get('/others', 'MaterialUiSampleController@react');
+Route::get('/music_video', 'SpaController@index');
+Route::get('/interview', 'SpaController@index');
+Route::get('/others', 'SpaController@index');
+
+// API
+Route::get('/api/video/list', 'ApiController@getAllVideos');

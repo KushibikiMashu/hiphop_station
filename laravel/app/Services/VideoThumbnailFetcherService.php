@@ -50,7 +50,7 @@ class VideoThumbnailFetcherService extends BaseService
         if (file_exists(public_path($file_path))) return;
         dump($file_path); // あえて残す
 
-        $result = $this->download_jpg_file_repo->couldDownloadJpgFromUrl($url, $file_path);
+        $result = $this->jpg_repo->couldDownloadJpgFromUrl($url, $file_path);
         if ($result === false) {
             Log::warning('Cannot download image file from: ' . $url);
             $this->video_repo->deleteByHash($hash);

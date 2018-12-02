@@ -58,7 +58,7 @@ class CreateJsonOfLatestVideoAndChannel extends Command
     private function createJson(string $filename, array $array): void
     {
         $json = json_encode($array, JSON_UNESCAPED_UNICODE);
-        $file = public_path( "json/{$filename}.json");
+        $file = public_path("json/{$filename}.json");
         file_put_contents($file, $json);
     }
 }
