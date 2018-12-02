@@ -147,7 +147,7 @@ class ApiRepository implements ApiRepositoryInterface
         $flag     = 0;
         switch ($hash) {
             case $channels[1]['hash']:
-                if (array_strpos($title, $keywords['others']) === true) {
+                if (arrayStrpos($title, $keywords['others']) === true) {
                     $flag = 3;
                 }
                 break;
