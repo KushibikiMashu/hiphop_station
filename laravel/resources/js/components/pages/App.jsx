@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import Header from "../organisms/Header";
 import Main from './Main'
 
-export default function App(){
+export default function App() {
     return (
         <React.Fragment>
             <Header/>
@@ -13,5 +13,5 @@ export default function App(){
 }
 
 if (document.getElementById('root')) {
-    ReactDOM.render(<App />, document.getElementById('root'))
+    ReactDOM.render(<App/>, document.getElementById('root'))
 }

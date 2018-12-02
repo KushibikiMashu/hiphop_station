@@ -5,7 +5,6 @@ import VideoCard from '../organisms/VideoCard'
 import VideoCardDummy from '../organisms/VideoCardDummy'
 import VideoListTemplate from '../templates/VideoListTemplate'
 import VideoListDummyTemplate from '../templates/VideoListDummyTemplate'
-import Grid from "@material-ui/core/Grid/Grid";
 
 const PATH = pathToJson("main")
 
