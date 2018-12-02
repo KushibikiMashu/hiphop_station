@@ -208,6 +208,7 @@ class VideoRepository implements YoutubeRepositoryInterface
                 'channel.created_at as channel_created_at'
                 )
             ->join('channel', 'video.channel_id', '=', 'channel.id')
+
             ->where('video.created_at', '>', (new \Carbon\Carbon)->subWeeks(2)->format('Y-m-d H:i:s'))
             ->orderBy('video.created_at', 'desc')
             ->get();

@@ -23,7 +23,8 @@ class ApiRepository implements ApiRepositoryInterface
     public function getNewVideosOfRegisteredChannel(): array
     {
         $now    = Carbon::now();
-        $after  = $this->video_repo->fetchLatestPublishedAtVideoRecord()->published_at;
+        $after  = substr((new Carbon($this->video_repo->fetchLatestPublishedAtVideoRecord()->published_at))
+                ->format(\DateTime::ATOM), 0, 19) . '.000Z';
         $before = substr($now->format(\DateTime::ATOM), 0, 19) . '.000Z';
         $query  = $this->channel_repo->fetchAnyColumn('hash');
         $videos = $res = [];
@@ -55,7 +56,7 @@ class ApiRepository implements ApiRepositoryInterface
             'title'        => $res->snippet->title,
             'hash'         => $hash,
             'video_count'  => $res->statistics->videoCount,
-            'published_at' => $res->snippet->publishedAt,
+            'published_at' => (new Carbon($res->snippet->publishedAt))->format('Y-m-d H:i:s'),
         ];
 
         $channel_thumbnail = [
