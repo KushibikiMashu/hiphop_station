@@ -14,13 +14,11 @@ class VideoApiService extends \App\Services\BaseService
      *
      * @return array
      */
-    public function getVideosOfThisTwoWeeks(): array
+    public function getAllVideos(): array
     {
         $new_videos  = [];
-        $videos      = $this->video_repo->getAllVideoJoinedChannelTwoWeeks();
-        $twoWeeksAgo = (new \Carbon\Carbon)->subWeeks(2)->format('Y-m-d H:i:s');
+        $videos      = $this->video_repo->getAllVideoJoinedChannel();
         foreach ($videos as $video) {
-            if ((new \Carbon\Carbon($video->published_at)) < $twoWeeksAgo) continue;
             $new_videos[] = $this->addOtherData($video);
         }
         return $new_videos;
@@ -35,7 +33,7 @@ class VideoApiService extends \App\Services\BaseService
     private function addOtherData($video)
     {
         $video->shortTitle = mb_strimwidth($video->title, 0, 50, '...');
-        $video->diffDate   = getDateDiff($video->published_at);
+        $video->diffDate   = getDateDiff($video->publishedAt);
         $video->thumbnail  = '/image/video_thumbnail/' . config('const.SIZES')[2] . "/{$video->hash}.jpg";
         return $video;
     }

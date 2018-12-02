@@ -14,8 +14,8 @@ class ApiController extends Controller
      * @param VideoApiService $service
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getVideoNew(VideoApiService $service): \Illuminate\Http\JsonResponse
+    public function getAllVideos(VideoApiService $service): \Illuminate\Http\JsonResponse
     {
-        return response()->json($service->getVideosOfThisTwoWeeks());
+        return response()->json($service->getAllVideos());
     }
 }

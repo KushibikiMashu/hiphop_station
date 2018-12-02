@@ -191,7 +191,7 @@ class VideoRepository implements YoutubeRepositoryInterface
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getAllVideoJoinedChannelTwoWeeks(): \Illuminate\Support\Collection
+    public function getAllVideoJoinedChannel(): \Illuminate\Support\Collection
     {
         return $this->video
             ->select(
@@ -199,18 +199,16 @@ class VideoRepository implements YoutubeRepositoryInterface
                 'video.title as title',
                 'video.hash as hash',
                 'video.genre as genre',
-                'video.published_at as published_at',
-                'video.created_at as created_at',
-                'channel.id as channel_id',
-                'channel.title as channel_title',
-                'channel.hash as channel_hash',
-                'channel.published_at as channel_published_at',
-                'channel.created_at as channel_created_at'
-                )
+                'video.published_at as publishedAt',
+                'video.created_at as createdAt',
+                'channel.id as channelId',
+                'channel.title as channelTitle',
+                'channel.hash as channelHash',
+                'channel.published_at as channelPublishedAt',
+                'channel.created_at as channelCreatedAt'
+            )
             ->join('channel', 'video.channel_id', '=', 'channel.id')
-
-            ->where('video.created_at', '>', (new \Carbon\Carbon)->subWeeks(2)->format('Y-m-d H:i:s'))
-            ->orderBy('video.created_at', 'desc')
+            ->orderBy('video.published_at', 'desc')
             ->get();
     }
 }
