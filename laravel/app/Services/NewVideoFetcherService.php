@@ -59,7 +59,7 @@ class NewVideoFetcherService extends BaseService
         $pub_time = strtotime($channel->published_at);
         while ($pub_time < $now_time) {
             $start = $this->convertToYoutubeDatetimeFormat($pub_time);
-            $end = $this->AddOneMonth($pub_time);
+            $end = $this->AddThreeMonths($pub_time);
             // startが現在時刻を超えたら、現在時刻を利用する
             if ($now_time < strtotime($end)) {
                 $end = $this->convertToYoutubeDatetimeFormat($now_time);
@@ -100,9 +100,9 @@ class NewVideoFetcherService extends BaseService
      * @param $timestamp
      * @return string
      */
-    private function AddOneMonth($timestamp): string
+    private function AddThreeMonths($timestamp): string
     {
-        return substr(\Carbon\Carbon::createFromTimestamp($timestamp)->addDays(30)->format(self::format), 0, 19) . '.000Z';
+        return substr(\Carbon\Carbon::createFromTimestamp($timestamp)->addMonths(3)->format(self::format), 0, 19) . '.000Z';
     }
 
     /**
