@@ -99,15 +99,9 @@ class ApiRepository implements ApiRepositoryInterface
         $registered_video_hashes = $this->video_repo->fetchPluckedColumn('hash')->flip();
         foreach ($res as $data) {
             if (isset($registered_video_hashes[$data->id->videoId])) continue;
-            // AbemaTVでHIPHOPという文字列が存在しなければ処理をスキップする
-            if ($channel_id === config('channels')[39]['hash']) {
-                if (strpos($data->snippet->title, config('const.KEYWORD')['hiphop']) === false) {
-                    continue;
-                }
-            }
             $title    = $data->snippet->title;
             $hash     = $data->id->videoId;
-            $genre    = $this->determine_video_genre($hash, $title);
+            $genre    = $this->getGenre($channel_id, $title);
             $videos[] = [
                 'channel_id'   => $channel_id,
                 'title'        => $title,
@@ -137,11 +131,11 @@ class ApiRepository implements ApiRepositoryInterface
     /**
      * 試着動画のgenreを振り分ける
      *
-     * @param string $hash
+     * @param string $channel_hash
      * @param string $title
      * @return string
      */
-    public function determine_video_genre(string $hash, string $title): string
+    public function getGenre(string $channel_hash, string $title): string
     {
         /**
          * titleとchannel_idでgenreを分類する
@@ -150,36 +144,37 @@ class ApiRepository implements ApiRepositoryInterface
         $channels = config('channels');
         $keywords = config('const.KEYWORDS');
         $flag     = 0;
-        switch ($hash) {
+        switch ($channel_hash) {
             case $channels[1]['hash']:
-                if (arrayStrpos($title, $keywords[1]['radio']) === true) {
+                if (arrayStrpos($title, $keywords[1]['radio'])) {
                     $flag = 3;
                 }
                 break;
             case $channels[2]['hash']:
-                if (arrayStrpos($title, $keywords[2]['battle']) === true) {
+                if (arrayStrpos($title, $keywords[2]['battle'])) {
                     $flag = 1;
-                } elseif (arrayStrpos($title, $keywords[2]['others']) === true) {
+                } elseif (arrayStrpos($title, $keywords[2]['others'])) {
                     $flag = 98;
                 }
                 break;
             case $channels[7]['hash']:
-                if (arrayStrpos($title, $keywords[7]['others']) === true) {
+                if (arrayStrpos($title, $keywords[7]['others'])) {
                     $flag = 98;
                 }
                 break;
             case $channels[8]['hash']: // 基本的にbattle
                 $flag = 1;
-                if (arrayStrpos($title, $keywords[8]['MV']) === true) {
+                if (arrayStrpos($title, $keywords[8]['MV'])) {
                     $flag = 0;
-                } elseif (arrayStrpos($title, $keywords[8]['interview']) === true) {
+                } elseif (arrayStrpos($title, $keywords[8]['interview'])) {
                     $flag = 2;
-                } elseif (arrayStrpos($title, $keywords[8]['radio']) === true) {
+                } elseif (arrayStrpos($title, $keywords[8]['radio'])) {
                     $flag = 3;
                 }
                 break;
             case $channels[9]['hash']: // 基本的にbattle
-                if (arrayStrpos($title, $keywords[9]['MV']) === true) {
+                $flag = 1;
+                if (arrayStrpos($title, $keywords[9]['MV'])) {
                     $flag = 0;
                 } elseif (arrayStrpos($title, $keywords[9]['interview'])) {
                     $flag = 2;
@@ -233,7 +228,10 @@ class ApiRepository implements ApiRepositoryInterface
                 }
                 break;
             case $channels[39]['hash']:
-                $flag = 98;
+                $flag = 99;
+                if (arrayStrpos($title, $keywords[38]['others'])) {
+                    $flag = 98;
+                }
                 break;
             case $channels[41]['hash']:
                 if (arrayStrpos($title, $keywords[41]['others'])) {
@@ -243,8 +241,6 @@ class ApiRepository implements ApiRepositoryInterface
             default:
                 break;
         }
-        dump($title);
-        dump($flag);
         return $this->determineVideoGenre($flag);
     }
 

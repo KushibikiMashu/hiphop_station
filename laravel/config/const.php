@@ -52,7 +52,10 @@ return [
         38 => [
             'others' => ['バトル用ビート'],
         ],
-        // 39 others
+        // 39 基本的に not HIPHOP
+        39 => [
+            'others' => ['HIPHOP'],
+            ],
         41 => [
             'others' => ['メイキング'],
         ],
