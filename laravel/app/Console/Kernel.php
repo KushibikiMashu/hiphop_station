@@ -40,6 +40,14 @@ class Kernel extends ConsoleKernel
                 $this->call('create:json');
             })
             ->timezone('Asia/Tokyo');
+
+        $schedule->command('fetch:allVideoThumbnail')
+            ->daily()
+            ->after(function () {
+                $this->call('create:json');
+            })
+            ->timezone('Asia/Tokyo');
+
     }
 
     /**
