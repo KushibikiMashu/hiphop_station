@@ -99,6 +99,12 @@ class ApiRepository implements ApiRepositoryInterface
         $registered_video_hashes = $this->video_repo->fetchPluckedColumn('hash')->flip();
         foreach ($res as $data) {
             if (isset($registered_video_hashes[$data->id->videoId])) continue;
+            // AbemaTVでHIPHOPという文字列が存在しなければ処理をスキップする
+            if ($channel_id === config('channels')[39]['hash']) {
+                if (strpos($data->snippet->title, config('const.KEYWORD')['hiphop']) === false) {
+                    continue;
+                }
+            }
             $title    = $data->snippet->title;
             $hash     = $data->id->videoId;
             $genre    = $this->determine_video_genre($hash, $title);
@@ -139,70 +145,118 @@ class ApiRepository implements ApiRepositoryInterface
     {
         /**
          * titleとchannel_idでgenreを分類する
-         * shinjuku tokyo, UMB, 戦国MCBattle, ifktv
-         * $flagで状態を持つ。0はsong。1はbattle。今後2はinterviewの予定
+         * $flagで状態を持つ
          */
         $channels = config('channels');
         $keywords = config('const.KEYWORDS');
         $flag     = 0;
         switch ($hash) {
             case $channels[1]['hash']:
-                if (arrayStrpos($title, $keywords['others']) === true) {
+                if (arrayStrpos($title, $keywords[1]['radio']) === true) {
                     $flag = 3;
                 }
                 break;
             case $channels[2]['hash']:
-                // 配列はプロパティで持つ
-                if (arrayStrpos($title, $keywords['2']) === true) {
+                if (arrayStrpos($title, $keywords[2]['battle']) === true) {
                     $flag = 1;
+                } elseif (arrayStrpos($title, $keywords[2]['others']) === true) {
+                    $flag = 98;
                 }
                 break;
-            // 基本的にbattle
-            case $channels[8]['hash']:
-                if (arrayStrpos($title, $keywords['song']) === true) {
+            case $channels[7]['hash']:
+                if (arrayStrpos($title, $keywords[7]['others']) === true) {
+                    $flag = 98;
+                }
+                break;
+            case $channels[8]['hash']: // 基本的にbattle
+                $flag = 1;
+                if (arrayStrpos($title, $keywords[8]['MV']) === true) {
                     $flag = 0;
-                } else if (arrayStrpos($title, $keywords['8']) === true) {
+                } elseif (arrayStrpos($title, $keywords[8]['interview']) === true) {
+                    $flag = 2;
+                } elseif (arrayStrpos($title, $keywords[8]['radio']) === true) {
                     $flag = 3;
-                } else {
-                    $flag = 1;
                 }
                 break;
-            // 基本的にbattle
-            case $channels[9]['hash']:
-                if (arrayStrpos($title, $keywords['song']) === true) {
+            case $channels[9]['hash']: // 基本的にbattle
+                if (arrayStrpos($title, $keywords[9]['MV']) === true) {
                     $flag = 0;
-                } else {
+                } elseif (arrayStrpos($title, $keywords[9]['interview'])) {
+                    $flag = 2;
+                }
+                break;
+            case $channels[10]['hash']:
+                if (arrayStrpos($title, $keywords[10]['interview'])) {
+                    $flag = 2;
+                }
+                break;
+            case $channels[20]['hash']:
+                if (arrayStrpos($title, $keywords[20]['others'])) {
+                    $flag = 98;
+                }
+                break;
+            case $channels[21]['hash']:
+                $flag = 99;
+                if (arrayStrpos($title, $keywords[21]['MV'])) {
+                    $flag = 0;
+                }
+                break;
+            case $channels[23]['hash']:
+                if (arrayStrpos($title, $keywords[23]['battle'])) {
                     $flag = 1;
                 }
                 break;
-            // 基本的にsong
-            case $channels[23]['hash']:
-                if (arrayStrpos($title, $keywords['23']) === true) {
-                    $flag = 1;
+            case $channels[24]['hash']:
+                $flag = 99;
+                break;
+            case $channels[29]['hash']:
+                $flag = 98;
+                if (arrayStrpos($title, $keywords[29]['MV'])) {
+                    $flag = 0;
                 }
                 break;
             case $channels[31]['hash']:
-                $flag = 2;
+                $flag = 98;
                 break;
             case $channels[33]['hash']:
                 $flag = 2;
                 break;
-            case $channels[39]['hash']:
-                // 基本的にHIPHOPではない
-                if (arrayStrpos($title, $keywords['hiphop']) === true) {
+            case $channels[37]['hash']:
+                $flag = 98;
+                if (arrayStrpos($title, $keywords[37]['MV'])) {
                     $flag = 0;
-                } else {
-                    $flag = 99;
+                }
+                break;
+            case $channels[38]['hash']:
+                if (arrayStrpos($title, $keywords[38]['others'])) {
+                    $flag = 98;
+                }
+                break;
+            case $channels[39]['hash']:
+                $flag = 98;
+                break;
+            case $channels[41]['hash']:
+                if (arrayStrpos($title, $keywords[41]['others'])) {
+                    $flag = 98;
                 }
                 break;
             default:
                 break;
         }
+        dump($title);
+        dump($flag);
+        return $this->determineVideoGenre($flag);
+    }
 
-        if (arrayStrpos($title, $keywords['interview']) === true) {
-            $flag = 2;
-        }
-
+    /**
+     * 動画のジャンルを決定する
+     *
+     * @param int $flag
+     * @return string
+     */
+    private function determineVideoGenre(int $flag): string
+    {
+        $genre = 'not HIPHOP';
         switch ($flag) {
             case 0:
                 $genre = 'MV';
@@ -214,6 +268,9 @@ class ApiRepository implements ApiRepositoryInterface
                 $genre = 'interview';
                 break;
             case 3:
+                $genre = 'radio';
+                break;
+            case 98:
                 $genre = 'others';
                 break;
             case 99:

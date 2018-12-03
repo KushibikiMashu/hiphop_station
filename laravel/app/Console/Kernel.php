@@ -24,9 +24,6 @@ class Kernel extends ConsoleKernel
         // ５分ごとに叩くコマンド
         Commands\FetchLatestVideosFromYoutubeApi::class,
         Commands\CreateJsonOfLatestVideoAndChannel::class,
-
-        // DBに登録済みの値を書き換えるコマンド
-        Commands\ExecuteUpdateVideoGenreQuery::class,
     ];
 
     /**
