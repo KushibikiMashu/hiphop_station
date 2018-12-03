@@ -89,9 +89,8 @@ class FetchLatestVideosFromYoutubeApiService extends BaseService
     {
         $new_video_thumbnails = array_slice($this->video_thumbnail_repo->fetchAllOrderByAsArray('id'), 0, $sum);
         foreach ($new_video_thumbnails as $record) {
-            foreach (config('const.SIZES') as $size) {
-                $this->fetchThumbnailInDatabase($record, $size);
-            }
+            if (\App\Video::find($record->video_id)->genre === 'not HIPHOP') continue;
+            $this->fetchThumbnailInDatabase($record, config('const.SIZES')[2]);
         }
     }
 

@@ -29,9 +29,8 @@ class VideoThumbnailFetcherService extends BaseService
     {
         $generator = $this->video_thumbnail_repo->fetchAll();
         foreach ($generator as $record) {
-            foreach (config('const.SIZES') as $size) {
-                $this->fetchThumbnailInDatabase($record, $size);
-            }
+            if (\App\Video::find($record->video_id)->genre === 'not HIPHOP') continue;
+            $this->fetchThumbnailInDatabase($record, config('const.SIZES')[2]);
         }
     }
 
@@ -44,7 +43,7 @@ class VideoThumbnailFetcherService extends BaseService
     private function fetchThumbnailInDatabase($record, string $size): void
     {
         $table = $this->video_thumbnail_repo->getTableName();
-        $url = str_replace('_live', '', $record->{$size});
+        $url   = str_replace('_live', '', $record->{$size});
         if (!$hash = $this->video_repo->getHashFromVideoThumbnail($record)) return;
         $file_path = "image/{$table}/{$size}/{$hash}.jpg";
         if (file_exists(public_path($file_path))) return;

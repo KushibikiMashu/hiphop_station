@@ -54,19 +54,19 @@ class NewVideoFetcherService extends BaseService
             return;
         }
 
-        // チャンネル公開日から1ヶ月ごとに取得する
+        // チャンネル公開日から3ヶ月ごとに取得する
         $now_time = strtotime('now');
         $pub_time = strtotime($channel->published_at);
         while ($pub_time < $now_time) {
             $start = $this->convertToYoutubeDatetimeFormat($pub_time);
-            $end = $this->AddThreeMonths($pub_time);
+            $end = $this->AddNityDays($pub_time);
             // startが現在時刻を超えたら、現在時刻を利用する
             if ($now_time < strtotime($end)) {
                 $end = $this->convertToYoutubeDatetimeFormat($now_time);
             }
             dump($end); // あえて入れている
             [$videos, $video_thumbnails] = $this->api_repo->getNewVideosByChannelHash($channel->id, $channel->hash, 50, $start, $end);
-            $pub_time += 86400 * 30;
+            $pub_time += 86400 * 90;
             if (is_null($videos)) continue;
             $this->saveVideosAndThumbnails($videos, $video_thumbnails);
         }
@@ -100,9 +100,9 @@ class NewVideoFetcherService extends BaseService
      * @param $timestamp
      * @return string
      */
-    private function AddThreeMonths($timestamp): string
+    private function AddNityDays($timestamp): string
     {
-        return substr(\Carbon\Carbon::createFromTimestamp($timestamp)->addMonths(3)->format(self::format), 0, 19) . '.000Z';
+        return substr(\Carbon\Carbon::createFromTimestamp($timestamp)->addDays(90)->format(self::format), 0, 19) . '.000Z';
     }
 
     /**
