@@ -15,13 +15,12 @@ const styles = theme => ({
 
 function VideoCard(props) {
     const {classes, video} = props
-
     return (
         <Grid item>
             <Card className={classes.card}>
                 <CustomCardMedia hash={video.hash} thumbnail={video.thumbnail}/>
                 <CustomCardContent title={video.shortTitle}/>
-                <CustomCardActions title={video.channelTitle} date={video.diffDate}/>
+                <CustomCardActions video={video}/>
             </Card>
         </Grid>
     )
@@ -33,3 +32,4 @@ VideoCard.propTypes = {
 }
 
 export default withStyles(styles)(VideoCard)
+
