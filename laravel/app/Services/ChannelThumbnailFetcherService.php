@@ -28,9 +28,7 @@ class ChannelThumbnailFetcherService extends BaseService
     {
         $generator = $this->channel_thumbnail_repo->fetchAll();
         foreach ($generator as $record) {
-            foreach (config('const.SIZES') as $size) {
-                $this->fetchThumbnailInDatabase($record, $size);
-            }
+            $this->fetchThumbnailInDatabase($record, config('const.SIZES')[2]);
         }
     }
 

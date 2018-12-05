@@ -162,7 +162,12 @@ return [
         'hash'    => 'UCy_pgokoyAhgpbAP-_XtCzA'
     ],
     41 => [
-        'channel' => '術ノ穴/subenoana', // メイキング→others
+        'channel' => '術ノ穴/subenoana',
         'hash'    => 'UCb__Bm7VBJWGaXSuHZMkSrQ'
     ],
+    42 => [
+        'channel' => 'Grand Master TV',
+        'hash'    => 'UCwjZ-4xxwPCel203nJlXB7Q'
+    ],
+
 ];

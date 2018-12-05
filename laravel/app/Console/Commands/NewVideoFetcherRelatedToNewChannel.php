@@ -12,7 +12,7 @@ class NewVideoFetcherRelatedToNewChannel extends Command
      *
      * @var string
      */
-    protected $signature = 'Fetch:NewVideo';
+    protected $signature = 'fetch:NewVideo';
 
     /**
      * The console command description.
@@ -37,6 +37,6 @@ class NewVideoFetcherRelatedToNewChannel extends Command
     public function handle(NewVideoFetcherService $service)
     {
         $service->run();
-        \Log::info("OK 'Fetch:NewVideo'");
+        \Log::info("OK 'fetch:NewVideo'");
     }
 }

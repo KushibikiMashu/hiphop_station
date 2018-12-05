@@ -24,9 +24,6 @@ class Kernel extends ConsoleKernel
         // ５分ごとに叩くコマンド
         Commands\FetchLatestVideosFromYoutubeApi::class,
         Commands\CreateJsonOfLatestVideoAndChannel::class,
-
-        // DBに登録済みの値を書き換えるコマンド
-        Commands\ExecuteUpdateVideoGenreQuery::class,
     ];
 
     /**
@@ -43,6 +40,14 @@ class Kernel extends ConsoleKernel
                 $this->call('create:json');
             })
             ->timezone('Asia/Tokyo');
+
+        $schedule->command('fetch:allVideoThumbnail')
+            ->daily()
+            ->after(function () {
+                $this->call('create:json');
+            })
+            ->timezone('Asia/Tokyo');
+
     }
 
     /**

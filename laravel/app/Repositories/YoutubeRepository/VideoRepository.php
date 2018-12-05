@@ -208,6 +208,7 @@ class VideoRepository implements YoutubeRepositoryInterface
                 'channel.created_at as channelCreatedAt'
             )
             ->join('channel', 'video.channel_id', '=', 'channel.id')
+            ->whereNotIn('video.genre', ['not HIPHOP'])
             ->orderBy('video.published_at', 'desc')
             ->get();
     }

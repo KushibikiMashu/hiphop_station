@@ -83,17 +83,17 @@ class ApiRepository implements ApiRepositoryInterface
         $res = $this->extended_youtube->listChannelVideos($channel_hash, $maxResult, $after, $before);
         if ($res === false) return [null, null];
 
-        return $this->processResponse($channel_id, $res);
+        return $this->processResponse($channel_id, $channel_hash, $res);
     }
 
     public function getNewVideosByChannelHashUnderFiftyVideos(int $channel_id, string $channel_hash, int $maxResult): array
     {
         $res = $this->extended_youtube->listChannelVideos($channel_hash, $maxResult);
         if ($res === false) return [null, null];
-        return $this->processResponse($channel_id, $res);
+        return $this->processResponse($channel_id, $channel_hash, $res);
     }
 
-    private function processResponse($channel_id, $res): array
+    private function processResponse($channel_id, $channel_hash, $res): array
     {
         $videos                  = $video_thumbnails = [];
         $registered_video_hashes = $this->video_repo->fetchPluckedColumn('hash')->flip();
@@ -101,7 +101,7 @@ class ApiRepository implements ApiRepositoryInterface
             if (isset($registered_video_hashes[$data->id->videoId])) continue;
             $title    = $data->snippet->title;
             $hash     = $data->id->videoId;
-            $genre    = $this->determine_video_genre($hash, $title);
+            $genre    = $this->getGenre($channel_id, $channel_hash, $title);
             $videos[] = [
                 'channel_id'   => $channel_id,
                 'title'        => $title,
@@ -131,78 +131,140 @@ class ApiRepository implements ApiRepositoryInterface
     /**
      * 試着動画のgenreを振り分ける
      *
-     * @param string $hash
+     * @param string $channel_hash
      * @param string $title
      * @return string
      */
-    public function determine_video_genre(string $hash, string $title): string
+    public function getGenre(int $channel_id, string $channel_hash, string $title): string
     {
         /**
          * titleとchannel_idでgenreを分類する
-         * shinjuku tokyo, UMB, 戦国MCBattle, ifktv
-         * $flagで状態を持つ。0はsong。1はbattle。今後2はinterviewの予定
+         * $flagで状態を持つ
          */
         $channels = config('channels');
         $keywords = config('const.KEYWORDS');
         $flag     = 0;
-        switch ($hash) {
+
+//        $genres = ['MV', 'radio']; // MV, radioなどジャンル名を配列で持たせる→constに定義
+//        $g = 'MV';
+//        foreach ($genres as $genre) {
+//            if (!isset($keywords[$channel_id][$genre])) continue;
+//            if (arrayStrpos($title, $keywords[$channel_id][$genre])) {
+//                $g = $genre;
+//            }
+//        }
+//        dump($title);
+//        dump($g);
+
+        switch ($channel_hash) {
             case $channels[1]['hash']:
-                if (array_strpos($title, $keywords['others']) === true) {
+                if (arrayStrpos($title, $keywords[1]['radio'])) {
                     $flag = 3;
                 }
                 break;
             case $channels[2]['hash']:
-                // 配列はプロパティで持つ
-                if (arrayStrpos($title, $keywords['2']) === true) {
+                if (arrayStrpos($title, $keywords[2]['battle'])) {
                     $flag = 1;
+                } elseif (arrayStrpos($title, $keywords[2]['others'])) {
+                    $flag = 98;
                 }
                 break;
-            // 基本的にbattle
-            case $channels[8]['hash']:
-                if (arrayStrpos($title, $keywords['song']) === true) {
+            case $channels[7]['hash']:
+                if (arrayStrpos($title, $keywords[7]['others'])) {
+                    $flag = 98;
+                }
+                break;
+            case $channels[8]['hash']: // 基本的にbattle
+                $flag = 1;
+                if (arrayStrpos($title, $keywords[8]['MV'])) {
                     $flag = 0;
-                } else if (arrayStrpos($title, $keywords['8']) === true) {
+                } elseif (arrayStrpos($title, $keywords[8]['interview'])) {
+                    $flag = 2;
+                } elseif (arrayStrpos($title, $keywords[8]['radio'])) {
                     $flag = 3;
-                } else {
-                    $flag = 1;
                 }
                 break;
-            // 基本的にbattle
-            case $channels[9]['hash']:
-                if (arrayStrpos($title, $keywords['song']) === true) {
+            case $channels[9]['hash']: // 基本的にbattle
+                $flag = 1;
+                if (arrayStrpos($title, $keywords[9]['MV'])) {
                     $flag = 0;
-                } else {
+                } elseif (arrayStrpos($title, $keywords[9]['interview'])) {
+                    $flag = 2;
+                }
+                break;
+            case $channels[10]['hash']:
+                if (arrayStrpos($title, $keywords[10]['interview'])) {
+                    $flag = 2;
+                }
+                break;
+            case $channels[20]['hash']:
+                if (arrayStrpos($title, $keywords[20]['others'])) {
+                    $flag = 98;
+                }
+                break;
+            case $channels[21]['hash']:
+                $flag = 99;
+                if (arrayStrpos($title, $keywords[21]['MV'])) {
+                    $flag = 0;
+                }
+                break;
+            case $channels[23]['hash']:
+                if (arrayStrpos($title, $keywords[23]['battle'])) {
                     $flag = 1;
                 }
                 break;
-            // 基本的にsong
-            case $channels[23]['hash']:
-                if (arrayStrpos($title, $keywords['23']) === true) {
-                    $flag = 1;
+            case $channels[24]['hash']:
+                $flag = 99;
+                break;
+            case $channels[29]['hash']:
+                $flag = 98;
+                if (arrayStrpos($title, $keywords[29]['MV'])) {
+                    $flag = 0;
                 }
                 break;
             case $channels[31]['hash']:
-                $flag = 2;
+                $flag = 98;
                 break;
             case $channels[33]['hash']:
                 $flag = 2;
                 break;
-            case $channels[39]['hash']:
-                // 基本的にHIPHOPではない
-                if (arrayStrpos($title, $keywords['hiphop']) === true) {
+            case $channels[37]['hash']:
+                $flag = 98;
+                if (arrayStrpos($title, $keywords[37]['MV'])) {
                     $flag = 0;
-                } else {
-                    $flag = 99;
+                }
+                break;
+            case $channels[38]['hash']:
+                if (arrayStrpos($title, $keywords[38]['others'])) {
+                    $flag = 98;
+                }
+                break;
+            case $channels[39]['hash']:
+                $flag = 99;
+                if (arrayStrpos($title, $keywords[38]['others'])) {
+                    $flag = 98;
+                }
+                break;
+            case $channels[41]['hash']:
+                if (arrayStrpos($title, $keywords[41]['others'])) {
+                    $flag = 98;
                 }
                 break;
             default:
                 break;
         }
+        return $this->determineVideoGenre($flag);
+    }
 
-        if (arrayStrpos($title, $keywords['interview']) === true) {
-            $flag = 2;
-        }
-
+    /**
+     * 動画のジャンルを決定する
+     *
+     * @param int $flag
+     * @return string
+     */
+    private function determineVideoGenre(int $flag): string
+    {
+        $genre = 'not HIPHOP';
         switch ($flag) {
             case 0:
                 $genre = 'MV';
@@ -214,6 +276,9 @@ class ApiRepository implements ApiRepositoryInterface
                 $genre = 'interview';
                 break;
             case 3:
+                $genre = 'radio';
+                break;
+            case 98:
                 $genre = 'others';
                 break;
             case 99:

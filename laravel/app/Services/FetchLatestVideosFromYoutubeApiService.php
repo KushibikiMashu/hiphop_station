@@ -52,7 +52,7 @@ class FetchLatestVideosFromYoutubeApiService extends BaseService
     {
         $channel_id = $this->channel_repo->fetchChannelIdByHash($video->snippet->channelId);
         $title      = $video->snippet->title;
-        $genre      = $this->api_repo->determine_video_genre($channel_id, $title);
+        $genre      = $this->api_repo->getGenre($channel_id, $title);
         \Log::info($title);
 
         return [
@@ -89,9 +89,8 @@ class FetchLatestVideosFromYoutubeApiService extends BaseService
     {
         $new_video_thumbnails = array_slice($this->video_thumbnail_repo->fetchAllOrderByAsArray('id'), 0, $sum);
         foreach ($new_video_thumbnails as $record) {
-            foreach (config('const.SIZES') as $size) {
-                $this->fetchThumbnailInDatabase($record, $size);
-            }
+            if (\App\Video::find($record->video_id)->genre === 'not HIPHOP') continue;
+            $this->fetchThumbnailInDatabase($record, config('const.SIZES')[2]);
         }
     }
 

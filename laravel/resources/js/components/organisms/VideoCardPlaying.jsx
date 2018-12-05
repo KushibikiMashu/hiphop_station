@@ -12,6 +12,7 @@ const styles = theme => ({
         textAlign: 'center'
     },
     card: {
+        maxWidth: 640,
         width: '100%',
         justifyContent: 'center',
     },
