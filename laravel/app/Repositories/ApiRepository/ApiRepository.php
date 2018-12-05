@@ -83,17 +83,17 @@ class ApiRepository implements ApiRepositoryInterface
         $res = $this->extended_youtube->listChannelVideos($channel_hash, $maxResult, $after, $before);
         if ($res === false) return [null, null];
 
-        return $this->processResponse($channel_id, $res);
+        return $this->processResponse($channel_id, $channel_hash, $res);
     }
 
     public function getNewVideosByChannelHashUnderFiftyVideos(int $channel_id, string $channel_hash, int $maxResult): array
     {
         $res = $this->extended_youtube->listChannelVideos($channel_hash, $maxResult);
         if ($res === false) return [null, null];
-        return $this->processResponse($channel_id, $res);
+        return $this->processResponse($channel_id, $channel_hash, $res);
     }
 
-    private function processResponse($channel_id, $res): array
+    private function processResponse($channel_id, $channel_hash, $res): array
     {
         $videos                  = $video_thumbnails = [];
         $registered_video_hashes = $this->video_repo->fetchPluckedColumn('hash')->flip();
@@ -101,7 +101,7 @@ class ApiRepository implements ApiRepositoryInterface
             if (isset($registered_video_hashes[$data->id->videoId])) continue;
             $title    = $data->snippet->title;
             $hash     = $data->id->videoId;
-            $genre    = $this->getGenre($channel_id, $title);
+            $genre    = $this->getGenre($channel_id, $channel_hash, $title);
             $videos[] = [
                 'channel_id'   => $channel_id,
                 'title'        => $title,
@@ -135,7 +135,7 @@ class ApiRepository implements ApiRepositoryInterface
      * @param string $title
      * @return string
      */
-    public function getGenre(string $channel_hash, string $title): string
+    public function getGenre(int $channel_id, string $channel_hash, string $title): string
     {
         /**
          * titleとchannel_idでgenreを分類する
@@ -144,6 +144,18 @@ class ApiRepository implements ApiRepositoryInterface
         $channels = config('channels');
         $keywords = config('const.KEYWORDS');
         $flag     = 0;
+
+//        $genres = ['MV', 'radio']; // MV, radioなどジャンル名を配列で持たせる→constに定義
+//        $g = 'MV';
+//        foreach ($genres as $genre) {
+//            if (!isset($keywords[$channel_id][$genre])) continue;
+//            if (arrayStrpos($title, $keywords[$channel_id][$genre])) {
+//                $g = $genre;
+//            }
+//        }
+//        dump($title);
+//        dump($g);
+
         switch ($channel_hash) {
             case $channels[1]['hash']:
                 if (arrayStrpos($title, $keywords[1]['radio'])) {
