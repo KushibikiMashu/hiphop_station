@@ -250,6 +250,11 @@ class ApiRepository implements ApiRepositoryInterface
                     $flag = 98;
                 }
                 break;
+            case $channels[42]['hash']:
+                if (arrayStrpos($title, $keywords[42]['others'])) {
+                    $flag = 98;
+                }
+                break;
             default:
                 break;
         }
