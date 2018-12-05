@@ -8,11 +8,10 @@ import TwitterIcon from '../atoms/TwitterIcon'
 const styles = theme => ({
     root: {
         paddingTop: 0,
+        paddingRight: 10,
+        paddingLeft: 10,
         display: 'flex',
         alignItems: 'center',
-    },
-    content: {
-        paddingLeft: 6,
     },
     twitter: {
         marginLeft: 'auto',
@@ -24,7 +23,7 @@ function CustomCardActions(props) {
     const {classes, video} = props
     return (
         <CardActions className={classes.root}>
-            <div className={classes.content}>
+            <div>
                 <div>
                     <Typography variant='caption'>
                         {video.channelTitle}
