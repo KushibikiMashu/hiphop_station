@@ -45,7 +45,6 @@ const styles = theme => ({
 
 function VideoCardDummy(props) {
     const {classes} = props
-
     return (
         <Grid item>
             <Card className={classes.card}>

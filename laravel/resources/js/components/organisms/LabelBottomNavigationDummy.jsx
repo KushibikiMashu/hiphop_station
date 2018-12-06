@@ -18,7 +18,6 @@ const styles = {
 
 function LabelBottomNavigationDummy(props) {
     const {classes} = props
-
     return (
         <BottomNavigation className={classes.root}>
             <BottomNavigationAction icon={<FiberNewIcon/>}/>

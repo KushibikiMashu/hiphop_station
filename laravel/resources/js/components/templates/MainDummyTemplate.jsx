@@ -32,7 +32,6 @@ const styles = theme => ({
 
 function MainDummyTemplate(props) {
     const {classes, title, videos} = props
-
     return (
         <div className={classes.root}>
             <TitleBar title={title}/>

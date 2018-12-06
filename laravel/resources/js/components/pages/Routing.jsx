@@ -35,7 +35,6 @@ export default function Routing(props) {
             main.push(video)
         }
     })
-
     return (
         <React.Fragment>
             <Route exact path='/' render={() => <VideoList videos={main}/>}/>

@@ -15,7 +15,6 @@ const styles = theme => ({
 function CustomCardMedia(props) {
     const {classes, hash, thumbnail} = props
     const videoPlayer = '/video/' + hash
-
     return (
         <CardMedia className={classes.media} image={thumbnail} title={hash} component={Link} to={videoPlayer}/>
 

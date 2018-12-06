@@ -14,7 +14,6 @@ const styles = theme => ({
 
 function MaxVideoListTemplate(props) {
     const {classes, videos} = props
-
     return (
         <div className={classes.flex}>
             <Grid container justify='center' direction="row" spacing={16}>

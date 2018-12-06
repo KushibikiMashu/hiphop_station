@@ -17,7 +17,6 @@ function VideoPlayerTemplate(props) {
     // propsでvideoのオブジェクトを渡してもらう。
     // そのvideoをMainVideoに渡す。
     const {classes, videos} = props
-
     var hash = location.pathname.split('/').pop()
     var playingVideo = []
     videos.map(video => {
@@ -26,7 +25,6 @@ function VideoPlayerTemplate(props) {
         }
         playingVideo = video
     })
-
     return (
         <React.Fragment>
             <Grid container justify='center' spacing={16}>
