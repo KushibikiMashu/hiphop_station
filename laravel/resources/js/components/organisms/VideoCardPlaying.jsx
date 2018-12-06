@@ -5,6 +5,7 @@ import Card from '@material-ui/core/Card'
 import ResponsiveIframe from '../atoms/ResponsiveIframe'
 import CustomCardContent from "../molecules/CustomCardContent";
 import CustomCardActions from '../molecules/CustomCardActions'
+import {CONST} from "../const";
 
 const styles = theme => ({
     root: {
@@ -20,14 +21,12 @@ const styles = theme => ({
 
 function VideoCardPlaying(props) {
     const {classes, video} = props
-    const src = 'https://www.youtube.com/embed/' + video.hash
-
     return (
         <div className={classes.root}>
             <Card className={classes.card}>
-                <ResponsiveIframe src={src}/>
+                <ResponsiveIframe src={CONST.youtubeEnbedUrl + video.hash}/>
                 <CustomCardContent title={video.title}/>
-                <CustomCardActions title={video.channelTitle} date={video.publishedAt}/>
+                <CustomCardActions video={video}/>
             </Card>
         </div>
     )

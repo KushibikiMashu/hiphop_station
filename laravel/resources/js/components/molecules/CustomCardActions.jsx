@@ -1,38 +1,48 @@
-import React from "react"
+import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles';
-import CardActions from "@material-ui/core/CardActions/CardActions"
-import Typography from "@material-ui/core/Typography/Typography"
+import CardActions from '@material-ui/core/CardActions/CardActions'
+import Typography from '@material-ui/core/Typography/Typography'
+import TwitterIcon from '../atoms/TwitterIcon'
 
 const styles = theme => ({
     root: {
-        paddingLeft: 12,
-        paddingRight: 12,
+        paddingTop: 0,
+        paddingRight: 10,
+        paddingLeft: 10,
+        display: 'flex',
+        alignItems: 'center',
     },
-    date: {
+    twitter: {
         marginLeft: 'auto',
-    }
+        paddingRight: 8,
+    },
 })
 
 function CustomCardActions(props) {
-    const {classes, title, date} = props
-
+    const {classes, video} = props
     return (
         <CardActions className={classes.root}>
-            <Typography variant="caption">
-                {title}
-            </Typography>
-            <Typography variant="caption" className={classes.date}>
-                {date}
-            </Typography>
+            <div>
+                <div>
+                    <Typography variant='caption'>
+                        {video.channelTitle}
+                    </Typography>
+                    <Typography variant='caption'>
+                        {video.date}
+                    </Typography>
+                </div>
+            </div>
+            <div className={classes.twitter}>
+                <TwitterIcon hash={video.hash}/>
+            </div>
         </CardActions>
     )
 }
 
 CustomCardActions.propTypes = {
     classes: PropTypes.object.isRequired,
-    title: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
+    video: PropTypes.object.isRequired,
 }
 
 export default withStyles(styles)(CustomCardActions)
