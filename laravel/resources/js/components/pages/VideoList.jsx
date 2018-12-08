@@ -26,6 +26,9 @@ export default class VideoList extends React.Component {
             loadedVideosCount: max
         })
     }
+    componentDidMount(){
+        window.scrollTo(0, 0);
+    }
     // loadVideos関数が呼ばれると、再度render関数が作動する
     render() {
         const {hasMoreVideos, loadedVideosCount} = this.state
