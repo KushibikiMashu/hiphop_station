@@ -2,8 +2,8 @@ Framework: Laravel(5.7)
 
 Docker Images: Nginx, php-fpm, MySQL, Redis
 
-# How to set up
-supposed to be used on EC2
+# Set up
+environment: Amazon Linux 2(EC2)
 
 ```
 $ git clone https://github.com/KushibikiMashu/hiphop_station.git
