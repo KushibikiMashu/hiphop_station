@@ -13,23 +13,26 @@ const styles = theme => ({
         display: 'flex',
         alignItems: 'center',
     },
+    channelTitle: {
+        textAlign: 'left',
+    },
     twitter: {
         marginLeft: 'auto',
         paddingRight: 8,
     },
 })
 
-function CustomCardActions(props) {
+function CustomCardActionsPlaying(props) {
     const {classes, video} = props
     return (
         <CardActions className={classes.root}>
             <div>
                 <div>
-                    <Typography variant='caption'>
+                    <Typography variant='caption' className={classes.channelTitle}>
                         {video.channelTitle}
                     </Typography>
                     <Typography variant='caption'>
-                        {video.diffDate}
+                        {video.createdAt}
                     </Typography>
                 </div>
             </div>
@@ -40,9 +43,9 @@ function CustomCardActions(props) {
     )
 }
 
-CustomCardActions.propTypes = {
+CustomCardActionsPlaying.propTypes = {
     classes: PropTypes.object.isRequired,
     video: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(CustomCardActions)
+export default withStyles(styles)(CustomCardActionsPlaying)
