@@ -3,9 +3,8 @@ import request from 'superagent'
 import { pathToJson, videoList } from '../const'
 import MainTemplate from '../templates/MainTemplate'
 import MainDummyTemplate from '../templates/MainDummyTemplate';
-import VideoCardDummy from "../organisms/VideoCardDummy";
-
-const PATH = pathToJson('main')
+import VideoCardDummy from '../organisms/VideoCardDummy';
+import { CONST } from '../const'
 
 export default class Main extends React.Component {
     constructor(props) {
@@ -18,7 +17,7 @@ export default class Main extends React.Component {
     // コンポーネントがマウントする前に動画情報のJSONを読み込む
     componentWillMount() {
         if (this.state.videos === null) {
-            request.get(PATH)
+            request.get(CONST.pathToJson('main'))
                 .end((err, res) => {
                     this.loadedJson(err, res)
                 })
@@ -38,8 +37,6 @@ export default class Main extends React.Component {
 
     render() {
         const videos = this.state.videos
-        const title = 'HIPSTY'
-
         // state.videosがnullの間はDummyを表示する
         if (!videos) {
             let dummyVideos = []
@@ -47,12 +44,12 @@ export default class Main extends React.Component {
                 dummyVideos.push(<VideoCardDummy key={i}/>)
             }
             return (
-                <MainDummyTemplate title={title} videos={dummyVideos}/>
+                <MainDummyTemplate title={CONST.title} videos={dummyVideos}/>
             )
         }
 
         return (
-            <MainTemplate title={title} videos={videos}/>
+            <MainTemplate title={CONST.title} videos={videos}/>
         )
     }
 }
