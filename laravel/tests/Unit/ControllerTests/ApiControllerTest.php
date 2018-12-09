@@ -18,10 +18,10 @@ class ApiControllerTest extends TestCase
     /**
      * @test
      */
-    public function getNew__新着動画をJSONで返す()
+    public function getAllVideos__新着動画をJSONで返す()
     {
         $video    = self::createVideoRecord();
-        $response = $this->get('/api/video/new');
+        $response = $this->get('/api/video/list');
         $response->assertStatus(200);
         self::deleteRecordByTableAndId($video->getTable(), $video->id);
     }

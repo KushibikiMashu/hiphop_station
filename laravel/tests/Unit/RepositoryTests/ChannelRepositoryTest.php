@@ -190,4 +190,16 @@ class ChannelRepositoryTest extends TestCase
         $this->assertSame(1, $actual->video_count);
         self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
     }
+
+    /**
+     * @test
+     */
+    public function getChannelByChannelHash_channelをhashで取得する()
+    {
+        $channel = self::createChannelRecord();
+        $actual = $this->instance->getChannelByChannelHash($channel->hash)->getOriginal();
+        $expected = $channel->getOriginal();
+        $this->assertEquals($expected, $actual);
+        self::deleteRecordByTableAndId($channel->getTable(), $channel->id);
+    }
 }

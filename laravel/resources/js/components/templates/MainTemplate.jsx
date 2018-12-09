@@ -32,7 +32,6 @@ const styles = theme => ({
 
 function MainTemplate(props) {
     const {classes, title, videos} = props
-
     return (
         <div className={classes.root}>
             <TitleBar title={title}/>

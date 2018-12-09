@@ -11,7 +11,6 @@ export default class VideoList extends React.Component {
             loadedVideosCount: 20, // デフォルトの動画表示数
         }
     }
-
     // 「次の20件を表示」ボタンをクリックすると、新たに10個の動画を表示する
     loadVideos(e, max) {
         const loadedVideosCount = this.state.loadedVideosCount
@@ -27,7 +26,9 @@ export default class VideoList extends React.Component {
             loadedVideosCount: max
         })
     }
-
+    componentDidMount(){
+        window.scrollTo(0, 0);
+    }
     // loadVideos関数が呼ばれると、再度render関数が作動する
     render() {
         const {hasMoreVideos, loadedVideosCount} = this.state

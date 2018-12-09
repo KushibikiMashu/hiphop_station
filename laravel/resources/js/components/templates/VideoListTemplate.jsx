@@ -16,7 +16,6 @@ const styles = theme => ({
 
 function VideoListTemplate(props) {
     const {classes, videos, onClick} = props
-
     return (
         <div className={classes.flex}>
             <Grid container justify='center' direction="row" spacing={16}>

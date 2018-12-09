@@ -20,7 +20,6 @@ const styles = theme => ({
 
 function TitleBar(props) {
     const {classes, title} = props;
-
     return (
         <AppBar className={classes.appBar} position="fixed">
             <Toolbar>

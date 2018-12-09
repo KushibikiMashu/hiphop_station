@@ -15,7 +15,6 @@ const styles = theme => ({
 
 function CustomCardContent(props) {
     const {classes, title} = props
-
     return (
         <CardContent className={classes.cardContent}>
             <Typography gutterBottom variant="subheading">

@@ -167,4 +167,15 @@ class ChannelRepository implements YoutubeRepositoryInterface
     {
         $this->channel->where('id', $channel_id)->update(['video_count' => $video_count]);
     }
+
+    /**
+     * channelをhashで取得する
+     *
+     * @param string $channel_hash
+     * @return Channel
+     */
+    public function getChannelByChannelHash(string $channel_hash): Channel
+    {
+        return $this->channel->where('hash', $channel_hash)->first();
+    }
 }

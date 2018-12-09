@@ -54,7 +54,7 @@ return [
         ],
         // 39 基本的に not HIPHOP
         39 => [
-            'others' => ['HIPHOP'],
+            'others' => ['HIPHOP', 'ラップスタア'],
         ],
         41 => [
             'others' => ['メイキング'],

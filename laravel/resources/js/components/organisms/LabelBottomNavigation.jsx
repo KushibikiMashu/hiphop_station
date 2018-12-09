@@ -33,7 +33,6 @@ class LabelBottomNavigation extends React.Component {
     render() {
         const {classes} = this.props
         const {value} = this.state
-
         return (
             <BottomNavigation value={value} onChange={this.handleChange} className={classes.root}>
                 <BottomNavigationAction label="New" value="new" component={Link} to='/' icon={<FiberNewIcon/>}/>
