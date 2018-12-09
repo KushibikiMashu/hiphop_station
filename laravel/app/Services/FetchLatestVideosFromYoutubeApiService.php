@@ -36,8 +36,8 @@ class FetchLatestVideosFromYoutubeApiService extends BaseService
                 if (isset($registered_video_hashes[$video->id->videoId])) {
                     continue;
                 }
-                $this->video_repo->saveRecord($this->prepare_video_record($video));
-                $this->video_thumbnail_repo->saveRecord($this->prepare_video_thumbnail_record($video));
+                $this->video_repo->saveRecord($this->prepareVideoRecord($video));
+                $this->video_thumbnail_repo->saveRecord($this->prepareVideoThumbnailRecord($video));
             }
         }
     }
@@ -48,11 +48,12 @@ class FetchLatestVideosFromYoutubeApiService extends BaseService
      * @param object $video
      * @return array
      */
-    private function prepare_video_record($video): array
+    private function prepareVideoRecord($video): array
     {
-        $channel_id = $this->channel_repo->fetchChannelIdByHash($video->snippet->channelId);
+        $channel = $this->channel_repo->getChannelByChannelHash($video->snippet->channelId);
+        $channel_id = $channel->id;
         $title      = $video->snippet->title;
-        $genre      = $this->api_repo->getGenre($channel_id, $title);
+        $genre      = $this->api_repo->getGenre($channel_id, $channel->hash, $title);
         \Log::info($title);
 
         return [
@@ -70,7 +71,7 @@ class FetchLatestVideosFromYoutubeApiService extends BaseService
      * @param object $video
      * @return array
      */
-    private function prepare_video_thumbnail_record($video): array
+    private function prepareVideoThumbnailRecord($video): array
     {
         return [
             'video_id' => $this->video_repo->fetchVideoIdByHash($video->id->videoId),
