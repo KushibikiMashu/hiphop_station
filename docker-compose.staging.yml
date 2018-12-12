@@ -19,7 +19,7 @@ services:
   nginx:
     image: nginx:stable-alpine
     volumes:
-    - ./nginx/conf.d/local:/etc/nginx/conf.d
+    - ./nginx/conf.d/staging:/etc/nginx/conf.d
     - ./nginx/log:/var/log/nginx
     - ./laravel:/var/www/laravel
     - ./nginx/ssl:/var/lib/https-portal
