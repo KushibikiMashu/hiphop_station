@@ -12,7 +12,7 @@ services:
     - nginx:nginx
     restart: always
     environment:
-      DOMAINS: 'hipsty.local.net -> http://nginx'
+      DOMAINS: 'ec2-100-24-19-105.compute-1.amazonaws.com -> http://nginx'
       STAGE: 'staging'
       # FORCE_RENEW: 'true'
 
