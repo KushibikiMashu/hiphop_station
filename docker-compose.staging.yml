@@ -12,8 +12,8 @@ services:
     - nginx:nginx
     restart: always
     environment:
-      DOMAINS: 'hipsty.net: -> http://nginx'
-      STAGE: 'production'
+      DOMAINS: 'hipsty.local.net -> http://nginx'
+      STAGE: 'staging'
       # FORCE_RENEW: 'true'
 
   nginx:

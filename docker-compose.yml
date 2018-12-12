@@ -1,13 +1,28 @@
-version: '2'
+version: '3'
 services:
+  https-portal:
+    image: steveltn/https-portal:1
+    volumes:
+    - ./https-portal/ssl:/var/lib/https-portal
+    - ./https-portal/letsencrypt:/etc/letsencrypt
+    ports:
+    - 80:80
+    - 443:443
+    links:
+    - nginx:nginx
+    restart: always
+    environment:
+      DOMAINS: 'hipsty.local.net -> http://nginx'
+      STAGE: 'local'
+      # FORCE_RENEW: 'true'
+
   nginx:
     image: nginx:stable-alpine
     volumes:
       - ./nginx/conf.d/local:/etc/nginx/conf.d
       - ./nginx/log:/var/log/nginx
       - ./laravel:/var/www/laravel
-    ports:
-      - 80:80
+      - ./nginx/ssl:/var/lib/https-portal
     links:
       - phpfpm:phpfpm
       - mysql:mysql
