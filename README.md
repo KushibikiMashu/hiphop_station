@@ -1,3 +1,5 @@
+⚠️Depreciated
+
 Framework: Laravel(5.7)
 
 Docker Images: Nginx, php-fpm, MySQL, Redis
